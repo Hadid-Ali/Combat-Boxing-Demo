@@ -2,45 +2,57 @@ using UnityEngine;
 
 public class Boxer : MonoBehaviour
 {
-    [SerializeField] Transform playerCameraTransform;
-    [SerializeField] float delayToChooseCard;
-
-
-    #region Functions
-
-    protected void PowerUp()
+    public enum BoxerType
     {
+        player,
+        Ai
+    }
+    public enum AttackType
+    {
+        powerpunch,
+        combo,
+        uppercut,
+        overhand,
+        hook,
+        body,
+        jab
+    }
+    
+    [SerializeField] BoxerType type;
+    [SerializeField] protected AttackType attackType;
+    [SerializeField] protected int pointsEarned;
+    [SerializeField] protected CardNamesScriptable cardType;
 
+    private void Update()
+    {
+        //before that call camera animation set to center
+        //ui will be disabled
+        //attack started
+            Attack(); // after some delay call attack
+    }
+    void Attack()
+    {
+        if (GameplayManager.GetAttackCall())
+        {
+            Invoke("ShiftCameraToFocusCombat", 1);
+            GameplayManager.SetAttack(false);
+        }
+            
     }
 
-    protected void PowerPunch()
+    void ShiftCameraToFocusCombat()
     {
-
+        GameplayManager.ShiftCamera(GameplayManager.GetCombatCamera());
+        GameHUD.DisableBottomUI(false);
+        Invoke("CallForAttack", 1);
+        CancelInvoke("ShiftCameraToFocusCombat");
     }
 
-    protected void Combo()
+    void CallForAttack()
     {
-
+        GameHUD.AvailableRounds();
+        Player.OnAttackAction(CardsManager.OnSelectedAttack());
+        OpponentAI.OnAttackAction(CardsManager.OnOpponentSelectedAttack());
+        CancelInvoke("CallForAttack");
     }
-    protected void UpperCut()
-    {
-
-    }
-    protected void OverHand()
-    {
-
-    }
-    protected void Hook()
-    {
-
-    }
-    protected void Body()
-    {
-
-    }
-    protected void Jab()
-    {
-
-    }
-    #endregion
 }

@@ -13,17 +13,24 @@ MonoBehaviour:
   m_Name: CardNames
   m_EditorClassIdentifier: 
   cards:
-  - name: POWER PUNCH
+  - name: POWERPUNCH
     cardSprite: {fileID: 0}
+    rewardAmount: 0
   - name: COMBO
     cardSprite: {fileID: 0}
+    rewardAmount: 0
   - name: UPPERCUT
     cardSprite: {fileID: 0}
+    rewardAmount: 0
   - name: OVERHAND
     cardSprite: {fileID: 0}
+    rewardAmount: 0
   - name: HOOK
     cardSprite: {fileID: 0}
+    rewardAmount: 0
   - name: BODY
     cardSprite: {fileID: 0}
+    rewardAmount: 0
   - name: JAB
     cardSprite: {fileID: 0}
+    rewardAmount: 0

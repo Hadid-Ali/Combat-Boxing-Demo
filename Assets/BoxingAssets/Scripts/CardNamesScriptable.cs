@@ -10,6 +10,7 @@ public class CardNamesScriptable : ScriptableObject
     {
         public string name;
         public Sprite cardSprite;
+        public int rewardAmount;
     }
     public List<Card> cards;
 }

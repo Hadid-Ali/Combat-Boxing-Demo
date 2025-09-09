@@ -2,83 +2,120 @@ using UnityEngine;
 
 public class OpponentAI : Boxer
 {
-    public delegate void PowerUpAttack();
-    public static event PowerUpAttack onPowerup;
+    public delegate void Attack(AttackType _type);
+    public static event Attack onAttack;
 
-    public delegate void PowerPunchAttack();
-    public static event PowerPunchAttack onPowerPunch;
+    public delegate void PointsEarned(int points);
+    public static event PointsEarned onEarnedPoints;
 
-    public delegate void ComboAttack();
-    public static event ComboAttack onCombo;
+    public delegate void GetCard();
+    public static event GetCard onCardSelection;
 
-    public delegate void UpperCutAttack();
-    public static event UpperCutAttack onUppercut;
-
-    public delegate void OverHandAttack();
-    public static event OverHandAttack onOverhand;
-
-    public delegate void HookAttack();
-    public static event HookAttack onHook;
-
-    public delegate void BodyAttack();
-    public static event BodyAttack onBody;
-
-    public delegate void JabAttack();
-    public static event JabAttack onJab;
     private void OnEnable()
     {
-        onPowerup += PowerUp;
-        onPowerPunch += PowerPunch;
-        onCombo += Combo;
-        onUppercut += UpperCut;
-        onOverhand += OverHand;
-        onHook += Hook;
-        onBody += Body;
-        onJab += Jab;
+        onAttack += AttackAction;
+        onEarnedPoints += UpdatePoints;
+        onCardSelection += AvailableCards;
     }
     private void OnDisable()
     {
-        onPowerup -= PowerUp;
-        onPowerPunch -= PowerPunch;
-        onCombo -= Combo;
-        onUppercut -= UpperCut;
-        onOverhand -= OverHand;
-        onHook -= Hook;
-        onBody -= Body;
-        onJab -= Jab;
+        onAttack -= AttackAction;
+        onEarnedPoints -= UpdatePoints;
+        onCardSelection -= AvailableCards;
     }
+
     #region Events Invoke
-    public static void OnPowerUpAttack()
+
+    public static void OnAttackAction(AttackType _type)
     {
-        onPowerup?.Invoke();
+        onAttack?.Invoke(_type);
     }
-    public static void OnPowerPunchAttack()
+
+    public static void OnEarnedPoints(int _points)
     {
-        onPowerPunch?.Invoke();
+        onEarnedPoints?.Invoke(_points);
     }
-    public static void OnComboAttack()
+    #endregion
+    #region Functions
+    protected void AttackAction(AttackType _attack)
     {
-        onCombo?.Invoke();
+        CardNamesScriptable.Card _card = null;
+        foreach (CardNamesScriptable.Card c in cardType.cards)
+        {
+            if (c.name.ToLower().Equals(_attack.ToString()))
+            {
+                _card = c;
+                break;
+            }
+        }
+        switch (_attack)
+        {
+            case AttackType.powerpunch:
+                Debug.Log("-----POWER PUNCH CALLED-----");
+                UpdatePoints(_card.rewardAmount);
+                CallAnimation(AttackType.powerpunch);
+                break;
+            case AttackType.combo:
+                Debug.Log("-----COMBO CALLED-----");
+                UpdatePoints(_card.rewardAmount);
+                CallAnimation(AttackType.combo);
+                break;
+            case AttackType.uppercut:
+                Debug.Log("-----UPPER CUT CALLED-----");
+                UpdatePoints(_card.rewardAmount);
+                CallAnimation(AttackType.uppercut);
+                break;
+            case AttackType.overhand:
+                Debug.Log("-----OVERHAND CALLED-----");
+                UpdatePoints(_card.rewardAmount);
+                CallAnimation(AttackType.overhand);
+                break;
+            case AttackType.hook:
+                Debug.Log("-----HOOK CALLED-----");
+                UpdatePoints(_card.rewardAmount);
+                CallAnimation(AttackType.hook);
+                break;
+            case AttackType.body:
+                Debug.Log("-----BODY CALLED-----");
+                UpdatePoints(_card.rewardAmount);
+                CallAnimation(AttackType.body);
+                break;
+            case AttackType.jab:
+                Debug.Log("-----JAB CALLED-----");
+                UpdatePoints(_card.rewardAmount);
+                CallAnimation(AttackType.jab);
+                break;
+        }
     }
-    public static void OnUppercutAttack()
+
+    void UpdatePoints(int p)
     {
-        onUppercut?.Invoke();
+        pointsEarned += p;
+        GameHUD.OnUpdatingPoints(BoxerType.Ai, p);
     }
-    public static void OnOverhandAttack()
+    void CallAnimation(AttackType anim)
     {
-        onOverhand?.Invoke();
+
     }
-    public static void OnHookAttack()
+
+    public static void GetCardForAi()
     {
-        onHook?.Invoke();
+        onCardSelection?.Invoke();
     }
-    public static void OnBodyAttack()
+    void AvailableCards()
     {
-        onBody?.Invoke();
-    }
-    public static void OnJabAttack()
-    {
-        onJab?.Invoke();
+        foreach (GameObject g in CardsManager.GetAvailabeCards())
+        {
+            Card_Info c = g.GetComponent<Card_Info>();
+            if (!c.selected)
+            {
+                c.SetAttackType(GameHUD.GetAICardTargetPosition(), BoxerType.Ai);
+                CardsManager.SetOpponentSelectedCard(c._type);
+                break;
+            }
+        }
+        GameplayManager.SetAttack(true);
+
     }
     #endregion
 }
