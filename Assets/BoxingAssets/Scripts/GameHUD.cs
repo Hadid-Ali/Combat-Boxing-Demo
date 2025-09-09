@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,6 +6,11 @@ public class GameHUD : MonoBehaviour
 {
     [SerializeField] Image cardSelectionTimer;
     [SerializeField] Color[] barColor;
+    [SerializeField] TextMeshProUGUI roundsText;
+    [SerializeField] TextMeshProUGUI playerPoints;
+    [SerializeField] TextMeshProUGUI aiPoints;
+    [SerializeField] GameObject playerTurnObj;
+    [SerializeField] GameObject aiTurnObj;
     public delegate void StartCardSelectionTimer(float val);
     public static event StartCardSelectionTimer onCardTimerStart;
     bool isFull => (cardSelectionTimer.fillAmount == 1);

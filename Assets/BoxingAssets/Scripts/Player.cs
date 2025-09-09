@@ -1,7 +1,7 @@
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : Boxer
 {
-    [SerializeField] Transform playerCameraTransform;
-    [SerializeField] float delayToChooseCard;
+    
+
 }

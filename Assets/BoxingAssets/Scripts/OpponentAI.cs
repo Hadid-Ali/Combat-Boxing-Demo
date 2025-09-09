@@ -1,7 +1,6 @@
 using UnityEngine;
 
-public class OpponentAI : MonoBehaviour
+public class OpponentAI : Boxer
 {
-    [SerializeField] Transform aiCameraTransform;
-    [SerializeField] float delayToChooseCard;
+   
 }
