@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System.Collections.Generic;
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -27,6 +28,14 @@ public class GameplayManager : MonoBehaviour
 
     public delegate void ShiftCameraForActivePlayer(Transform _target);
     public static event ShiftCameraForActivePlayer onShiftingCamera;
+
+    public delegate string FetchFirstAttacker();
+    public static event FetchFirstAttacker onRevealFirstAttacker;
+
+    public delegate void SetFirstAttacker(string val);
+    public static event SetFirstAttacker onSetFirstAttackerValue;
+
+    [SerializeField] string boxerWhoWillAttackFirst;
     private void OnEnable()
     {
         onChangingCameraPosition += ChangeCamTransform;
@@ -34,6 +43,8 @@ public class GameplayManager : MonoBehaviour
         onValueSetAttack += SetAttackValue;
         onShiftingCamera += CameraShifting;
         onAttackCamera += GetCameraTargetForCombat;
+        onRevealFirstAttacker += GetFirstAttacker;
+        onSetFirstAttackerValue += ReSetFirstAttacker;
     }
 
     private void OnDisable()
@@ -43,8 +54,10 @@ public class GameplayManager : MonoBehaviour
         onValueSetAttack -= SetAttackValue;
         onShiftingCamera -= CameraShifting;
         onAttackCamera -= GetCameraTargetForCombat;
+        onRevealFirstAttacker -= GetFirstAttacker;
+        onSetFirstAttackerValue -= ReSetFirstAttacker;
     }
-
+    
     public static void SetAttack(bool val)
     {
         onValueSetAttack?.Invoke(val);
@@ -64,6 +77,7 @@ public class GameplayManager : MonoBehaviour
     private void Update()
     {
         RaycastToDetectPlayerPointer();
+        Attack();
     }
     public static void ChangingCameraTransform(Transform pos)
     {
@@ -159,5 +173,54 @@ public class GameplayManager : MonoBehaviour
     Transform GetCameraTargetForCombat()
     {
         return attackFocusedCamera.transform;
+    }
+    void Attack()
+    {
+        if (startAttack)
+        {
+            if(Player.playerAttackPriority < OpponentAI.aiAttackPriority)
+                boxerWhoWillAttackFirst = "player";
+            else
+                boxerWhoWillAttackFirst = "Ai";
+
+            Invoke("ShiftToCombat", 1);
+            startAttack = false;
+        }
+
+    }
+
+    void ShiftToCombat()
+    {
+        ShiftCamera(GetCombatCamera());
+        GameHUD.DisableBottomUI(false);
+        Invoke("CallForAttack", 1);
+        CancelInvoke("ShiftToCombat");
+    }
+
+    void CallForAttack()
+    {
+        GameHUD.AvailableRounds();
+        if(boxerWhoWillAttackFirst.ToLower().Equals(Boxer.BoxerType.player.ToString().ToLower()))
+            Player.OnAttackAction(CardsManager.OnSelectedAttack());
+        else
+            OpponentAI.OnAttackAction(CardsManager.OnOpponentSelectedAttack());
+        CancelInvoke("CallForAttack");
+    }
+
+    public static string FirstAttacker()
+    {
+        return onRevealFirstAttacker.Invoke();
+    }
+    string GetFirstAttacker()
+    {
+        return boxerWhoWillAttackFirst;
+    }
+    public static void ResetFirstAttackerValue(string val)
+    {
+        onSetFirstAttackerValue?.Invoke(val);
+    }
+    void ReSetFirstAttacker(string val)
+    {
+        boxerWhoWillAttackFirst = val;
     }
 }

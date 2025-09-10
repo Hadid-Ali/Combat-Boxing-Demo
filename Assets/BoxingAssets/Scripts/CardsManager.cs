@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static Boxer;
 
 public class CardsManager : MonoBehaviour
 {
@@ -13,24 +14,27 @@ public class CardsManager : MonoBehaviour
     public delegate void CloneCards();
     public static event CloneCards onCloneCard;
     [SerializeField] List<CardNamesScriptable.Card> powers;
-    [SerializeField] Boxer.AttackType selectedAttack;
+    [SerializeField] AttackType selectedAttack;
 
-    [SerializeField] Boxer.AttackType opponentsAttack;
+    [SerializeField] AttackType opponentsAttack;
 
-    public delegate Boxer.AttackType GetSelectedAttack();
+    public delegate AttackType GetSelectedAttack();
     public static event GetSelectedAttack onAttackSelected;
 
-    public delegate Boxer.AttackType GetOpponentSelectedAttack();
+    public delegate AttackType GetOpponentSelectedAttack();
     public static event GetOpponentSelectedAttack onOpponentAttackSelected;
 
-    public delegate void SetOpponentSelectedAttack(Boxer.AttackType val);
+    public delegate void SetOpponentSelectedAttack(AttackType val);
     public static event SetOpponentSelectedAttack onOpponentAttackSelection;
 
-    public delegate void SetSelectedAttack(Boxer.AttackType val);
+    public delegate void SetSelectedAttack(AttackType val);
     public static event SetSelectedAttack onAttackSet;
 
     public delegate List<GameObject> GetCards();
     public static event GetCards onGettingAvailableCards;
+
+    public delegate float SetAttackPriority(AttackType _type);
+    public static event SetAttackPriority onPriorityCheck;
     private void Start()
     {
         powers.AddRange(cardDictionary.cards);
@@ -44,6 +48,7 @@ public class CardsManager : MonoBehaviour
         onOpponentAttackSelected += GetAttackSelectedForOpponent;
         onGettingAvailableCards += GetCardsInstantiated;
         onOpponentAttackSelection += SetOpponentsAttack;
+        onPriorityCheck += GetAttackPriority;
     }
 
     private void OnDisable()
@@ -54,6 +59,7 @@ public class CardsManager : MonoBehaviour
         onOpponentAttackSelected -= GetAttackSelectedForOpponent;
         onGettingAvailableCards += GetCardsInstantiated;
         onOpponentAttackSelection -= SetOpponentsAttack;
+        onPriorityCheck -= GetAttackPriority;
     }
 
     public static void InstantiatingCards()
@@ -92,36 +98,36 @@ public class CardsManager : MonoBehaviour
         powers.AddRange(cardDictionary.cards);
         //powers.Reverse();
     }
-    public static Boxer.AttackType OnSelectedAttack()
+    public static AttackType OnSelectedAttack()
     {
         return onAttackSelected.Invoke();
     }
-    Boxer.AttackType GetAttackSelected()
+    AttackType GetAttackSelected()
     {
         return selectedAttack;
     }
-    public static Boxer.AttackType OnOpponentSelectedAttack()
+    public static AttackType OnOpponentSelectedAttack()
     {
         return onOpponentAttackSelected.Invoke();
     }
-    Boxer.AttackType GetAttackSelectedForOpponent()
+    AttackType GetAttackSelectedForOpponent()
     {
         return opponentsAttack;
     }
-    public static void OnSetAttack(Boxer.AttackType val)
+    public static void OnSetAttack(AttackType val)
     {
         onAttackSet?.Invoke(val);
     }
-    void SetAttackValue(Boxer.AttackType attack)
+    void SetAttackValue(AttackType attack)
     {
         selectedAttack = attack;
         //Debug.LogError("selectedAttack "+ selectedAttack);
     }
-    public static void SetOpponentSelectedCard(Boxer.AttackType attack)
+    public static void SetOpponentSelectedCard(AttackType attack)
     {
         onOpponentAttackSelection?.Invoke(attack);
     }
-    void SetOpponentsAttack(Boxer.AttackType attack)
+    void SetOpponentsAttack(AttackType attack)
     {
         opponentsAttack = attack;
         Debug.LogError("selected opponent");
@@ -134,5 +140,22 @@ public class CardsManager : MonoBehaviour
     List<GameObject> GetCardsInstantiated()
     {
         return cardsInstantiated;
+    }
+
+    public static float GetPriorityValueForAttack(AttackType _type)
+    {
+       return onPriorityCheck.Invoke(_type);
+    }
+    float GetAttackPriority(AttackType _type)
+    {
+        float _priority = 0;
+        foreach (CardNamesScriptable.Card c in cardDictionary.cards)
+        {
+            if (c.name.ToLower().Equals(_type.ToString().ToLower()))
+            {
+                _priority = c.speed;
+            }
+        }
+        return _priority;
     }
 }

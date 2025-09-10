@@ -2,7 +2,6 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.GraphicsBuffer;
 
 public class Card_Info : MonoBehaviour
 {
@@ -14,9 +13,7 @@ public class Card_Info : MonoBehaviour
     public void CardSelected(RectTransform target, Boxer.BoxerType pType)
     {
         SetAttackType(target, pType);
-        Debug.LogError("card selected ");
         CardsManager.OnSetAttack(_type);
-       
         selected = true;
     }
 
@@ -70,6 +67,7 @@ public class Card_Info : MonoBehaviour
             //    t.anchorMin = new Vector2(1f, 1f);
             //    t.anchorMax = new Vector2(1f, 1f);
             //}
+            m_TextMeshPro.enabled = true;
             t.DOPause();
         });
     }

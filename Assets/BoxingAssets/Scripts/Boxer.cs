@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Boxer : MonoBehaviour
@@ -9,6 +10,7 @@ public class Boxer : MonoBehaviour
     }
     public enum AttackType
     {
+        idle,
         powerpunch,
         combo,
         uppercut,
@@ -22,37 +24,9 @@ public class Boxer : MonoBehaviour
     [SerializeField] protected AttackType attackType;
     [SerializeField] protected int pointsEarned;
     [SerializeField] protected CardNamesScriptable cardType;
+    [SerializeField] protected Animator animator;
+    [SerializeField] protected float moveSpeed;
+    [SerializeField] protected List<GameObject> effectsPrefab;
+    [SerializeField] protected Transform effectParent;
 
-    private void Update()
-    {
-        //before that call camera animation set to center
-        //ui will be disabled
-        //attack started
-            Attack(); // after some delay call attack
-    }
-    void Attack()
-    {
-        if (GameplayManager.GetAttackCall())
-        {
-            Invoke("ShiftCameraToFocusCombat", 1);
-            GameplayManager.SetAttack(false);
-        }
-            
-    }
-
-    void ShiftCameraToFocusCombat()
-    {
-        GameplayManager.ShiftCamera(GameplayManager.GetCombatCamera());
-        GameHUD.DisableBottomUI(false);
-        Invoke("CallForAttack", 1);
-        CancelInvoke("ShiftCameraToFocusCombat");
-    }
-
-    void CallForAttack()
-    {
-        GameHUD.AvailableRounds();
-        Player.OnAttackAction(CardsManager.OnSelectedAttack());
-        OpponentAI.OnAttackAction(CardsManager.OnOpponentSelectedAttack());
-        CancelInvoke("CallForAttack");
-    }
 }
