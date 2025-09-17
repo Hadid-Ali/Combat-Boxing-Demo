@@ -34,6 +34,8 @@ public class Player : Boxer
             GameObject g = Instantiate(effect, effectParent, false);
             instantiatedEffects.Add(g);
             g.transform.SetParent(effectParent);
+            g.transform.localPosition = Vector3.zero;
+            g.transform.localEulerAngles = Vector3.zero;
         }
     }
     private void OnEnable()
@@ -98,7 +100,7 @@ public class Player : Boxer
                 //Debug.Log("-----POWER PUNCH CALLED-----");
                 UpdatePoints(_card.rewardAmount);
                 val = Random.Range(_card.minAnimFloat, _card.maxAnimFloat);
-                animator.SetFloat(_card.blendIndex, val);
+                animator.SetFloat(_card.blendIndex, 1);
                 CallAnimation(AttackType.powerpunch);
                 attackType = AttackType.powerpunch;
                 break;

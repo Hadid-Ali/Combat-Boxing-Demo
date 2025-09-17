@@ -1857,6 +1857,8 @@ MonoBehaviour:
   powers: []
   selectedAttack: 0
   opponentsAttack: 0
+  testing: 0
+  attackIndex: 
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1977,7 +1979,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -2431,7 +2434,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -2694,8 +2698,11 @@ MonoBehaviour:
   cardType: {fileID: 11400000, guid: 8da0dabeea148624da7f1e6347ee93d6, type: 2}
   animator: {fileID: 2124231201}
   moveSpeed: 0.25
+  effectsPrefab: []
+  effectParent: {fileID: 0}
   boxer: {fileID: 654991155}
   targetToMove: {fileID: 133071236}
+  instantiatedEffects: []
 --- !u!1 &1359240274
 GameObject:
   m_ObjectHideFlags: 0
@@ -2757,7 +2764,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -3098,8 +3106,11 @@ MonoBehaviour:
   cardType: {fileID: 11400000, guid: 8da0dabeea148624da7f1e6347ee93d6, type: 2}
   animator: {fileID: 855882780}
   moveSpeed: 0.25
+  effectsPrefab: []
+  effectParent: {fileID: 0}
   boxer: {fileID: 855882779}
   targetToMove: {fileID: 133071236}
+  instantiatedEffects: []
 --- !u!1 &1557603072
 GameObject:
   m_ObjectHideFlags: 0
@@ -3363,6 +3374,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   originalPos: {fileID: 101505148}
   speed: 0.25
+  boxerName: 
 --- !u!1 &1844114941
 GameObject:
   m_ObjectHideFlags: 0
@@ -3836,6 +3848,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   originalPos: {fileID: 1816476689}
   speed: 0.25
+  boxerName: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

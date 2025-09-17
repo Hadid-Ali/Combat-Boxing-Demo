@@ -38,6 +38,8 @@ public class OpponentAI : Boxer
             GameObject g = Instantiate(effect, effectParent, false);
             instantiatedEffects.Add(g);
             g.transform.SetParent(effectParent);
+            g.transform.localPosition = Vector3.zero;
+            g.transform.localEulerAngles = Vector3.zero;
         }
     }
     private void OnEnable()
@@ -110,7 +112,7 @@ public class OpponentAI : Boxer
                 //Debug.Log("-----POWER PUNCH CALLED-----");
                 UpdatePoints(_card.rewardAmount);
                 val = Random.Range(_card.minAnimFloat, _card.maxAnimFloat);
-                animator.SetFloat(_card.blendIndex, val);
+                animator.SetFloat(_card.blendIndex, 1);
                 CallAnimation(AttackType.powerpunch);
                 attackType = AttackType.powerpunch;
                 break;
@@ -221,7 +223,7 @@ public class OpponentAI : Boxer
         }
         else
         {
-            val = Random.Range(0.25f, 0.65f);
+            val = Random.Range(0.3f, 0.67f);
             animator.SetFloat("DefenceBlendINdex", val);
             animator.SetBool("IsDefending", true);
             Debug.Log($"{animator.gameObject.name} guarded!");

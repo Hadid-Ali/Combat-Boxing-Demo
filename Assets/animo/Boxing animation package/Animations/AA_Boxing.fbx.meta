@@ -1126,15 +1126,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.92459613
-        functionName: OnAttackAnimationComplete
+      - time: 0.3127513
+        functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.32275128
-        functionName: OnDamage
+      - time: 0.92459613
+        functionName: OnAttackAnimationComplete
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -1169,15 +1169,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.9179021
-        functionName: OnAttackAnimationComplete
+      - time: 0.35937622
+        functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.37223336
-        functionName: OnDamage
+      - time: 0.9179021
+        functionName: OnAttackAnimationComplete
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -1241,15 +1241,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.92474353
-        functionName: OnAttackAnimationComplete
+      - time: 0.32977873
+        functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.34406444
-        functionName: OnDamage
+      - time: 0.92474353
+        functionName: OnAttackAnimationComplete
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -1284,15 +1284,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.9271
-        functionName: OnAttackAnimationComplete
+      - time: 0.40252194
+        functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.36252192
-        functionName: OnDamage
+      - time: 0.9271
+        functionName: OnAttackAnimationComplete
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -1327,15 +1327,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.9112521
-        functionName: OnAttackAnimationComplete
+      - time: 0.3837827
+        functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.39235416
-        functionName: OnDamage
+      - time: 0.9112521
+        functionName: OnAttackAnimationComplete
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -1370,15 +1370,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.90808254
-        functionName: OnAttackAnimationComplete
+      - time: 0.5001826
+        functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.4816112
-        functionName: OnDamage
+      - time: 0.90808254
+        functionName: OnAttackAnimationComplete
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -1413,15 +1413,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.92076087
-        functionName: OnAttackAnimationComplete
+      - time: 0.46816906
+        functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.4567405
-        functionName: OnDamage
+      - time: 0.92076087
+        functionName: OnAttackAnimationComplete
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -1456,15 +1456,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.9302696
-        functionName: OnAttackAnimationComplete
+      - time: 0.40186158
+        functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.40471873
-        functionName: OnDamage
+      - time: 0.9302696
+        functionName: OnAttackAnimationComplete
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -1499,15 +1499,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.9271
-        functionName: OnAttackAnimationComplete
+      - time: 0.45283705
+        functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.47283706
-        functionName: OnDamage
+      - time: 0.9271
+        functionName: OnAttackAnimationComplete
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -1722,15 +1722,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.9119497
-        functionName: OnAttackAnimationComplete
+      - time: 0.38641977
+        functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.37213406
-        functionName: OnDamage
+      - time: 0.9119497
+        functionName: OnAttackAnimationComplete
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -1794,15 +1794,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.9271
-        functionName: OnAttackAnimationComplete
+      - time: 0.4678236
+        functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.48893365
-        functionName: OnDamage
+      - time: 0.9271
+        functionName: OnAttackAnimationComplete
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -1909,22 +1909,22 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0.32082498
+        functionName: OnDamage
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.51993966
+        functionName: OnDamage
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.9112521
         functionName: OnAttackAnimationComplete
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.32796785
-        functionName: OnDamage
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.5613682
-        functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -1959,14 +1959,14 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.9112522
-        functionName: OnAttackAnimationComplete
+      - time: 0.23060367
+        functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.2434608
+      - time: 0.33644533
         functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
@@ -1975,6 +1975,13 @@ ModelImporter:
         messageOptions: 0
       - time: 0.501006
         functionName: OnDamage
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.9112522
+        functionName: OnAttackAnimationComplete
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -2009,6 +2016,20 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0.1679075
+        functionName: OnDamage
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.66173047
+        functionName: OnDamage
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.92393047
         functionName: OnAttackAnimationComplete
         data: 
@@ -2016,14 +2037,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.17505036
-        functionName: OnDamage
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.62173045
+      - time: 0.41354996
         functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
@@ -2059,29 +2073,29 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0.10364189
+        functionName: OnDamage
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.32963786
+        functionName: OnDamage
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.6139437
+        functionName: OnDamage
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.9271
         functionName: OnAttackAnimationComplete
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.13078475
-        functionName: OnDamage
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.36820927
-        functionName: OnDamage
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.609658
-        functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -2116,29 +2130,29 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0.14247487
+        functionName: OnDamage
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.42814893
+        functionName: OnDamage
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.7180484
+        functionName: OnDamage
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.92393035
         functionName: OnAttackAnimationComplete
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.12676059
-        functionName: OnDamage
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.50100607
-        functionName: OnDamage
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.7223341
-        functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -2173,29 +2187,29 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0.20490949
+        functionName: OnDamage
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.43454728
+        functionName: OnDamage
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.69859165
+        functionName: OnDamage
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.9271
         functionName: OnAttackAnimationComplete
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.1991952
-        functionName: OnDamage
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.42454728
-        functionName: OnDamage
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.6700202
-        functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -2237,7 +2251,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.20724347
+      - time: 0.19438633
         functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
@@ -2251,14 +2265,14 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.9080826
+      - time: 0.6402819
         functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.6659962
+      - time: 0.9080826
         functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
@@ -2294,8 +2308,8 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.9175913
-        functionName: OnAttackAnimationComplete
+      - time: 0.12396191
+        functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -2308,15 +2322,36 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.45271632
+      - time: 0.33239695
         functionName: OnDamage
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.64989954
+      - time: 0.39700204
         functionName: OnDamage
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.5391741
+        functionName: OnDamage
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.6470424
+        functionName: OnDamage
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.9175913
+        functionName: OnAttackAnimationComplete
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -2721,6 +2756,35 @@ ModelImporter:
       loopBlendPositionY: 0
       loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: HitReaction
+      takeName: AA_Boxing_Dodge_Pull_Back
+      internalID: -7540319245488582862
+      firstFrame: 7.9000006
+      lastFrame: 24
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
       heightFromFeet: 0

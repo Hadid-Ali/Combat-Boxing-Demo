@@ -525,7 +525,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -1640,7 +1641,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -2196,7 +2198,10 @@ MonoBehaviour:
   index: 0
   cardsInstantiated: []
   powers: []
-  selectedAttack: 
+  selectedAttack: 0
+  opponentsAttack: 0
+  testing: 0
+  attackIndex: 
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -2312,7 +2317,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -3042,6 +3048,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7015477a13025b24eb6e5c64ff547bf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerCardTargetPos: {fileID: 0}
+  aiCardTargetPos: {fileID: 0}
+  bottomUi: {fileID: 0}
   cardSelectionTimer: {fileID: 190171892}
   barColor:
   - {r: 0.1415093, g: 0.622282, b: 1, a: 1}
@@ -3049,8 +3058,10 @@ MonoBehaviour:
   roundsText: {fileID: 1359240276}
   playerPoints: {fileID: 890115901}
   aiPoints: {fileID: 1174122007}
-  playerTurnObj: {fileID: 444561297}
-  aiTurnObj: {fileID: 1150006502}
+  totalRounds: 0
+  playedRound: 0
+  targetValueForBG: 0
+  animationSpeedForBottomUi: 0
 --- !u!1 &1174122005
 GameObject:
   m_ObjectHideFlags: 0
@@ -3112,7 +3123,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -3444,10 +3456,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f370855ab4b6d441a94848424f71709, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCameraTransform: {fileID: 161956856}
-  delayToChooseCard: 1
   type: 1
   attackType: 0
+  pointsEarned: 0
+  cardType: {fileID: 0}
+  animator: {fileID: 0}
+  moveSpeed: 0
+  effectsPrefab: []
+  effectParent: {fileID: 0}
+  boxer: {fileID: 0}
+  targetToMove: {fileID: 0}
+  instantiatedEffects: []
 --- !u!1 &1293325058
 GameObject:
   m_ObjectHideFlags: 0
@@ -3584,7 +3603,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -4069,10 +4089,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8541f52cecd8094987ff75adf374b0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCameraTransform: {fileID: 563961105}
-  delayToChooseCard: 1
   type: 0
   attackType: 0
+  pointsEarned: 0
+  cardType: {fileID: 0}
+  animator: {fileID: 0}
+  moveSpeed: 0
+  effectsPrefab: []
+  effectParent: {fileID: 0}
+  boxer: {fileID: 0}
+  targetToMove: {fileID: 0}
+  instantiatedEffects: []
 --- !u!1 &1571427272
 GameObject:
   m_ObjectHideFlags: 0
@@ -4545,6 +4572,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 330585543}
+  cameraMoveSpeed: 0
+  playerCameraTransform: {fileID: 0}
+  opponentCameraTransform: {fileID: 0}
+  attackFocusedCamera: {fileID: 0}
+  startAttack: 0
+  boxerWhoWillAttackFirst: 
+  rayDistance: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &1990311593
 GameObject:
   m_ObjectHideFlags: 0

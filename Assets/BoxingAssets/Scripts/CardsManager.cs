@@ -11,12 +11,18 @@ public class CardsManager : MonoBehaviour
     [SerializeField] int index = 0;
     [SerializeField] List<GameObject> cardsInstantiated;
 
-    public delegate void CloneCards();
-    public static event CloneCards onCloneCard;
     [SerializeField] List<CardNamesScriptable.Card> powers;
     [SerializeField] AttackType selectedAttack;
 
     [SerializeField] AttackType opponentsAttack;
+
+    [SerializeField] bool testing;
+    [SerializeField] string attackIndex;
+
+    #region Delegates
+
+    public delegate void CloneCards();
+    public static event CloneCards onCloneCard;
 
     public delegate AttackType GetSelectedAttack();
     public static event GetSelectedAttack onAttackSelected;
@@ -35,6 +41,8 @@ public class CardsManager : MonoBehaviour
 
     public delegate float SetAttackPriority(AttackType _type);
     public static event SetAttackPriority onPriorityCheck;
+
+    #endregion
     private void Start()
     {
         powers.AddRange(cardDictionary.cards);
@@ -75,17 +83,23 @@ public class CardsManager : MonoBehaviour
                 powers.Clear();
                 powers.AddRange(cardDictionary.cards);
             }
-            int r = Random.Range(0, (powers.Count-1));
+            int r = Random.Range(0, (powers.Count - 1));
             GameObject g = Instantiate(cardPrefab, cardParent.position, Quaternion.identity);
             cardsInstantiated.Add(g);
             g.transform.SetParent(cardParent.transform);
             g.transform.localEulerAngles = Vector3.zero;
             g.transform.localScale = Vector3.one;
             g.transform.localPosition = Vector3.zero;
+            //Debug.LogError(" " + powers[r].name+" "+r);
+
             Card_Info c_info = g.GetComponent<Card_Info>();
+            if (testing)
+                c_info.m_TextMeshPro.text = attackIndex;
+            else
                 c_info.m_TextMeshPro.text = powers[r].name;
             if(powers[r].cardSprite)
                 c_info.icon.sprite = powers[r].cardSprite;
+
             powers.Remove(powers[r]);
             index++;
             IntantiateCards();
@@ -130,7 +144,7 @@ public class CardsManager : MonoBehaviour
     void SetOpponentsAttack(AttackType attack)
     {
         opponentsAttack = attack;
-        Debug.LogError("selected opponent");
+        //Debug.LogError("selected opponent");
     }
    
     public static List<GameObject> GetAvailabeCards()
