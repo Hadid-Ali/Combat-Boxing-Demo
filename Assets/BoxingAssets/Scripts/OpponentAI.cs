@@ -211,7 +211,8 @@ public class OpponentAI : Boxer
     }
     void RandomDefense()
     {
-        int rand = Random.Range(0, 2);
+        //int rand = Random.Range(0, 2);
+        int rand = 0;
         float val = 0;
 
         if (rand == 0)

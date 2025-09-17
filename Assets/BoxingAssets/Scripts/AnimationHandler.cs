@@ -8,6 +8,13 @@ public class AnimationHandler : MonoBehaviour
     Tween moveTween;
     [SerializeField] float speed;
     [SerializeField] string boxerName;
+    [SerializeField]Animator animator;
+    [Header("IK Targets")]
+    public Transform rightHandTarget;
+    public Transform leftHandTarget;
+
+    [Range(0, 1)] public float ikWeight = 1.0f;
+
     public void OnAttackAnimationComplete()
     {
         ResetToOriginalPosition();
@@ -73,5 +80,27 @@ public class AnimationHandler : MonoBehaviour
     {
         Player.OnResetAttackState();
         CancelInvoke("ResetPlayerAnimation");
+    }
+
+    void OnAnimatorIK(int layerIndex)
+    {
+        if (animator == null) return;
+
+        if (rightHandTarget != null)
+        {
+            animator.SetIKPositionWeight(AvatarIKGoal.RightHand, ikWeight);
+            animator.SetIKRotationWeight(AvatarIKGoal.RightHand, ikWeight);
+            animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandTarget.position);
+            animator.SetIKRotation(AvatarIKGoal.RightHand, rightHandTarget.rotation);
+        }
+
+        if (leftHandTarget != null)
+        {
+            animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, ikWeight);
+            animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, ikWeight);
+            animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandTarget.position);
+            animator.SetIKRotation(AvatarIKGoal.LeftHand, leftHandTarget.rotation);
+        }
+
     }
 }
