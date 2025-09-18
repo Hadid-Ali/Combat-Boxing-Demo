@@ -42,6 +42,8 @@ public class CardsManager : MonoBehaviour
     public delegate float SetAttackPriority(AttackType _type);
     public static event SetAttackPriority onPriorityCheck;
 
+    public delegate void RegenerateCardList();
+    public static event RegenerateCardList onRegeneratingCards;
     #endregion
     private void Start()
     {
@@ -57,6 +59,7 @@ public class CardsManager : MonoBehaviour
         onGettingAvailableCards += GetCardsInstantiated;
         onOpponentAttackSelection += SetOpponentsAttack;
         onPriorityCheck += GetAttackPriority;
+        onRegeneratingCards += ResetCard;
     }
 
     private void OnDisable()
@@ -68,6 +71,7 @@ public class CardsManager : MonoBehaviour
         onGettingAvailableCards += GetCardsInstantiated;
         onOpponentAttackSelection -= SetOpponentsAttack;
         onPriorityCheck -= GetAttackPriority;
+        onRegeneratingCards -= ResetCard;
     }
 
     public static void InstantiatingCards()
@@ -171,5 +175,20 @@ public class CardsManager : MonoBehaviour
             }
         }
         return _priority;
+    }
+
+    public static void RegenerateCards()
+    {
+        onRegeneratingCards?.Invoke();
+    }
+    void ResetCard()
+    {
+        foreach(GameObject g in cardsInstantiated)
+        {
+            Destroy(g);
+        }
+        cardsInstantiated.Clear();
+        IntantiateCards();
+        GameHUD.ChooseCardTimer(-1);
     }
 }
