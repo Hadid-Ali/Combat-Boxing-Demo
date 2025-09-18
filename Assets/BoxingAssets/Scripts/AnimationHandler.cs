@@ -14,20 +14,21 @@ public class AnimationHandler : MonoBehaviour
     public Transform leftHandTarget;
 
     [Range(0, 1)] public float ikWeight = 1.0f;
-
+    //[SerializeField] GameObject rightAttackSweatEffect;
+    //[SerializeField] GameObject leftAttackSweatEffect;
     public void OnAttackAnimationComplete()
     {
         ResetToOriginalPosition();
         if (GameplayManager.FirstAttacker() != "")
         {
             if (GameplayManager.FirstAttacker().ToLower().Equals(BoxerType.player.ToString().ToLower()))
-                Invoke("CallOpponentAttack", 0.55f);
+                Invoke("CallOpponentAttack", 1.5f);
             else
-                Invoke("CallPlayerAttack", 0.55f);
+                Invoke("CallPlayerAttack", 1.5f);
 
             GameplayManager.ResetFirstAttackerValue("");
         }
-        
+
         //Debug.LogError("on animation complete");
     }
 
@@ -57,20 +58,51 @@ public class AnimationHandler : MonoBehaviour
         //Debug.LogError("player reset");
     }
 
-    void OnDamage()
+    void OnDamage(string reaction)
     {
         if (boxerName.Equals("Player"))
         {
-            OpponentAI.GetRandomDefence();
-            Invoke("ResetOpponentAnimation", 1.5f);
+            OpponentAI.GetRandomDefence(reaction);
+            //Invoke("ResetOpponentAnimation", 1.5f);
         }
         else if (boxerName.Equals("Ai"))
         {
-            Player.GetRandomDefence();
-            Invoke("ResetPlayerAnimation", 1.5f);
+            Player.GetRandomDefence(reaction);
+            //Invoke("ResetPlayerAnimation", 1.5f);
         }
     }
-
+    void EffectOnRightHand(string attack)
+    {
+        if (boxerName.Equals("Player"))
+        {
+            Player.PlayRightHandEffect();
+            if (attack.Equals("FacePunch") || attack.Equals("UppercutPunch"))
+                OpponentAI.PlaySweatEffect();
+        }
+        else if (boxerName.Equals("Ai"))
+        {
+            OpponentAI.PlayRightHandEffect();
+            if (attack.Equals("FacePunch") || attack.Equals("UppercutPunch"))
+                Player.PlaySweatEffect();
+        }
+       
+    }
+    void EffectOnLeftHand(string attack)
+    {
+        if (boxerName.Equals("Player"))
+        {
+            Player.PlayLeftHandEffect();
+            if (attack.Equals("FacePunch") || attack.Equals("UppercutPunch"))
+                OpponentAI.PlaySweatEffect();
+        }
+        else if (boxerName.Equals("Ai"))
+        {
+            OpponentAI.PlayLeftHandEffect();
+            if (attack.Equals("FacePunch") || attack.Equals("UppercutPunch"))
+                Player.PlaySweatEffect();
+        }
+      
+    }
     private void ResetOpponentAnimation()
     {
         OpponentAI.OnResetAttackState();

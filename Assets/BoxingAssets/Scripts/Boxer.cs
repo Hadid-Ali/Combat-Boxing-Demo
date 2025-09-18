@@ -27,6 +27,8 @@ public class Boxer : MonoBehaviour
     [SerializeField] protected Animator animator;
     [SerializeField] protected float moveSpeed;
     [SerializeField] protected List<GameObject> effectsPrefab;
-    [SerializeField] protected Transform effectParent;
+    [SerializeField] protected Transform rightHandEffectParent;
+    [SerializeField] protected Transform leftHandEffectParent;
+    [SerializeField] protected GameObject sweatEffect;
 
 }
