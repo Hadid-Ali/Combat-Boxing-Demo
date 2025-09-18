@@ -190,9 +190,5 @@ public class CardsManager : MonoBehaviour
         cardsInstantiated.Clear();
         IntantiateCards();
         GameHUD.ChooseCardTimer(-1);
-
-        //reapear bottom ui
-        //reset camera to fisrt position
-        //
     }
 }
