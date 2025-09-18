@@ -1,4 +1,5 @@
 using DG.Tweening;
+using SmoothShakeFree;
 using System.Collections.Generic;
 using UnityEngine;
 using static Player;
@@ -326,11 +327,22 @@ public class OpponentAI : Boxer
     void RightHandEffect()
     {
         rightHandEffect.GetComponent<ParticleSystem>().Play();
+        StartShaking();
+        Invoke("StopShaking", 0.07f);
     }
-
+    void StopShaking()
+    {
+        mainCamera.GetComponent<SmoothShake>().ForceStop();
+    }
+    void StartShaking()
+    {
+        mainCamera.GetComponent<SmoothShake>().StartShake();
+    }
     void LeftHandEffect()
     {
         leftHandEffect.GetComponent<ParticleSystem>().Play();
+        StartShaking();
+        Invoke("StopShaking", 0.07f);
     }
     public static void PlaySweatEffect()
     {
@@ -339,6 +351,7 @@ public class OpponentAI : Boxer
     void SweatEffect()
     {
         sweatEffect.GetComponent<ParticleSystem>().Play();
+        bloodEffect.GetComponent<ParticleSystem>().Play();
     }
     #endregion
 }

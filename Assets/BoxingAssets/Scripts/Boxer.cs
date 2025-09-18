@@ -30,5 +30,6 @@ public class Boxer : MonoBehaviour
     [SerializeField] protected Transform rightHandEffectParent;
     [SerializeField] protected Transform leftHandEffectParent;
     [SerializeField] protected GameObject sweatEffect;
-
+    [SerializeField] protected GameObject bloodEffect;
+    [SerializeField] protected GameObject mainCamera;
 }

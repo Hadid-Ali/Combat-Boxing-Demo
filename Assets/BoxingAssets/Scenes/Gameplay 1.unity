@@ -1689,10 +1689,13 @@ MonoBehaviour:
   animator: {fileID: 0}
   moveSpeed: 0
   effectsPrefab: []
-  effectParent: {fileID: 0}
+  rightHandEffectParent: {fileID: 0}
+  leftHandEffectParent: {fileID: 0}
+  sweatEffect: {fileID: 0}
+  bloodEffect: {fileID: 0}
   boxer: {fileID: 0}
   targetToMove: {fileID: 0}
-  instantiatedEffects: []
+  speed: 0
 --- !u!1 &1398424373
 GameObject:
   m_ObjectHideFlags: 0
@@ -1960,10 +1963,13 @@ MonoBehaviour:
   animator: {fileID: 0}
   moveSpeed: 0
   effectsPrefab: []
-  effectParent: {fileID: 0}
+  rightHandEffectParent: {fileID: 0}
+  leftHandEffectParent: {fileID: 0}
+  sweatEffect: {fileID: 0}
+  bloodEffect: {fileID: 0}
   boxer: {fileID: 0}
   targetToMove: {fileID: 0}
-  instantiatedEffects: []
+  speed: 0
 --- !u!1001 &1689598350
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 using DG.Tweening;
+using SmoothShakeFree;
 using System.Collections.Generic;
 using UnityEngine;
 using static CardNamesScriptable;
@@ -301,11 +302,23 @@ public class Player : Boxer
     void RightHandEffect()
     {
         rightHandEffect.GetComponent<ParticleSystem>().Play();
+        StartShaking();
+        Invoke("StopShaking", 0.07f);
     }
 
     void LeftHandEffect()
     {
         leftHandEffect.GetComponent<ParticleSystem>().Play();
+        StartShaking();
+        Invoke("StopShaking", 0.07f);
+    }
+    void StopShaking()
+    {
+        mainCamera.GetComponent<SmoothShake>().ForceStop();
+    }
+    void StartShaking()
+    {
+        mainCamera.GetComponent<SmoothShake>().StartShake();
     }
     public static void PlaySweatEffect()
     {
@@ -314,6 +327,7 @@ public class Player : Boxer
     void SweatEffect()
     {
         sweatEffect.GetComponent<ParticleSystem>().Play();
+        bloodEffect.GetComponent<ParticleSystem>().Play();
     }
     #endregion
 }

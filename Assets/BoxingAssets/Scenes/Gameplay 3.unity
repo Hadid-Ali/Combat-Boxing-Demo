@@ -2699,10 +2699,13 @@ MonoBehaviour:
   animator: {fileID: 2124231201}
   moveSpeed: 0.25
   effectsPrefab: []
-  effectParent: {fileID: 0}
+  rightHandEffectParent: {fileID: 0}
+  leftHandEffectParent: {fileID: 0}
+  sweatEffect: {fileID: 0}
+  bloodEffect: {fileID: 0}
   boxer: {fileID: 654991155}
   targetToMove: {fileID: 133071236}
-  instantiatedEffects: []
+  speed: 0
 --- !u!1 &1359240274
 GameObject:
   m_ObjectHideFlags: 0
@@ -3107,10 +3110,13 @@ MonoBehaviour:
   animator: {fileID: 855882780}
   moveSpeed: 0.25
   effectsPrefab: []
-  effectParent: {fileID: 0}
+  rightHandEffectParent: {fileID: 0}
+  leftHandEffectParent: {fileID: 0}
+  sweatEffect: {fileID: 0}
+  bloodEffect: {fileID: 0}
   boxer: {fileID: 855882779}
   targetToMove: {fileID: 133071236}
-  instantiatedEffects: []
+  speed: 0
 --- !u!1 &1557603072
 GameObject:
   m_ObjectHideFlags: 0
@@ -3375,6 +3381,10 @@ MonoBehaviour:
   originalPos: {fileID: 101505148}
   speed: 0.25
   boxerName: 
+  animator: {fileID: 0}
+  rightHandTarget: {fileID: 0}
+  leftHandTarget: {fileID: 0}
+  ikWeight: 1
 --- !u!1 &1844114941
 GameObject:
   m_ObjectHideFlags: 0
@@ -3849,6 +3859,10 @@ MonoBehaviour:
   originalPos: {fileID: 1816476689}
   speed: 0.25
   boxerName: 
+  animator: {fileID: 0}
+  rightHandTarget: {fileID: 0}
+  leftHandTarget: {fileID: 0}
+  ikWeight: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
