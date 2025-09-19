@@ -377,6 +377,7 @@ public class Player : Boxer
     }
     void SweatEffect()
     {
+        sweatEffect.gameObject.SetActive(true);
         sweatEffect.GetComponent<ParticleSystem>().Play();
         bloodEffect.SetActive(true);
         bloodEffect.GetComponent<ParticleSystem>().Play();

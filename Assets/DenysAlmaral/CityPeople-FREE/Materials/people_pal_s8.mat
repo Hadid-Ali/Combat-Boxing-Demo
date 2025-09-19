@@ -25,6 +25,7 @@ Material:
   m_Parent: {fileID: 2100000, guid: 214522dcab1b87643901ca3e37cb7f5a, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _DETAIL_MULX2
   - _METALLICSPECGLOSSMAP
   m_InvalidKeywords:
   - _GLOSSYREFLECTIONS_OFF
