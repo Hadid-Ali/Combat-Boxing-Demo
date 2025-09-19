@@ -19,6 +19,9 @@ public class Player : Boxer
 
     public delegate void FetchRandomDefence(string reaction);
     public static event FetchRandomDefence onRandomDefence;
+
+    public delegate void PlayerKnockedOut();
+    public static event PlayerKnockedOut onKnockedout;
     Tween playerTween;
 
     public delegate AttackType CurrentAttackState();
@@ -26,10 +29,8 @@ public class Player : Boxer
 
     public delegate void ReSetAttack();
     public static event ReSetAttack onAttackResetState;
-
-    GameObject rightHandEffect;
-    GameObject leftHandEffect;
-
+    [SerializeField] List<GameObject> rightHandEffect;
+    [SerializeField] List<GameObject> leftHandEffect;
 
     public delegate void ActivateRightHandEffect();
     public static event ActivateRightHandEffect onRightHandEffectActivation;
@@ -38,18 +39,23 @@ public class Player : Boxer
 
     public delegate void ActivateSweatEffect();
     public static event ActivateSweatEffect onSweatEffectPlay;
+
+    public delegate void GroundHitEffectActivation();
+    public static event GroundHitEffectActivation onGroundHit;
     private void Start()
     {
         foreach (GameObject effect in effectsPrefab)
         {
             GameObject right_g = Instantiate(effect, rightHandEffectParent, false);
-            rightHandEffect = right_g;
+            if (!rightHandEffect.Contains(right_g))
+                rightHandEffect.Add(right_g);
             right_g.transform.SetParent(rightHandEffectParent);
             right_g.transform.localPosition = Vector3.zero;
             right_g.transform.localEulerAngles = Vector3.zero;
 
             GameObject left_g = Instantiate(effect, leftHandEffectParent, false);
-            leftHandEffect = left_g;
+            if (!leftHandEffect.Contains(left_g))
+                leftHandEffect.Add(left_g);
             left_g.transform.SetParent(leftHandEffectParent);
             left_g.transform.localPosition = Vector3.zero;
             left_g.transform.localEulerAngles = Vector3.zero;
@@ -65,7 +71,8 @@ public class Player : Boxer
         onRightHandEffectActivation += RightHandEffect;
         onLeftHandEffectActivation += LeftHandEffect;
         onSweatEffectPlay += SweatEffect;
-
+        onKnockedout += KnockOut;
+        onGroundHit += GroundHitEffect;
     }
     private void OnDisable()
     {
@@ -77,6 +84,9 @@ public class Player : Boxer
         onRightHandEffectActivation -= RightHandEffect;
         onLeftHandEffectActivation -= LeftHandEffect;
         onSweatEffectPlay -= SweatEffect;
+        onKnockedout -= KnockOut;
+        onGroundHit += GroundHitEffect;
+
     }
     #region Events Invoke
 
@@ -269,7 +279,40 @@ public class Player : Boxer
         }
        
     }
+    public static void Knockedout()
+    {
+        onKnockedout?.Invoke();
+    }
+    void KnockOut()
+    {
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsTag("knockout"))
+        {
+            animator.ResetTrigger("knockout");
+            animator.SetTrigger("knockout");
+        }
 
+        valHit = 1.0f;
+        animator.SetFloat("KnockoutBlendIndex", valHit);
+        //knockOutCamera.SetActive(true);
+
+        Invoke("EnableKnockOutCamer", 0.05f);
+    }
+    void EnableKnockOutCamer()
+    {
+        knockOutCamera.SetActive(true);
+        CancelInvoke("EnableKnockOutCamer");
+    }
+    public static void EnableGroundHitEffect()
+    {
+        onGroundHit?.Invoke();
+    }
+    void GroundHitEffect()
+    {
+        Time.timeScale = 1.0f;
+
+        groundHitEffect.SetActive(true);
+        groundHitEffect.GetComponent<ParticleSystem>().Play();
+    }
     public static AttackType GetAttackState()
     {
         return onAttackState.Invoke();
@@ -301,14 +344,22 @@ public class Player : Boxer
     }
     void RightHandEffect()
     {
-        rightHandEffect.GetComponent<ParticleSystem>().Play();
+        foreach (GameObject g in rightHandEffect)
+        {
+            g.SetActive(true);
+            g.GetComponent<ParticleSystem>().Play();
+        }
         StartShaking();
         Invoke("StopShaking", 0.07f);
     }
 
     void LeftHandEffect()
     {
-        leftHandEffect.GetComponent<ParticleSystem>().Play();
+        foreach (GameObject g in leftHandEffect)
+        {
+            g.SetActive(true);
+            g.GetComponent<ParticleSystem>().Play();
+        }
         StartShaking();
         Invoke("StopShaking", 0.07f);
     }
@@ -327,6 +378,7 @@ public class Player : Boxer
     void SweatEffect()
     {
         sweatEffect.GetComponent<ParticleSystem>().Play();
+        bloodEffect.SetActive(true);
         bloodEffect.GetComponent<ParticleSystem>().Play();
     }
     #endregion

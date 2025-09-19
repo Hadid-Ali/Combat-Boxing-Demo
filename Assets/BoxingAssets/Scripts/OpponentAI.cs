@@ -2,7 +2,6 @@ using DG.Tweening;
 using SmoothShakeFree;
 using System.Collections.Generic;
 using UnityEngine;
-using static Player;
 
 public class OpponentAI : Boxer
 {
@@ -20,9 +19,14 @@ public class OpponentAI : Boxer
     public delegate void FetchRandomDefence(string reaction);
     public static event FetchRandomDefence onRandomDefence;
 
+
+    public delegate void PlayerKnockedOut();
+    public static event PlayerKnockedOut onKnockedout;
+
     Tween opponentTween;
     [SerializeField] Transform boxer;
     [SerializeField] Transform targetToMove;
+    [SerializeField] CardNamesScriptable CardNamesScriptable;
 
     public delegate AttackType CurrentAttackState();
     public static event CurrentAttackState onAttackState;
@@ -30,8 +34,8 @@ public class OpponentAI : Boxer
     public delegate void ReSetAttack();
     public static event ReSetAttack onAttackResetState;
 
-    GameObject rightHandEffect;
-    GameObject leftHandEffect;
+    [SerializeField] List<GameObject> rightHandEffect;
+    [SerializeField] List<GameObject> leftHandEffect;
 
     public delegate void ActivateRightHandEffect();
     public static event ActivateRightHandEffect onRightHandEffectActivation;
@@ -40,18 +44,22 @@ public class OpponentAI : Boxer
 
     public delegate void ActivateSweatEffect();
     public static event ActivateSweatEffect onSweatEffectPlay;
+
+    [SerializeField] bool testing;
     private void Start()
     {
         foreach (GameObject effect in effectsPrefab)
         {
             GameObject right_g = Instantiate(effect, rightHandEffectParent, false);
-            rightHandEffect = right_g;
+            if(!rightHandEffect.Contains(right_g))
+                rightHandEffect.Add(right_g);
             right_g.transform.SetParent(rightHandEffectParent);
             right_g.transform.localPosition = Vector3.zero;
             right_g.transform.localEulerAngles = Vector3.zero;
 
             GameObject left_g = Instantiate(effect, leftHandEffectParent, false);
-            leftHandEffect = left_g;
+            if(!leftHandEffect.Contains(left_g))
+                leftHandEffect.Add(left_g);
             left_g.transform.SetParent(leftHandEffectParent);
             left_g.transform.localPosition = Vector3.zero;
             left_g.transform.localEulerAngles = Vector3.zero;
@@ -68,6 +76,8 @@ public class OpponentAI : Boxer
         onRightHandEffectActivation += RightHandEffect;
         onLeftHandEffectActivation += LeftHandEffect;
         onSweatEffectPlay += SweatEffect;
+        onKnockedout += KnockOut;
+
     }
     private void OnDisable()
     {
@@ -80,6 +90,8 @@ public class OpponentAI : Boxer
         onRightHandEffectActivation -= RightHandEffect;
         onLeftHandEffectActivation -= LeftHandEffect;
         onSweatEffectPlay -= SweatEffect;
+        onKnockedout -= KnockOut;
+
     }
 
     #region Events Invoke
@@ -101,7 +113,6 @@ public class OpponentAI : Boxer
 
         opponentTween = boxer.DOMove(targetToMove.position, moveSpeed).SetEase(Ease.Linear).OnComplete(() =>
                         {
-                            Debug.LogError("opponent move ");
                             TriggerAttackAnimation(_attack);
                         });
 
@@ -202,7 +213,6 @@ public class OpponentAI : Boxer
     {
         animator.ResetTrigger(anim.ToString());
         animator.SetTrigger(anim.ToString());
-        Debug.LogError("opponent animation");
     }
 
     public static void GetCardForAi()
@@ -217,11 +227,23 @@ public class OpponentAI : Boxer
             if (!c.selected)
             {
                 c.SetAttackType(GameHUD.GetAICardTargetPosition(), BoxerType.Ai);
-                CardsManager.SetOpponentSelectedCard(c._type);
 
+                if (!testing)
+                {
+                    CardsManager.SetOpponentSelectedCard(c._type);
+                }
+                else
+                {
+                    attackType = AttackType.combo;
+                    c.m_TextMeshPro.text = attackType.ToString();
+                    c.icon.sprite = CardNamesScriptable.cards[1].cardSprite;
+                    CardsManager.SetOpponentSelectedCard(attackType);
+                }
                 break;
             }
+           
         }
+      
         GameplayManager.SetAttack(true);
 
     }
@@ -295,6 +317,23 @@ public class OpponentAI : Boxer
         }
        
     }
+
+    public static void Knockedout()
+    {
+        onKnockedout?.Invoke();
+    }
+    void KnockOut()
+    {
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsTag("knockout"))
+        {
+            animator.ResetTrigger("knockout");
+            animator.SetTrigger("knockout");
+        }
+
+        valHit = 1.0f;
+        animator.SetFloat("KnockoutBlendIndex", valHit);
+
+    }
     public static AttackType GetAttackState()
     {
         return onAttackState.Invoke();
@@ -324,23 +363,33 @@ public class OpponentAI : Boxer
     {
         onRightHandEffectActivation?.Invoke();
     }
+
     void RightHandEffect()
     {
-        rightHandEffect.GetComponent<ParticleSystem>().Play();
+        foreach(GameObject g in rightHandEffect)
+        {
+            g.SetActive(true);
+            g.GetComponent<ParticleSystem>().Play();
+        }
+   
         StartShaking();
         Invoke("StopShaking", 0.07f);
     }
     void StopShaking()
     {
-        mainCamera.GetComponent<SmoothShake>().ForceStop();
+        //mainCamera.GetComponent<SmoothShake>().ForceStop();
     }
     void StartShaking()
     {
-        mainCamera.GetComponent<SmoothShake>().StartShake();
+        //mainCamera.GetComponent<SmoothShake>().StartShake();
     }
     void LeftHandEffect()
     {
-        leftHandEffect.GetComponent<ParticleSystem>().Play();
+        foreach (GameObject g in leftHandEffect)
+        {
+            g.SetActive(true);
+            g.GetComponent<ParticleSystem>().Play();
+        }
         StartShaking();
         Invoke("StopShaking", 0.07f);
     }
@@ -351,6 +400,7 @@ public class OpponentAI : Boxer
     void SweatEffect()
     {
         sweatEffect.GetComponent<ParticleSystem>().Play();
+        bloodEffect.SetActive(true);
         bloodEffect.GetComponent<ParticleSystem>().Play();
     }
     #endregion

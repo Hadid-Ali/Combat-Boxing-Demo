@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cards:
   - name: POWERPUNCH
-    speed: 1
-    cardSprite: {fileID: 0}
+    speed: 1.5
+    cardSprite: {fileID: 21300000, guid: 2d4689afae5a1bb4793100bc1781d39a, type: 3}
     rewardAmount: 0
     animations:
     - SteppingBack
@@ -23,8 +23,8 @@ MonoBehaviour:
     maxAnimFloat: 1
     blendIndex: PowerpunchBlendIndex
   - name: COMBO
-    speed: 1.5
-    cardSprite: {fileID: 0}
+    speed: 1
+    cardSprite: {fileID: 21300000, guid: fa71b5d7babd1124486d72a4702cd117, type: 3}
     rewardAmount: 0
     animations:
     - ComboJabcrossJabcrossHookHook
@@ -40,7 +40,7 @@ MonoBehaviour:
     blendIndex: ComboBlendIndex
   - name: UPPERCUT
     speed: 2.5
-    cardSprite: {fileID: 0}
+    cardSprite: {fileID: 21300000, guid: 0356a50f6d901a64cb919198ac8d0110, type: 3}
     rewardAmount: 0
     animations:
     - LeadUppercut
@@ -50,7 +50,7 @@ MonoBehaviour:
     blendIndex: UppercutBlendIndex
   - name: OVERHAND
     speed: 2
-    cardSprite: {fileID: 0}
+    cardSprite: {fileID: 21300000, guid: 95cc59a99f0f7e64a921d12168eceb99, type: 3}
     rewardAmount: 0
     animations: []
     minAnimFloat: 0
@@ -58,7 +58,7 @@ MonoBehaviour:
     blendIndex: OverhandBlendIndex
   - name: HOOK
     speed: 3
-    cardSprite: {fileID: 0}
+    cardSprite: {fileID: 21300000, guid: 62973fc0a6b79e84abef16ae2d005a6a, type: 3}
     rewardAmount: 0
     animations:
     - LeadHook
@@ -68,7 +68,7 @@ MonoBehaviour:
     blendIndex: HookBlendIndex
   - name: BODY
     speed: 4
-    cardSprite: {fileID: 0}
+    cardSprite: {fileID: 21300000, guid: e0939947016d52843919cda136281f20, type: 3}
     rewardAmount: 0
     animations:
     - RearUppercutBody
@@ -82,7 +82,7 @@ MonoBehaviour:
     blendIndex: BodyBlendIndex
   - name: JAB
     speed: 5
-    cardSprite: {fileID: 0}
+    cardSprite: {fileID: 21300000, guid: 8477bb5d6efc27743bfedc67c456d2c4, type: 3}
     rewardAmount: 0
     animations:
     - SteppingJab

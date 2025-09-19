@@ -7,11 +7,9 @@ using UnityEngine.EventSystems;
 public class GameplayManager : MonoBehaviour
 {
     [SerializeField] GameObject mainCamera;
-    [SerializeField] float cameraMoveSpeed;
     [SerializeField] Transform playerCameraTransform;
     [SerializeField] Transform opponentCameraTransform;
     [SerializeField] Transform attackFocusedCamera;
-    private Tween suckTween;
 
     public delegate void ChangeCameraPosition(Transform pos);
     public static event ChangeCameraPosition onChangingCameraPosition;
@@ -26,8 +24,6 @@ public class GameplayManager : MonoBehaviour
     public delegate Transform GetAttackCamera();
     public static event GetAttackCamera onAttackCamera;
 
-    public delegate void ShiftCameraForActivePlayer(Transform _target);
-    public static event ShiftCameraForActivePlayer onShiftingCamera;
 
     public delegate string FetchFirstAttacker();
     public static event FetchFirstAttacker onRevealFirstAttacker;
@@ -41,7 +37,6 @@ public class GameplayManager : MonoBehaviour
         onChangingCameraPosition += ChangeCamTransform;
         onStartAttack += GetAttackValue;
         onValueSetAttack += SetAttackValue;
-        onShiftingCamera += CameraShifting;
         onAttackCamera += GetCameraTargetForCombat;
         onRevealFirstAttacker += GetFirstAttacker;
         onSetFirstAttackerValue += ReSetFirstAttacker;
@@ -52,7 +47,6 @@ public class GameplayManager : MonoBehaviour
         onChangingCameraPosition -= ChangeCamTransform;
         onStartAttack -= GetAttackValue;
         onValueSetAttack -= SetAttackValue;
-        onShiftingCamera -= CameraShifting;
         onAttackCamera -= GetCameraTargetForCombat;
         onRevealFirstAttacker -= GetFirstAttacker;
         onSetFirstAttackerValue -= ReSetFirstAttacker;
@@ -131,7 +125,7 @@ public class GameplayManager : MonoBehaviour
     }
     void ShiftOpponentCameraOnSelection()
     {
-        ShiftCamera(opponentCameraTransform);
+        CameraManager.SwitchToOpponentPosition();
         Invoke("GetCardForAI", 2);
         CancelInvoke("ShiftOpponentCameraOnSelection");
     }
@@ -141,30 +135,6 @@ public class GameplayManager : MonoBehaviour
         CancelInvoke("GetCardForAI");
     }
 
-    public static void ShiftCamera(Transform target)
-    {
-        onShiftingCamera?.Invoke(target);
-    }
-    void CameraShifting(Transform target)
-    {
-        if (target == null)
-        {
-            Debug.LogWarning("Target Point not assigned!");
-            return;
-        }
-
-        if (suckTween != null && suckTween.IsActive())
-            suckTween.Kill();
-
-        Sequence seq = DOTween.Sequence();
-
-        seq.Join(mainCamera.transform.DOMove(target.position, cameraMoveSpeed).SetEase(Ease.OutCirc));
-
-        seq.Join(mainCamera.transform.DORotate(target.eulerAngles, cameraMoveSpeed).SetEase(Ease.OutCirc));
-
-        suckTween = seq;
-   
-    }
 
     public static Transform GetCombatCamera()
     {
@@ -191,7 +161,7 @@ public class GameplayManager : MonoBehaviour
 
     void ShiftToCombat()
     {
-        ShiftCamera(GetCombatCamera());
+        CameraManager.SwitchToFightingPosition();
         GameHUD.DisableBottomUI(false);
         Invoke("CallForAttack", 1);
         CancelInvoke("ShiftToCombat");

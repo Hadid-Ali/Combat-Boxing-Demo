@@ -18,7 +18,7 @@ public class AnimationHandler : MonoBehaviour
     //[SerializeField] GameObject leftAttackSweatEffect;
     public void OnAttackAnimationComplete()
     {
-        ResetToOriginalPosition();
+        //ResetToOriginalPosition();
         if (GameplayManager.FirstAttacker() != "")
         {
             if (GameplayManager.FirstAttacker().ToLower().Equals(BoxerType.player.ToString().ToLower()))
@@ -41,8 +41,8 @@ public class AnimationHandler : MonoBehaviour
 
     void CallPlayerAttack()
     {
-        OpponentAI.OnResetAttackState();
-        Player.OnAttackAction(CardsManager.OnSelectedAttack());
+        //OpponentAI.OnResetAttackState();
+        //Player.OnAttackAction(CardsManager.OnSelectedAttack());
         CancelInvoke("CallPlayerAttack");
     }
     void ResetToOriginalPosition()
@@ -102,6 +102,31 @@ public class AnimationHandler : MonoBehaviour
                 Player.PlaySweatEffect();
         }
       
+    }
+
+    void OnKnockedOut()
+    {
+
+        if (boxerName.Equals("Player"))
+        {
+            OpponentAI.Knockedout();
+        }
+        else if (boxerName.Equals("Ai"))
+        {
+            Time.timeScale = 0.2f;
+            Player.Knockedout();
+        }
+    }
+
+    void GroundHit()
+    {
+        if (boxerName.Equals("Player"))
+        {
+            Player.EnableGroundHitEffect();
+        }
+        else if (boxerName.Equals("Ai"))
+        {
+        }
     }
     private void ResetOpponentAnimation()
     {

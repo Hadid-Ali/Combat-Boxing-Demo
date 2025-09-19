@@ -32,4 +32,6 @@ public class Boxer : MonoBehaviour
     [SerializeField] protected GameObject sweatEffect;
     [SerializeField] protected GameObject bloodEffect;
     [SerializeField] protected GameObject mainCamera;
+    [SerializeField] protected GameObject knockOutCamera;
+    [SerializeField] protected GameObject groundHitEffect;
 }

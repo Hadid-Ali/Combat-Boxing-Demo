@@ -48,30 +48,17 @@ public class Card_Info : MonoBehaviour
     }
     void CardSelectionAnimation(RectTransform _target, Boxer.BoxerType pType)
     {
-        //Vector3 worldPos = this.transform.position;
         this.transform.SetParent(_target.parent);
-        //Vector3 localPos = _target.InverseTransformPoint(worldPos);
-        //this.transform.localPosition = worldPos;
         RectTransform t = this.GetComponent<RectTransform>();
 
-       
         t.DOAnchorPos(_target.anchoredPosition, animationSpeed).SetEase(Ease.Linear).OnComplete(() =>
         {
-            //if (pType.Equals(Boxer.BoxerType.player))
-            //{
-            //    t.anchorMin = new Vector2(0f, 1f);
-            //    t.anchorMax = new Vector2(0f, 1f);
-            //}
-            //else
-            //{
-            //    t.anchorMin = new Vector2(1f, 1f);
-            //    t.anchorMax = new Vector2(1f, 1f);
-            //}
+           
             m_TextMeshPro.enabled = true;
+            if(icon)
+                icon.gameObject.SetActive(true);
             t.DOPause();
         });
     }
-
    
-    //on car selection -- which 
 }

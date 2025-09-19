@@ -26,8 +26,11 @@ public class GameHUD : MonoBehaviour
     public delegate void UpdatePoints(Boxer.BoxerType _type, int points);
     public static event UpdatePoints onPointsUpdate;
 
-    public delegate void BottomUIActivity(bool active);
-    public static event BottomUIActivity onUiActivity;
+    public delegate void DeactivateBottomUI(bool active);
+    public static event DeactivateBottomUI onUiDeactivity;
+
+    public delegate void ActivateBottomUI(bool active);
+    public static event ActivateBottomUI onActivatingUI;
 
     public delegate RectTransform GetPlayerSelectedCardTarget();
     public static event GetPlayerSelectedCardTarget onPlayerCardTargetPos;
@@ -46,18 +49,20 @@ public class GameHUD : MonoBehaviour
         onCardTimerStart += FillBar;
         onRoundsAvailablity += CheckRounds;
         onPointsUpdate += UpdatePointUI;
-        onUiActivity += DisableUI;
+        onUiDeactivity += DisableUI;
         onPlayerCardTargetPos += GetPlayerCardTargetPos;
         onAICardTargetPos += GetAICardTargetPos;
+        onActivatingUI += EnableBottomUI;
     }
     private void OnDisable()
     {
         onCardTimerStart -= FillBar;
         onRoundsAvailablity -= CheckRounds;
         onPointsUpdate += UpdatePointUI;
-        onUiActivity -= DisableUI;
+        onUiDeactivity -= DisableUI;
         onPlayerCardTargetPos += GetPlayerCardTargetPos;
         onAICardTargetPos += GetAICardTargetPos;
+        onActivatingUI -= EnableBottomUI;
     }
     public static void ChooseCardTimer(float val)
     {
@@ -104,7 +109,7 @@ public class GameHUD : MonoBehaviour
 
     public static void DisableBottomUI(bool val)
     {
-        onUiActivity.Invoke(val);
+        onUiDeactivity?.Invoke(val);
     }
     void DisableUI(bool ui)
     {
@@ -114,7 +119,19 @@ public class GameHUD : MonoBehaviour
             bottomUi.transform.DOPause();
         });
     }
+    public static void EnablingBottomUI(bool val)
+    {
+        onActivatingUI?.Invoke(val);
+    }
+    void EnableBottomUI(bool ui)
+    {
+        bottomUi.SetActive(ui);
 
+        bottomUi.GetComponent<RectTransform>().DOAnchorPos(Vector2.zero, animationSpeedForBottomUi).SetEase(Ease.Linear).OnComplete(() =>
+        {
+            bottomUi.transform.DOPause();
+        });
+    }
     public static RectTransform GetPlayerCardTargetPosition()
     {
         return onPlayerCardTargetPos.Invoke();

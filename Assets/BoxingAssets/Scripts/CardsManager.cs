@@ -59,7 +59,7 @@ public class CardsManager : MonoBehaviour
         onGettingAvailableCards += GetCardsInstantiated;
         onOpponentAttackSelection += SetOpponentsAttack;
         onPriorityCheck += GetAttackPriority;
-        onRegeneratingCards += ResetCard;
+        onRegeneratingCards += ResetAndRegenerateCard;
     }
 
     private void OnDisable()
@@ -71,7 +71,7 @@ public class CardsManager : MonoBehaviour
         onGettingAvailableCards += GetCardsInstantiated;
         onOpponentAttackSelection -= SetOpponentsAttack;
         onPriorityCheck -= GetAttackPriority;
-        onRegeneratingCards -= ResetCard;
+        onRegeneratingCards -= ResetAndRegenerateCard;
     }
 
     public static void InstantiatingCards()
@@ -98,11 +98,18 @@ public class CardsManager : MonoBehaviour
 
             Card_Info c_info = g.GetComponent<Card_Info>();
             if (testing)
+            {
                 c_info.m_TextMeshPro.text = attackIndex;
+                c_info.icon.sprite = powers[0].cardSprite;
+                c_info.icon.gameObject.SetActive(false);
+            }
             else
+            {
                 c_info.m_TextMeshPro.text = powers[r].name;
-            if(powers[r].cardSprite)
-                c_info.icon.sprite = powers[r].cardSprite;
+                if (powers[r].cardSprite)
+                    c_info.icon.sprite = powers[r].cardSprite;
+            }
+                
 
             powers.Remove(powers[r]);
             index++;
@@ -181,7 +188,7 @@ public class CardsManager : MonoBehaviour
     {
         onRegeneratingCards?.Invoke();
     }
-    void ResetCard()
+    void ResetAndRegenerateCard()
     {
         foreach(GameObject g in cardsInstantiated)
         {
@@ -190,5 +197,7 @@ public class CardsManager : MonoBehaviour
         cardsInstantiated.Clear();
         IntantiateCards();
         GameHUD.ChooseCardTimer(-1);
+        CameraManager.SwitchToPlayerPosition();
+        GameHUD.EnablingBottomUI(true);
     }
 }
