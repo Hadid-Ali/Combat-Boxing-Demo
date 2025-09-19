@@ -50,19 +50,8 @@ public class OpponentAI : Boxer
     {
         foreach (GameObject effect in effectsPrefab)
         {
-            GameObject right_g = Instantiate(effect, rightHandEffectParent, false);
-            if(!rightHandEffect.Contains(right_g))
-                rightHandEffect.Add(right_g);
-            right_g.transform.SetParent(rightHandEffectParent);
-            right_g.transform.localPosition = Vector3.zero;
-            right_g.transform.localEulerAngles = Vector3.zero;
-
-            GameObject left_g = Instantiate(effect, leftHandEffectParent, false);
-            if(!leftHandEffect.Contains(left_g))
-                leftHandEffect.Add(left_g);
-            left_g.transform.SetParent(leftHandEffectParent);
-            left_g.transform.localPosition = Vector3.zero;
-            left_g.transform.localEulerAngles = Vector3.zero;
+            HitEffects.InstantiateHitEffects(effect, rightHandEffectParent, rightHandEffect);
+            HitEffects.InstantiateHitEffects(effect, leftHandEffectParent, leftHandEffect);
         }
     }
     private void OnEnable()
