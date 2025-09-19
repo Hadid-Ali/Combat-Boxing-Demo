@@ -13,17 +13,80 @@ MonoBehaviour:
   m_Name: CardNames
   m_EditorClassIdentifier: 
   cards:
-  - name: POWER PUNCH
-    cardSprite: {fileID: 0}
+  - name: POWERPUNCH
+    speed: 1.5
+    cardSprite: {fileID: 21300000, guid: 2d4689afae5a1bb4793100bc1781d39a, type: 3}
+    rewardAmount: 0
+    animations:
+    - SteppingBack
+    minAnimFloat: 0
+    maxAnimFloat: 1
+    blendIndex: PowerpunchBlendIndex
   - name: COMBO
-    cardSprite: {fileID: 0}
+    speed: 1
+    cardSprite: {fileID: 21300000, guid: fa71b5d7babd1124486d72a4702cd117, type: 3}
+    rewardAmount: 0
+    animations:
+    - ComboJabcrossJabcrossHookHook
+    - ComboJabcross
+    - ComboJabcrossHook
+    - ComboJabJabcross
+    - ComboCrossHookcross
+    - ComboHookcrossHook
+    - ComboJabHookcross
+    - ComboJabcrossHookcross
+    minAnimFloat: 0.1
+    maxAnimFloat: 1
+    blendIndex: ComboBlendIndex
   - name: UPPERCUT
-    cardSprite: {fileID: 0}
+    speed: 2.5
+    cardSprite: {fileID: 21300000, guid: 0356a50f6d901a64cb919198ac8d0110, type: 3}
+    rewardAmount: 0
+    animations:
+    - LeadUppercut
+    - RearUppercut
+    minAnimFloat: 0.3
+    maxAnimFloat: 0.7
+    blendIndex: UppercutBlendIndex
   - name: OVERHAND
-    cardSprite: {fileID: 0}
+    speed: 2
+    cardSprite: {fileID: 21300000, guid: 95cc59a99f0f7e64a921d12168eceb99, type: 3}
+    rewardAmount: 0
+    animations: []
+    minAnimFloat: 0
+    maxAnimFloat: 1
+    blendIndex: OverhandBlendIndex
   - name: HOOK
-    cardSprite: {fileID: 0}
+    speed: 3
+    cardSprite: {fileID: 21300000, guid: 62973fc0a6b79e84abef16ae2d005a6a, type: 3}
+    rewardAmount: 0
+    animations:
+    - LeadHook
+    - RearHook
+    minAnimFloat: 0.2
+    maxAnimFloat: 0.8
+    blendIndex: HookBlendIndex
   - name: BODY
-    cardSprite: {fileID: 0}
+    speed: 4
+    cardSprite: {fileID: 21300000, guid: e0939947016d52843919cda136281f20, type: 3}
+    rewardAmount: 0
+    animations:
+    - RearUppercutBody
+    - LeadUppercutBody
+    - CrossBody
+    - JabBody
+    - LeadHookBody
+    - RearHookBody
+    minAnimFloat: 0.1
+    maxAnimFloat: 1
+    blendIndex: BodyBlendIndex
   - name: JAB
-    cardSprite: {fileID: 0}
+    speed: 5
+    cardSprite: {fileID: 21300000, guid: 8477bb5d6efc27743bfedc67c456d2c4, type: 3}
+    rewardAmount: 0
+    animations:
+    - SteppingJab
+    - Jab
+    minAnimFloat: 0.3
+    maxAnimFloat: 0.8
+    blendIndex: JabBlendIndex
