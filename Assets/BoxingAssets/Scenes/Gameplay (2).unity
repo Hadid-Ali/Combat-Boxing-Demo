@@ -39559,7 +39559,7 @@ MonoBehaviour:
   targetToMove: {fileID: 133071236}
   rightHandEffect: []
   leftHandEffect: []
-  speed: 0.5
+  speed: 0.1
 --- !u!1001 &1537631746
 PrefabInstance:
   m_ObjectHideFlags: 0

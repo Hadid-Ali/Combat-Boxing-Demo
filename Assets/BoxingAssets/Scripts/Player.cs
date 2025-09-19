@@ -220,12 +220,15 @@ public class Player : Boxer
         speedTween = DOTween.To(() => animator.GetFloat("HitBlendIndex"), x =>
         {
             animator.SetFloat("HitBlendIndex", x);
-        }, targetSpeed, duration).SetEase(Ease.Linear);
+
+        }, targetSpeed, duration).SetEase(Ease.Linear).OnComplete(() =>
+        {
+            valLastHit = -1f;
+        });
     }
 
     void RandomDefense(string hitReaction)
     {
-        //int rand = Random.Range(0, 2);
         int rand = 0;
         float val = 0;
         
@@ -255,16 +258,12 @@ public class Player : Boxer
                     SetBlendSpeed(valHit, speed);
                     break;
             }
-          
-            Debug.Log($"{gameObject.name} took a hit!");
-           
         }
         else
         {
             val = Random.Range(0.25f, 0.65f);
             animator.SetFloat("DefenceBlendINdex", val);
             animator.SetBool("IsDefending", true);
-            Debug.Log($"{gameObject.name} guarded!");
         }
        
     }
@@ -284,7 +283,7 @@ public class Player : Boxer
         animator.SetFloat("KnockoutBlendIndex", valHit);
         //knockOutCamera.SetActive(true);
 
-        Invoke("EnableKnockOutCamer", 0.05f);
+        Invoke("EnableKnockOutCamer", 0.06f);
     }
     void EnableKnockOutCamer()
     {

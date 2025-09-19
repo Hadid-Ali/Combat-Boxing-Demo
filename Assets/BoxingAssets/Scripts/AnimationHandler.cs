@@ -67,6 +67,7 @@ public class AnimationHandler : MonoBehaviour
         }
         else if (boxerName.Equals("Ai"))
         {
+            Debug.LogError("body hit ");
             Player.GetRandomDefence(reaction);
             //Invoke("ResetPlayerAnimation", 1.5f);
         }

@@ -2322,7 +2322,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.119940035
+      - time: 0.12312475
         functionName: EffectOnLeftHand
         data: BodyHit
         objectReferenceParameter: {instanceID: 0}
@@ -2343,21 +2343,14 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.32913962
-        functionName: OnDamage
-        data: BodyHit
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.33673322
+      - time: 0.33354852
         functionName: EffectOnLeftHand
         data: BodyHit
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.39700204
+      - time: 0.34347084
         functionName: OnDamage
         data: BodyHit
         objectReferenceParameter: {instanceID: 0}
@@ -2366,6 +2359,13 @@ ModelImporter:
         messageOptions: 0
       - time: 0.40253472
         functionName: EffectOnRightHand
+        data: BodyHit
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.4097409
+        functionName: OnDamage
         data: BodyHit
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -2385,14 +2385,14 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.6382241
+      - time: 0.6414088
         functionName: OnKnockedOut
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.6477341
+      - time: 0.6525112
         functionName: EffectOnRightHand
         data: UppercutPunch
         objectReferenceParameter: {instanceID: 0}

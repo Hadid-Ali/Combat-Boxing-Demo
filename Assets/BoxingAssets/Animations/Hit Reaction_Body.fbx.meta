@@ -34,8 +34,8 @@ ModelImporter:
       name: BodyHit
       takeName: mixamo.com
       internalID: -203655887218126122
-      firstFrame: 0
-      lastFrame: 48
+      firstFrame: 4.7
+      lastFrame: 40
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
