@@ -20,9 +20,9 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.6431373, g: 0.6901961, b: 0.7372549, a: 1}
-  m_AmbientEquatorColor: {r: 0.6431373, g: 0.6901961, b: 0.7372549, a: 1}
-  m_AmbientGroundColor: {r: 0.6421324, g: 0.68894476, b: 0.735849, a: 1}
+  m_AmbientSkyColor: {r: 0.7372549, g: 0.6784314, b: 0.6431373, a: 1}
+  m_AmbientEquatorColor: {r: 0.7372549, g: 0.6784314, b: 0.6431373, a: 1}
+  m_AmbientGroundColor: {r: 0.7372549, g: 0.6766409, b: 0.6431373, a: 1}
   m_AmbientIntensity: 1.079
   m_AmbientMode: 1
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
@@ -9557,7 +9557,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.072312206, g: 0.2153074, b: 0.6132076, a: 1}
+  m_Color: {r: 0.26415092, g: 0.26415092, b: 0.26415092, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -39656,23 +39656,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1030973084, guid: abc00000000007504923313430000712, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.5
+      value: 1.1567901
       objectReference: {fileID: 0}
     - target: {fileID: 1030973084, guid: abc00000000007504923313430000712, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.5
+      value: 1.1567901
       objectReference: {fileID: 0}
     - target: {fileID: 1030973084, guid: abc00000000007504923313430000712, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.5
+      value: 1.1567901
       objectReference: {fileID: 0}
     - target: {fileID: 1030973084, guid: abc00000000007504923313430000712, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.682229
+      value: 6.195
       objectReference: {fileID: 0}
     - target: {fileID: 1030973084, guid: abc00000000007504923313430000712, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.8
+      value: -0.487
       objectReference: {fileID: 0}
     - target: {fileID: 1030973084, guid: abc00000000007504923313430000712, type: 3}
       propertyPath: m_LocalPosition.z
