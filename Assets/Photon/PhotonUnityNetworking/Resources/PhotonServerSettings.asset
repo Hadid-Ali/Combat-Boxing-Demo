@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f3758f8f58fdef43803eb9be1df0608, type: 3}
+  m_Name: PhotonServerSettings
+  m_EditorClassIdentifier: 
+  AppSettings:
+    AppIdRealtime: 6b441a45-5bcd-422a-8f8e-a5f306e40ffc
+    AppIdFusion: 
+    AppIdChat: 
+    AppIdVoice: 
+    AppVersion: 
+    UseNameServer: 1
+    FixedRegion: 
+    Server: 
+    Port: 0
+    ProxyServer: 
+    Protocol: 0
+    EnableProtocolFallback: 1
+    AuthMode: 0
+    EnableLobbyStatistics: 0
+    NetworkLogging: 1
+  DevRegion: 
+  PunLogging: 0
+  EnableSupportLogger: 0
+  RunInBackground: 1
+  StartInOfflineMode: 0
+  RpcList:
+  - AnnounceWinner_RPC
+  - ClickRpc
+  - DestroyRpc
+  - DestroySpaceship
+  - Fire
+  - GlobalTimerTick
+  - LoadScene
+  - OnNetworkSubmitRequest_RPC
+  - OnNetworkTimerStartRequest_RPC
+  - OnPlayerAppUnFocus
+  - ReceiveHandFromNetwork
+  - RespawnSpaceship
+  - RestartGame_RPC
+  - SetPlayerData_RPC
+  - SyncAwardPlayerPoints_RPC
+  - SyncPlayerCount_RPC
+  - SyncUserScores_RPC
+  DisableAutoOpenWizard: 1
+  ShowSettings: 0
+  DevRegionSetOnce: 0
