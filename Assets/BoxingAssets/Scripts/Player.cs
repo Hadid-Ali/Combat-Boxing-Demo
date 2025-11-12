@@ -42,6 +42,7 @@ public class Player : Boxer
 
     public delegate void GroundHitEffectActivation();
     public static event GroundHitEffectActivation onGroundHit;
+
     private void Start()
     {
         foreach (GameObject effect in effectsPrefab)
@@ -98,11 +99,11 @@ public class Player : Boxer
                           TriggerAttackAnimation(_attack);
                       });
     }
+
     void TriggerAttackAnimation(AttackType _attack)
-    {
-        
-        Card _card = null;
-        foreach (Card c in cardType.cards)
+    {        
+        Boxing_Card _card = null;
+        foreach (Boxing_Card c in cardType.cards)
         {
             if (c.name.ToLower().Equals(_attack.ToString()))
             {

@@ -108,8 +108,8 @@ public class OpponentAI : Boxer
     }
     void TriggerAttackAnimation(AttackType _attack)
     {
-        CardNamesScriptable.Card _card = null;
-        foreach (CardNamesScriptable.Card c in cardType.cards)
+        CardNamesScriptable.Boxing_Card _card = null;
+        foreach (CardNamesScriptable.Boxing_Card c in cardType.cards)
         {
             if (c.name.ToLower().Equals(_attack.ToString()))
             {

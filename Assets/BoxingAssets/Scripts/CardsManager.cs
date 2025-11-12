@@ -11,7 +11,7 @@ public class CardsManager : MonoBehaviour
     [SerializeField] int index = 0;
     [SerializeField] List<GameObject> cardsInstantiated;
 
-    [SerializeField] List<CardNamesScriptable.Card> powers;
+    [SerializeField] List<CardNamesScriptable.Boxing_Card> powers;
     [SerializeField] AttackType selectedAttack;
 
     [SerializeField] AttackType opponentsAttack;
@@ -174,7 +174,7 @@ public class CardsManager : MonoBehaviour
     float GetAttackPriority(AttackType _type)
     {
         float _priority = 0;
-        foreach (CardNamesScriptable.Card c in cardDictionary.cards)
+        foreach (CardNamesScriptable.Boxing_Card c in cardDictionary.cards)
         {
             if (c.name.ToLower().Equals(_type.ToString().ToLower()))
             {
