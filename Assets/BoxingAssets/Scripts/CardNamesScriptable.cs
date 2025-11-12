@@ -6,7 +6,7 @@ using UnityEngine;
 public class CardNamesScriptable : ScriptableObject
 {
     [Serializable]
-    public class Card
+    public class Boxing_Card
     {
         public string name;
         public float speed;
@@ -17,5 +17,5 @@ public class CardNamesScriptable : ScriptableObject
         public float maxAnimFloat;
         public string blendIndex;
     }
-    public List<Card> cards;
+    public List<Boxing_Card> cards;
 }
