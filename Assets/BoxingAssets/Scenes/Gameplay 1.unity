@@ -163,6 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3693607495acc54b86a5acc6990db1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  activeTurn: 0
 --- !u!1 &90409490
 GameObject:
   m_ObjectHideFlags: 0
@@ -1143,6 +1144,10 @@ MonoBehaviour:
   index: 0
   cardsInstantiated: []
   powers: []
+  selectedAttack: 0
+  opponentsAttack: 0
+  testing: 0
+  attackIndex: 
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1481,10 +1486,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7015477a13025b24eb6e5c64ff547bf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerCardTargetPos: {fileID: 0}
+  aiCardTargetPos: {fileID: 0}
+  bottomUi: {fileID: 0}
   cardSelectionTimer: {fileID: 190171892}
   barColor:
   - {r: 0.1415093, g: 0.622282, b: 1, a: 1}
   - {r: 0.9882353, g: 0.34117648, b: 0.7490196, a: 1}
+  roundsText: {fileID: 0}
+  playerPoints: {fileID: 0}
+  aiPoints: {fileID: 0}
+  totalRounds: 0
+  playedRound: 0
+  targetValueForBG: 0
+  animationSpeedForBottomUi: 0
 --- !u!1 &1211674681
 GameObject:
   m_ObjectHideFlags: 0
@@ -1667,8 +1682,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f370855ab4b6d441a94848424f71709, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aiCameraTransform: {fileID: 161956856}
-  delayToChooseCard: 1
+  type: 0
+  attackType: 0
+  pointsEarned: 0
+  cardType: {fileID: 0}
+  animator: {fileID: 0}
+  moveSpeed: 0
+  effectsPrefab: []
+  rightHandEffectParent: {fileID: 0}
+  leftHandEffectParent: {fileID: 0}
+  sweatEffect: {fileID: 0}
+  bloodEffect: {fileID: 0}
+  boxer: {fileID: 0}
+  targetToMove: {fileID: 0}
+  speed: 0
 --- !u!1 &1398424373
 GameObject:
   m_ObjectHideFlags: 0
@@ -1929,8 +1956,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8541f52cecd8094987ff75adf374b0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCameraTransform: {fileID: 563961105}
-  delayToChooseCard: 1
+  type: 0
+  attackType: 0
+  pointsEarned: 0
+  cardType: {fileID: 0}
+  animator: {fileID: 0}
+  moveSpeed: 0
+  effectsPrefab: []
+  rightHandEffectParent: {fileID: 0}
+  leftHandEffectParent: {fileID: 0}
+  sweatEffect: {fileID: 0}
+  bloodEffect: {fileID: 0}
+  boxer: {fileID: 0}
+  targetToMove: {fileID: 0}
+  speed: 0
 --- !u!1001 &1689598350
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2178,6 +2217,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 330585543}
+  cameraMoveSpeed: 0
+  playerCameraTransform: {fileID: 0}
+  opponentCameraTransform: {fileID: 0}
+  attackFocusedCamera: {fileID: 0}
+  startAttack: 0
+  boxerWhoWillAttackFirst: 
+  rayDistance: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &1990311593
 GameObject:
   m_ObjectHideFlags: 0

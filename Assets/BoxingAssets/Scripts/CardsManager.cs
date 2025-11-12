@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static Boxer;
 
 public class CardsManager : MonoBehaviour
 {
@@ -10,9 +11,40 @@ public class CardsManager : MonoBehaviour
     [SerializeField] int index = 0;
     [SerializeField] List<GameObject> cardsInstantiated;
 
+    [SerializeField] List<CardNamesScriptable.Card> powers;
+    [SerializeField] AttackType selectedAttack;
+
+    [SerializeField] AttackType opponentsAttack;
+
+    [SerializeField] bool testing;
+    [SerializeField] string attackIndex;
+
+    #region Delegates
+
     public delegate void CloneCards();
     public static event CloneCards onCloneCard;
-    [SerializeField] List<CardNamesScriptable.Card> powers;
+
+    public delegate AttackType GetSelectedAttack();
+    public static event GetSelectedAttack onAttackSelected;
+
+    public delegate AttackType GetOpponentSelectedAttack();
+    public static event GetOpponentSelectedAttack onOpponentAttackSelected;
+
+    public delegate void SetOpponentSelectedAttack(AttackType val);
+    public static event SetOpponentSelectedAttack onOpponentAttackSelection;
+
+    public delegate void SetSelectedAttack(AttackType val);
+    public static event SetSelectedAttack onAttackSet;
+
+    public delegate List<GameObject> GetCards();
+    public static event GetCards onGettingAvailableCards;
+
+    public delegate float SetAttackPriority(AttackType _type);
+    public static event SetAttackPriority onPriorityCheck;
+
+    public delegate void RegenerateCardList();
+    public static event RegenerateCardList onRegeneratingCards;
+    #endregion
     private void Start()
     {
         powers.AddRange(cardDictionary.cards);
@@ -21,11 +53,25 @@ public class CardsManager : MonoBehaviour
     private void OnEnable()
     {
         onCloneCard += IntantiateCards;
+        onAttackSelected += GetAttackSelected;
+        onAttackSet += SetAttackValue;
+        onOpponentAttackSelected += GetAttackSelectedForOpponent;
+        onGettingAvailableCards += GetCardsInstantiated;
+        onOpponentAttackSelection += SetOpponentsAttack;
+        onPriorityCheck += GetAttackPriority;
+        onRegeneratingCards += ResetAndRegenerateCard;
     }
 
     private void OnDisable()
     {
         onCloneCard -= IntantiateCards;
+        onAttackSelected -= GetAttackSelected;
+        onAttackSet -= SetAttackValue;
+        onOpponentAttackSelected -= GetAttackSelectedForOpponent;
+        onGettingAvailableCards += GetCardsInstantiated;
+        onOpponentAttackSelection -= SetOpponentsAttack;
+        onPriorityCheck -= GetAttackPriority;
+        onRegeneratingCards -= ResetAndRegenerateCard;
     }
 
     public static void InstantiatingCards()
@@ -41,14 +87,30 @@ public class CardsManager : MonoBehaviour
                 powers.Clear();
                 powers.AddRange(cardDictionary.cards);
             }
-            int r = Random.Range(0, (powers.Count-1));
+            int r = Random.Range(0, (powers.Count - 1));
             GameObject g = Instantiate(cardPrefab, cardParent.position, Quaternion.identity);
             cardsInstantiated.Add(g);
             g.transform.SetParent(cardParent.transform);
+            g.transform.localEulerAngles = Vector3.zero;
+            g.transform.localScale = Vector3.one;
+            g.transform.localPosition = Vector3.zero;
+            //Debug.LogError(" " + powers[r].name+" "+r);
+
             Card_Info c_info = g.GetComponent<Card_Info>();
-            c_info.m_TextMeshPro.text = cardDictionary.cards[r].name;
-            if(cardDictionary.cards[r].cardSprite)
-                c_info.icon.sprite = cardDictionary.cards[r].cardSprite;
+            if (testing)
+            {
+                c_info.m_TextMeshPro.text = attackIndex;
+                c_info.icon.sprite = powers[0].cardSprite;
+                c_info.icon.gameObject.SetActive(false);
+            }
+            else
+            {
+                c_info.m_TextMeshPro.text = powers[r].name;
+                if (powers[r].cardSprite)
+                    c_info.icon.sprite = powers[r].cardSprite;
+            }
+                
+
             powers.Remove(powers[r]);
             index++;
             IntantiateCards();
@@ -60,5 +122,82 @@ public class CardsManager : MonoBehaviour
         index = 0;
         powers.AddRange(cardDictionary.cards);
         //powers.Reverse();
+    }
+    public static AttackType OnSelectedAttack()
+    {
+        return onAttackSelected.Invoke();
+    }
+    AttackType GetAttackSelected()
+    {
+        return selectedAttack;
+    }
+    public static AttackType OnOpponentSelectedAttack()
+    {
+        return onOpponentAttackSelected.Invoke();
+    }
+    AttackType GetAttackSelectedForOpponent()
+    {
+        return opponentsAttack;
+    }
+    public static void OnSetAttack(AttackType val)
+    {
+        onAttackSet?.Invoke(val);
+    }
+    void SetAttackValue(AttackType attack)
+    {
+        selectedAttack = attack;
+        //Debug.LogError("selectedAttack "+ selectedAttack);
+    }
+    public static void SetOpponentSelectedCard(AttackType attack)
+    {
+        onOpponentAttackSelection?.Invoke(attack);
+    }
+    void SetOpponentsAttack(AttackType attack)
+    {
+        opponentsAttack = attack;
+        //Debug.LogError("selected opponent");
+    }
+   
+    public static List<GameObject> GetAvailabeCards()
+    {
+        return onGettingAvailableCards.Invoke();
+    }
+    List<GameObject> GetCardsInstantiated()
+    {
+        return cardsInstantiated;
+    }
+
+    public static float GetPriorityValueForAttack(AttackType _type)
+    {
+       return onPriorityCheck.Invoke(_type);
+    }
+    float GetAttackPriority(AttackType _type)
+    {
+        float _priority = 0;
+        foreach (CardNamesScriptable.Card c in cardDictionary.cards)
+        {
+            if (c.name.ToLower().Equals(_type.ToString().ToLower()))
+            {
+                _priority = c.speed;
+            }
+        }
+        return _priority;
+    }
+
+    public static void RegenerateCards()
+    {
+        onRegeneratingCards?.Invoke();
+    }
+    void ResetAndRegenerateCard()
+    {
+        foreach(GameObject g in cardsInstantiated)
+        {
+            Destroy(g);
+        }
+        cardsInstantiated.Clear();
+        IntantiateCards();
+        GameHUD.ChooseCardTimer(-1);
+        CameraManager.SwitchToPlayerPosition();
+        GameHUD.EnablingBottomUI(true);
     }
 }
