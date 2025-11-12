@@ -63,13 +63,17 @@ public class NetworkPlayerSpawner : MonoBehaviour, INetworkPlayerSpawner
         int index = (actorNumber - 1) % m_PlayerPrefabNames.Count;
 
         string prefabName = m_PlayerPrefabNames[index];
+
         Vector3 spawnPos = (m_SpawnPoints.Count > index)
             ? m_SpawnPoints[index].position
             : Vector3.zero;
 
-        Debug.Log($"Spawning player prefab '{prefabName}' at position {spawnPos}");
+        Vector3 rotation = (m_SpawnPoints.Count > index)
+            ? m_SpawnPoints[index].eulerAngles
+            : Vector3.zero;
 
-        PhotonNetwork.Instantiate($"Network/Player/{prefabName}", spawnPos, Quaternion.identity, 0);
+        Debug.Log($"Spawning player prefab '{prefabName}' at position {spawnPos}");
+        PhotonNetwork.Instantiate($"Network/Player/{prefabName}", spawnPos, Quaternion.Euler(rotation), 0);
     }
 
     public void RegisterPlayer(PlayerController playerController)

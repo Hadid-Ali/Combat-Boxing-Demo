@@ -32,7 +32,7 @@ public class NetworkMatchStartHandler : MonoBehaviour
         if (PhotonNetwork.IsMasterClient)
         {
             CheckForMinimumPlayersCount();
-            CheckForMaximumPlayersCount();
+            //CheckForMaximumPlayersCount();
         }
     }
 
@@ -96,7 +96,8 @@ public class NetworkMatchStartHandler : MonoBehaviour
         if (!PhotonNetwork.IsMasterClient)
             return;
         
-        PhotonNetwork.CurrentRoom.IsOpen = false;      
+        PhotonNetwork.CurrentRoom.IsOpen = false;
+        
         PhotonNetwork.LoadLevel("GameplayFinal");
         //NetworkManager.Instance.LoadGameplay("PokerGame");
     }

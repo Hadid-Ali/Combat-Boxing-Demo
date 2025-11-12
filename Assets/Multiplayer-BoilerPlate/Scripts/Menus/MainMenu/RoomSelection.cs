@@ -7,6 +7,8 @@ public class RoomSelection : UIMenuBase
     [SerializeField] private Transform roomTParent;
 
     private List<RoomObject> instantiatedObj = new();
+
+
     private void Awake()
     {
         GameEvents.MenuEvents.RoomsListUpdated.Register(OnRoomsUpdated);

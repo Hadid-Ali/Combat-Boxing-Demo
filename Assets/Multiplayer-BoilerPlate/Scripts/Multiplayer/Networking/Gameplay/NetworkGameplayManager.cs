@@ -30,9 +30,9 @@ public class NetworkGameplayManager : MonoBehaviour
     
     private void Start()
     {
-        if(PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient)
             GameEvents.NetworkEvents.OnMasterGameplayLoaded.Raise();
-        
+
         StartMatchInternal();
         Application.runInBackground = true;
     }

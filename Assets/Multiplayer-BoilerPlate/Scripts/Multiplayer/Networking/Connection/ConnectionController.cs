@@ -278,7 +278,6 @@ public class ConnectionController : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
-        Debug.Log("Player Entered Room");
         base.OnPlayerEnteredRoom(newPlayer);
         GameEvents.NetworkEvents.PlayerJoinedRoom.Raise();
         UpdatePlayersList();
