@@ -18,6 +18,7 @@ public class CameraManager : MonoBehaviour
 
     public delegate void SwitchCameraToFightingPosition();
     public static event SwitchCameraToFightingPosition onCameraSwitchingToFight;
+
     private void OnEnable()
     {
         onCameraSwitchingToPlayer += SwitchToPlayer;
