@@ -5,6 +5,13 @@ using Photon.Pun;
 
 public class NetworkPlayerSpawner : MonoBehaviour, INetworkPlayerSpawner
 {
+    [Tooltip("List of player prefab names, e.g. Player1, Player2, Player3")]
+    [SerializeField] private List<string> m_PlayerPrefabNames = new();
+
+    [Header("Spawn Points")]
+    [Tooltip("Assign spawn points for players in order")]
+    [SerializeField] private List<Transform> m_SpawnPoints = new();
+
     [SerializeField] private List<PlayerController> m_JoinedPlayers = new();
     private GameEvent<PlayerController> m_OnPlayerSpawned = new();
 
@@ -44,18 +51,25 @@ public class NetworkPlayerSpawner : MonoBehaviour, INetworkPlayerSpawner
     }
 
     public void SpawnPlayer()
-    { 
-        PhotonNetwork.Instantiate($"Network/Player/Avatars/PlayerAvatar", Vector3.zero,
-            Quaternion.identity, 0);
-        ;
-        if(m_Manager.BotCount <= 0 || !PhotonNetwork.IsMasterClient)
-            return;
-
-        for (int i = 0; i < m_Manager.BotCount; i++)
+    {
+        if (!PhotonNetwork.IsConnectedAndReady)
         {
-            PhotonNetwork.Instantiate($"Network/Player/Avatars/BotAvatar", Vector3.zero,
-                Quaternion.identity, 0);
+            Debug.LogWarning("Photon not ready yet. Cannot spawn player.");
+            return;
         }
+
+        // Use ActorNumber to determine index
+        int actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
+        int index = (actorNumber - 1) % m_PlayerPrefabNames.Count;
+
+        string prefabName = m_PlayerPrefabNames[index];
+        Vector3 spawnPos = (m_SpawnPoints.Count > index)
+            ? m_SpawnPoints[index].position
+            : Vector3.zero;
+
+        Debug.Log($"Spawning player prefab '{prefabName}' at position {spawnPos}");
+
+        PhotonNetwork.Instantiate($"Network/Player/{prefabName}", spawnPos, Quaternion.identity, 0);
     }
 
     public void RegisterPlayer(PlayerController playerController)

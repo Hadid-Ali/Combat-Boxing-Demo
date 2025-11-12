@@ -66,11 +66,9 @@ public class NetworkMatchStartHandler : MonoBehaviour
 
     public void OnPlayerLeftRoom(int id)
     {
-        print("Inside leftRoom function");
         if (CurrentPlayersCount < GameData.MetaData.MinimumRequiredPlayers)
         {
             TerminateAutoMatchStartRequest();
-            print("Match request terminated");
         }
     }
 
@@ -98,9 +96,8 @@ public class NetworkMatchStartHandler : MonoBehaviour
         if (!PhotonNetwork.IsMasterClient)
             return;
         
-        PhotonNetwork.CurrentRoom.IsOpen = false;
-        
-        PhotonNetwork.LoadLevel(2);
+        PhotonNetwork.CurrentRoom.IsOpen = false;      
+        PhotonNetwork.LoadLevel("GameplayFinal");
         //NetworkManager.Instance.LoadGameplay("PokerGame");
     }
 
@@ -112,7 +109,7 @@ public class NetworkMatchStartHandler : MonoBehaviour
     [PunRPC]
     private void LoadScene()
     {
-        PhotonNetwork.LoadLevel(2);
+        PhotonNetwork.LoadLevel("GameplayFinal");
         //NetworkManager.Instance.LoadGameplay("PokerGame");
     }
 }

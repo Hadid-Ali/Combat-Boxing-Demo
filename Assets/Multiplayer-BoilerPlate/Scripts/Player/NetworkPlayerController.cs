@@ -34,11 +34,9 @@ public class NetworkPlayerController : PlayerController
         if (!IsLocalPlayer)
             return;
         
-        InitializeControls();
-        SetPlayerDataOverServer();    
-        
+        //InitializeControls();
+        //SetPlayerDataOverServer();            
     }
-
 
 
     private void OnNetworkDisconnect()

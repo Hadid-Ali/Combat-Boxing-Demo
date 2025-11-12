@@ -2752,8 +2752,10 @@ GameObject:
   - component: {fileID: 1282078684141216979}
   - component: {fileID: 8970941476985846280}
   - component: {fileID: 242303427812608491}
+  - component: {fileID: 8608137767498369249}
+  - component: {fileID: 7072320887550963982}
   m_Layer: 0
-  m_Name: AI
+  m_Name: Player 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2821,6 +2823,42 @@ MonoBehaviour:
   rightHandTarget: {fileID: 1417988917410719542}
   leftHandTarget: {fileID: 4094771599780787661}
   ikWeight: 1
+--- !u!114 &8608137767498369249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8887615823647050475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &7072320887550963982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8887615823647050475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9141d1815b01d6e4b90d58e758bf56bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 0
+  m_PhotonView: {fileID: 8608137767498369249}
 --- !u!1 &9052376393872793052
 GameObject:
   m_ObjectHideFlags: 0

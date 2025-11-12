@@ -197,7 +197,7 @@ public class ConnectionController : MonoBehaviourPunCallbacks
 
     private void OnRoomsReceivedInternal(List<RoomInfo> roomList)
     {
-        Debug.LogError("Rooms Received");
+        Debug.Log("Rooms Received");
         if (!roomList.Any())
         {
             GameEvents.NetworkEvents.RoomJoinFailed.Raise();
@@ -237,7 +237,7 @@ public class ConnectionController : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.OfflineMode)
         {
-            NetworkManager.Instance.LoadGameplay("PokerGame");
+            NetworkManager.Instance.LoadGameplay("GameplayFinal");
             return;
         }
 
@@ -278,6 +278,7 @@ public class ConnectionController : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
+        Debug.Log("Player Entered Room");
         base.OnPlayerEnteredRoom(newPlayer);
         GameEvents.NetworkEvents.PlayerJoinedRoom.Raise();
         UpdatePlayersList();

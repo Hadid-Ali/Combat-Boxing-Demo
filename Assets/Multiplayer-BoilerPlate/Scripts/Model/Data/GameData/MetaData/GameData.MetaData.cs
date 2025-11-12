@@ -23,7 +23,7 @@ public static partial class GameData
         public const float RevealTimeForThreePlayersGame = 8f;
         public const float RevealTimeForSixPlayersGame = 26f;
         
-        public const int WaitBeforeAutomaticMatchStart = 30;
+        public const int WaitBeforeAutomaticMatchStart = 5;
         public const int WaitBeforeAutomaticRoundStart = 5;
         public const int WaitBeforeAutomaticCardsSubmission = 180;
         public const int WaitBeforeSubmissionTimerStart = 5;
