@@ -1,23 +1,29 @@
+using DG.Tweening;
+using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using static Boxer;
 
 public class CardsManager : MonoBehaviour
 {
-    [SerializeField] CardNamesScriptable cardDictionary;
-    [SerializeField] GameObject cardPrefab;
-    [SerializeField] Transform cardParent;
-    [SerializeField] int totalCardsNeeded;
-    [SerializeField] int index = 0;
-    [SerializeField] List<GameObject> cardsInstantiated;
+    [SerializeField] private CardNamesScriptable cardDictionary;
+    [SerializeField] private GameObject cardPrefab;
+    [SerializeField] private Transform cardParent;
+    [SerializeField] private Transform selectedCardParentP1;
+    [SerializeField] private Transform selectedCardParentP2;
+    [SerializeField] private GameObject blockerOBJ;
 
+    [SerializeField] List<Card_Info> cardsInstantiated;
     [SerializeField] List<CardNamesScriptable.Boxing_Card> powers;
-    [SerializeField] AttackType selectedAttack;
 
+    [SerializeField] AttackType selectedAttack;
     [SerializeField] AttackType opponentsAttack;
 
     [SerializeField] bool testing;
     [SerializeField] string attackIndex;
+    [SerializeField] int totalCardsNeeded;
+    [SerializeField] int index = 0;
 
     #region Delegates
 
@@ -36,7 +42,7 @@ public class CardsManager : MonoBehaviour
     public delegate void SetSelectedAttack(AttackType val);
     public static event SetSelectedAttack onAttackSet;
 
-    public delegate List<GameObject> GetCards();
+    public delegate List<Card_Info> GetCards();
     public static event GetCards onGettingAvailableCards;
 
     public delegate float SetAttackPriority(AttackType _type);
@@ -44,15 +50,24 @@ public class CardsManager : MonoBehaviour
 
     public delegate void RegenerateCardList();
     public static event RegenerateCardList onRegeneratingCards;
+
+
+    private PhotonView _photonView;
+
+
     #endregion
+
     private void Start()
     {
+        _photonView = GetComponent<PhotonView>();
+        totalCardsNeeded = cardDictionary.cards.Count;
         powers.AddRange(cardDictionary.cards);
         InstantiatingCards();
     }
+
     private void OnEnable()
     {
-        onCloneCard += IntantiateCards;
+        onCloneCard += InstantiateCards;
         onAttackSelected += GetAttackSelected;
         onAttackSet += SetAttackValue;
         onOpponentAttackSelected += GetAttackSelectedForOpponent;
@@ -64,7 +79,7 @@ public class CardsManager : MonoBehaviour
 
     private void OnDisable()
     {
-        onCloneCard -= IntantiateCards;
+        onCloneCard -= InstantiateCards;
         onAttackSelected -= GetAttackSelected;
         onAttackSet -= SetAttackValue;
         onOpponentAttackSelected -= GetAttackSelectedForOpponent;
@@ -74,55 +89,138 @@ public class CardsManager : MonoBehaviour
         onRegeneratingCards -= ResetAndRegenerateCard;
     }
 
-    public static void InstantiatingCards()
+    private void InstantiatingCards()
     {
-        onCloneCard?.Invoke();
+        if (PhotonNetwork.IsMasterClient)
+            onCloneCard?.Invoke();
     }
-    void IntantiateCards()
+
+    private void InstantiateCards()
     {
-        if (index < totalCardsNeeded)
+        Debug.Log("Instantiating Cards " + index);
+
+        for (int i = 0; i < cardDictionary.cards.Count; i++)
         {
-            if (powers.Count < totalCardsNeeded)
-            {
-                powers.Clear();
-                powers.AddRange(cardDictionary.cards);
-            }
-            int r = Random.Range(0, (powers.Count - 1));
-            GameObject g = Instantiate(cardPrefab, cardParent.position, Quaternion.identity);
-            cardsInstantiated.Add(g);
-            g.transform.SetParent(cardParent.transform);
-            g.transform.localEulerAngles = Vector3.zero;
-            g.transform.localScale = Vector3.one;
-            g.transform.localPosition = Vector3.zero;
-            //Debug.LogError(" " + powers[r].name+" "+r);
+            var data = cardDictionary.cards[i];
+            GameObject g = PhotonNetwork.Instantiate("Network/Cards/CardInfo", cardParent.position,
+                Quaternion.identity);
 
-            Card_Info c_info = g.GetComponent<Card_Info>();
-            if (testing)
-            {
-                c_info.m_TextMeshPro.text = attackIndex;
-                c_info.icon.sprite = powers[0].cardSprite;
-                c_info.icon.gameObject.SetActive(false);
-            }
-            else
-            {
-                c_info.m_TextMeshPro.text = powers[r].name;
-                if (powers[r].cardSprite)
-                    c_info.icon.sprite = powers[r].cardSprite;
-            }
-                
-
-            powers.Remove(powers[r]);
-            index++;
-            IntantiateCards();
+            // Sync spawn info to all clients
+            _photonView.RPC(nameof(RPC_SpawnCard),
+                RpcTarget.AllBuffered,
+                data.id, g.GetComponent<PhotonView>().ViewID);
         }
     }
 
-    void ResetIndex()
+    [PunRPC]
+    private void RPC_SpawnCard(string id, int viewID)
+    {
+        var card = cardDictionary.cards.Find(c => c.id == id);
+
+        // This runs on ALL clients (called by master)
+        GameObject cardObj = PhotonView.Find(viewID).gameObject;
+        if (cardObj == null) return;
+
+        Card_Info cardInfo = cardObj.GetComponent<Card_Info>();
+        cardsInstantiated.Add(cardInfo);
+        cardInfo.transform.SetParent(cardParent);
+
+        cardInfo.m_TextMeshPro.text = card.name;
+        cardInfo.cardId = id;
+        cardInfo.transform.localScale = Vector3.one;
+        cardInfo.icon.sprite = card.cardSprite;
+        cardInfo.priority = card.priority;
+
+        Button btn = cardObj.GetComponent<Button>();
+        btn.onClick.RemoveAllListeners();
+        btn.onClick.AddListener(() => OnCardSelected(cardInfo));
+    }
+
+    public void OnCardSelected(Card_Info cardInfo)
+    {
+        int playerId = PhotonNetwork.LocalPlayer.ActorNumber;
+
+        // Make sure the card has a PhotonView
+        PhotonView cardView = PhotonView.Find(cardInfo.PhotonId());
+
+        if (cardView == null)
+        {
+            Debug.LogError("Card has no PhotonView attached!");
+            return;
+        }
+
+        blockerOBJ.SetActive(true);
+
+        // Send the selection info to everyone (movement happens in RPC)
+        _photonView.RPC(
+            nameof(RPC_CardSelectedMeta),
+            RpcTarget.AllBuffered,
+            playerId,
+            cardInfo.cardId,
+            cardView.ViewID
+        );
+    }
+
+    [PunRPC]
+    private void RPC_CardSelectedMeta(int playerId, string cardId, int viewID)
+    {
+        PhotonView cardView = PhotonView.Find(viewID);
+        if (cardView == null)
+        {
+            Debug.LogWarning($"No card found with ViewID {viewID}");
+            return;
+        }
+
+        Card_Info card = cardView.GetComponent<Card_Info>();
+        if (card == null) return;
+
+        Button btn = card.GetComponent<Button>();
+        if (btn != null)
+            btn.interactable = false;
+
+        Transform targetParent = (playerId == 1)
+            ? selectedCardParentP1
+            : selectedCardParentP2;
+
+        RectTransform cardRect = card.GetComponent<RectTransform>();
+        RectTransform targetRect = targetParent.GetComponent<RectTransform>();
+
+        Vector3 worldPos = cardRect.position;
+        cardRect.SetParent(targetRect, worldPositionStays: true);
+
+        cardRect.DOAnchorPos(Vector2.zero, 0.6f).SetEase(Ease.OutBack);
+        cardRect.DORotate(Vector3.zero, 0.4f).SetEase(Ease.OutBack);
+        cardRect.DOScale(Vector3.one, 0.4f).SetEase(Ease.OutBack);
+
+        if (playerId == 1)
+            GameplayManager.instance.SetPlayer1SelectedCard(card);
+        else
+            GameplayManager.instance.SetPlayer2SelectedCard(card);
+
+        Debug.Log($"Player {playerId} selected card priority {card.priority}");
+        GameplayManager.instance.StartCardPriorityEvaluation();
+    }
+
+
+    public void EnableCardSelection(bool enable)
+    {
+        foreach (var card in cardsInstantiated)
+        {
+            Button btn = card.GetComponent<Button>();
+            if (btn != null)
+                btn.interactable = enable;
+        }
+
+        if (blockerOBJ != null)
+            blockerOBJ.SetActive(!enable);
+    }
+
+    private void ResetIndex()
     {
         index = 0;
         powers.AddRange(cardDictionary.cards);
-        //powers.Reverse();
     }
+
     public static AttackType OnSelectedAttack()
     {
         return onAttackSelected.Invoke();
@@ -158,11 +256,12 @@ public class CardsManager : MonoBehaviour
         //Debug.LogError("selected opponent");
     }
    
-    public static List<GameObject> GetAvailabeCards()
+    public static List<Card_Info> GetAvailabeCards()
     {
         return onGettingAvailableCards.Invoke();
     }
-    List<GameObject> GetCardsInstantiated()
+
+    public List<Card_Info> GetCardsInstantiated()
     {
         return cardsInstantiated;
     }
@@ -188,14 +287,15 @@ public class CardsManager : MonoBehaviour
     {
         onRegeneratingCards?.Invoke();
     }
+
     void ResetAndRegenerateCard()
     {
-        foreach(GameObject g in cardsInstantiated)
+        foreach(var g in cardsInstantiated)
         {
             Destroy(g);
         }
         cardsInstantiated.Clear();
-        IntantiateCards();
+        InstantiateCards();
         GameHUD.ChooseCardTimer(-1);
         CameraManager.SwitchToPlayerPosition();
         GameHUD.EnablingBottomUI(true);

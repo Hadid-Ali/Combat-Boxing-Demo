@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: CardNames
   m_EditorClassIdentifier: 
   cards:
-  - name: POWERPUNCH
+  - id: 0
+    priority: 1
+    name: POWERPUNCH
     speed: 1.5
     cardSprite: {fileID: 21300000, guid: 2d4689afae5a1bb4793100bc1781d39a, type: 3}
     rewardAmount: 0
@@ -22,7 +24,9 @@ MonoBehaviour:
     minAnimFloat: 0
     maxAnimFloat: 1
     blendIndex: PowerpunchBlendIndex
-  - name: COMBO
+  - id: 1
+    priority: 5
+    name: COMBO
     speed: 1
     cardSprite: {fileID: 21300000, guid: fa71b5d7babd1124486d72a4702cd117, type: 3}
     rewardAmount: 0
@@ -38,7 +42,9 @@ MonoBehaviour:
     minAnimFloat: 0.1
     maxAnimFloat: 1
     blendIndex: ComboBlendIndex
-  - name: UPPERCUT
+  - id: 2
+    priority: 3
+    name: UPPERCUT
     speed: 2.5
     cardSprite: {fileID: 21300000, guid: 0356a50f6d901a64cb919198ac8d0110, type: 3}
     rewardAmount: 0
@@ -48,7 +54,9 @@ MonoBehaviour:
     minAnimFloat: 0.3
     maxAnimFloat: 0.7
     blendIndex: UppercutBlendIndex
-  - name: OVERHAND
+  - id: 3
+    priority: 6
+    name: OVERHAND
     speed: 2
     cardSprite: {fileID: 21300000, guid: 95cc59a99f0f7e64a921d12168eceb99, type: 3}
     rewardAmount: 0
@@ -56,7 +64,9 @@ MonoBehaviour:
     minAnimFloat: 0
     maxAnimFloat: 1
     blendIndex: OverhandBlendIndex
-  - name: HOOK
+  - id: 4
+    priority: 4
+    name: HOOK
     speed: 3
     cardSprite: {fileID: 21300000, guid: 62973fc0a6b79e84abef16ae2d005a6a, type: 3}
     rewardAmount: 0
@@ -66,7 +76,9 @@ MonoBehaviour:
     minAnimFloat: 0.2
     maxAnimFloat: 0.8
     blendIndex: HookBlendIndex
-  - name: BODY
+  - id: 5
+    priority: 0
+    name: BODY
     speed: 4
     cardSprite: {fileID: 21300000, guid: e0939947016d52843919cda136281f20, type: 3}
     rewardAmount: 0
@@ -80,7 +92,9 @@ MonoBehaviour:
     minAnimFloat: 0.1
     maxAnimFloat: 1
     blendIndex: BodyBlendIndex
-  - name: JAB
+  - id: 6
+    priority: 2
+    name: JAB
     speed: 5
     cardSprite: {fileID: 21300000, guid: 8477bb5d6efc27743bfedc67c456d2c4, type: 3}
     rewardAmount: 0

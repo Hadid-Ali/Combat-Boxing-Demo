@@ -8,44 +8,41 @@ public class AnimationHandler : MonoBehaviour
     Tween moveTween;
     [SerializeField] float speed;
     [SerializeField] string boxerName;
-    [SerializeField]Animator animator;
+    [SerializeField] Animator animator;
+
     [Header("IK Targets")]
     public Transform rightHandTarget;
     public Transform leftHandTarget;
 
     [Range(0, 1)] public float ikWeight = 1.0f;
-    //[SerializeField] GameObject rightAttackSweatEffect;
-    //[SerializeField] GameObject leftAttackSweatEffect;
+
+
     public void OnAttackAnimationComplete()
     {
-        //ResetToOriginalPosition();
         if (GameplayManager.FirstAttacker() != "")
         {
             if (GameplayManager.FirstAttacker().ToLower().Equals(BoxerType.player.ToString().ToLower()))
-                Invoke("CallOpponentAttack", 1.5f);
+                Invoke(nameof(CallOpponentAttack), 1.5f);
             else
-                Invoke("CallPlayerAttack", 1.5f);
+                Invoke(nameof(CallPlayerAttack), 1.5f);
 
             GameplayManager.ResetFirstAttackerValue("");
         }
-
-        //Debug.LogError("on animation complete");
     }
 
-    void CallOpponentAttack()
+    private void CallOpponentAttack()
     {
         Player.OnResetAttackState();
         OpponentAI.OnAttackAction(CardsManager.OnOpponentSelectedAttack());
         CancelInvoke("CallOpponentAttack");
     }
 
-    void CallPlayerAttack()
+    private void CallPlayerAttack()
     {
-        //OpponentAI.OnResetAttackState();
-        //Player.OnAttackAction(CardsManager.OnSelectedAttack());
-        CancelInvoke("CallPlayerAttack");
+        CancelInvoke(nameof(CallPlayerAttack));
     }
-    void ResetToOriginalPosition()
+
+    private void ResetToOriginalPosition()
     {
         this.GetComponent<Animator>().SetBool("IsDefending", false);
 
@@ -53,26 +50,24 @@ public class AnimationHandler : MonoBehaviour
 
         moveTween = this.transform.DOMove(originalPos.position, speed).SetEase(Ease.Linear).OnComplete(() =>
         {
-        });
 
-        //Debug.LogError("player reset");
+        });
     }
 
-    void OnDamage(string reaction)
+    private void OnDamage(string reaction)
     {
         if (boxerName.Equals("Player"))
         {
             OpponentAI.GetRandomDefence(reaction);
-            //Invoke("ResetOpponentAnimation", 1.5f);
         }
         else if (boxerName.Equals("Ai"))
         {
             Debug.LogError("body hit ");
             Player.GetRandomDefence(reaction);
-            //Invoke("ResetPlayerAnimation", 1.5f);
         }
     }
-    void EffectOnRightHand(string attack)
+
+    private void EffectOnRightHand(string attack)
     {
         if (boxerName.Equals("Player"))
         {
@@ -85,10 +80,11 @@ public class AnimationHandler : MonoBehaviour
             OpponentAI.PlayRightHandEffect();
             if (attack.Equals("FacePunch") || attack.Equals("UppercutPunch"))
                 Player.PlaySweatEffect();
-        }
-       
+        }       
     }
-    void EffectOnLeftHand(string attack)
+
+
+    private void EffectOnLeftHand(string attack)
     {
         if (boxerName.Equals("Player"))
         {
@@ -101,13 +97,11 @@ public class AnimationHandler : MonoBehaviour
             OpponentAI.PlayLeftHandEffect();
             if (attack.Equals("FacePunch") || attack.Equals("UppercutPunch"))
                 Player.PlaySweatEffect();
-        }
-      
+        }      
     }
 
-    void OnKnockedOut()
+    private void OnKnockedOut()
     {
-
         if (boxerName.Equals("Player"))
         {
             OpponentAI.Knockedout();
@@ -119,7 +113,7 @@ public class AnimationHandler : MonoBehaviour
         }
     }
 
-    void GroundHit()
+    private void GroundHit()
     {
         if (boxerName.Equals("Player"))
         {
@@ -129,18 +123,20 @@ public class AnimationHandler : MonoBehaviour
         {
         }
     }
+
     private void ResetOpponentAnimation()
     {
         OpponentAI.OnResetAttackState();
-        CancelInvoke("ResetOpponentAnimation");
+        CancelInvoke(nameof(ResetOpponentAnimation));
     }
+
     private void ResetPlayerAnimation()
     {
         Player.OnResetAttackState();
-        CancelInvoke("ResetPlayerAnimation");
+        CancelInvoke(nameof(ResetPlayerAnimation));
     }
 
-    void OnAnimatorIK(int layerIndex)
+    private void OnAnimatorIK(int layerIndex)
     {
         if (animator == null) return;
 
@@ -159,6 +155,5 @@ public class AnimationHandler : MonoBehaviour
             animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandTarget.position);
             animator.SetIKRotation(AvatarIKGoal.LeftHand, leftHandTarget.rotation);
         }
-
     }
 }

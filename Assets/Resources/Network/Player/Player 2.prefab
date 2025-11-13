@@ -2754,6 +2754,8 @@ GameObject:
   - component: {fileID: 242303427812608491}
   - component: {fileID: 8608137767498369249}
   - component: {fileID: 7072320887550963982}
+  - component: {fileID: 1368290441885243477}
+  - component: {fileID: 6610322085979150887}
   m_Layer: 0
   m_Name: Player 2
   m_TagString: Untagged
@@ -2859,6 +2861,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   score: 0
   m_PhotonView: {fileID: 8608137767498369249}
+--- !u!114 &1368290441885243477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8887615823647050475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6abea5e8278803c498555f49d6bb1fa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  attackType: 0
+  pointsEarned: 0
+  cardType: {fileID: 11400000, guid: 8da0dabeea148624da7f1e6347ee93d6, type: 2}
+  animator: {fileID: 8970941476985846280}
+  moveSpeed: 0
+  effectsPrefab:
+  - {fileID: 3432958286849152088, guid: 87ee7299dd44ed747af24dbb91bcd33b, type: 3}
+  - {fileID: 4021103657954561961, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}
+  - {fileID: 1429954232896169633, guid: 83036083a4ebcd34f98131bd3cf6f4d2, type: 3}
+  rightHandEffectParent: {fileID: 1385630742200234943}
+  leftHandEffectParent: {fileID: 1799593414067141797}
+  sweatEffect: {fileID: 5477001029687946491}
+  bloodEffect: {fileID: 7573848405757015678}
+  knockOutCamera: {fileID: 0}
+  groundHitEffect: {fileID: 0}
+  boxer: {fileID: 1282078684141216979}
+  targetToMove: {fileID: 0}
+  rightHandEffect: []
+  leftHandEffect: []
+  _animationRPC: {fileID: 0}
+  speed: 0
+--- !u!114 &6610322085979150887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8887615823647050475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ea19dece88236947932e81082a35258, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9052376393872793052
 GameObject:
   m_ObjectHideFlags: 0
@@ -3260,6 +3308,11 @@ PrefabInstance:
 --- !u!4 &4088557457190148395 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1066758779770365515, guid: 11752c4efbbb3334cb653f4fb57bdb2b, type: 3}
+  m_PrefabInstance: {fileID: 3922804793749946208}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7573848405757015678 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6875638537394587934, guid: 11752c4efbbb3334cb653f4fb57bdb2b, type: 3}
   m_PrefabInstance: {fileID: 3922804793749946208}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4591757917645333299
@@ -3738,6 +3791,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5f1feffd19715e40b8a1abed30b6f22, type: 3}
+--- !u!1 &5477001029687946491 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1245987682601367864, guid: f5f1feffd19715e40b8a1abed30b6f22, type: 3}
+  m_PrefabInstance: {fileID: 6721785554209920451}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5870116984259101935 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 882226220757455148, guid: f5f1feffd19715e40b8a1abed30b6f22, type: 3}

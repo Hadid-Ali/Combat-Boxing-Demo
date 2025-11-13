@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Photon.Pun;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,9 +8,28 @@ public class Card_Info : MonoBehaviour
 {
     public TextMeshProUGUI m_TextMeshPro;
     public Image icon;
+    public string cardId;
+    public int priority;
     public bool selected = false;
     public Boxer.AttackType _type;
     [SerializeField] float animationSpeed;
+
+
+    private PhotonView m_PhotonView;
+
+    private void Start()
+    {
+        m_PhotonView = GetComponent<PhotonView>();
+    }
+
+    public int PhotonId()
+    {
+        if (m_PhotonView != null)
+            return m_PhotonView.ViewID;
+        else
+            return -1;
+    }
+
     public void CardSelected(RectTransform target, Boxer.BoxerType pType)
     {
         SetAttackType(target, pType);
@@ -46,14 +66,14 @@ public class Card_Info : MonoBehaviour
         }
         CardSelectionAnimation(target, pType);
     }
+
     void CardSelectionAnimation(RectTransform _target, Boxer.BoxerType pType)
     {
         this.transform.SetParent(_target.parent);
         RectTransform t = this.GetComponent<RectTransform>();
 
         t.DOAnchorPos(_target.anchoredPosition, animationSpeed).SetEase(Ease.Linear).OnComplete(() =>
-        {
-           
+        {          
             m_TextMeshPro.enabled = true;
             if(icon)
                 icon.gameObject.SetActive(true);

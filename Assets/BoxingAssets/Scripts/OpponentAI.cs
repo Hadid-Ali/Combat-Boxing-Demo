@@ -106,6 +106,8 @@ public class OpponentAI : Boxer
                         });
 
     }
+
+
     void TriggerAttackAnimation(AttackType _attack)
     {
         CardNamesScriptable.Boxing_Card _card = null;
@@ -208,9 +210,10 @@ public class OpponentAI : Boxer
     {
         onCardSelection?.Invoke();
     }
-    void AvailableCards()
+
+    private void AvailableCards()
     {
-        foreach (GameObject g in CardsManager.GetAvailabeCards())
+        foreach (var g in CardsManager.GetAvailabeCards())
         {
             Card_Info c = g.GetComponent<Card_Info>();
             if (!c.selected)
@@ -232,18 +235,20 @@ public class OpponentAI : Boxer
             }
            
         }
-      
         GameplayManager.SetAttack(true);
-
     }
+
     public static void GetRandomDefence(string reaction)
     {
         onRandomDefence?.Invoke(reaction);
     }
+
     float valHit = 0;
     float valLastHit = 0;
-    [SerializeField]float speed = 0;
+    [SerializeField] float speed = 0;
     private Tween speedTween;
+
+
     public void SetBlendSpeed(float targetSpeed, float duration)
     {
         float current = animator.GetFloat("HitBlendIndex");

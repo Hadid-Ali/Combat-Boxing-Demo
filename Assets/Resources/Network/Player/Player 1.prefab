@@ -672,9 +672,11 @@ GameObject:
   m_Component:
   - component: {fileID: 3800102740068956046}
   - component: {fileID: 7724687428481711278}
-  - component: {fileID: 3356563600845871764}
   - component: {fileID: 5466604009275080871}
+  - component: {fileID: 3356563600845871764}
   - component: {fileID: 3183052713336949485}
+  - component: {fileID: 7771569855155354703}
+  - component: {fileID: 2834138271018478736}
   m_Layer: 0
   m_Name: Player 1
   m_TagString: Untagged
@@ -728,25 +730,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &3356563600845871764
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1495907222151937870}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7b61c20bb624b244b91c62c8654a341, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  originalPos: {fileID: 0}
-  speed: 0.25
-  boxerName: Player
-  animator: {fileID: 7724687428481711278}
-  rightHandTarget: {fileID: 2314591169773018405}
-  leftHandTarget: {fileID: 8339520144446072523}
-  ikWeight: 1
 --- !u!114 &5466604009275080871
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -769,6 +752,25 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &3356563600845871764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495907222151937870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7b61c20bb624b244b91c62c8654a341, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  originalPos: {fileID: 0}
+  speed: 0.25
+  boxerName: Player
+  animator: {fileID: 7724687428481711278}
+  rightHandTarget: {fileID: 2314591169773018405}
+  leftHandTarget: {fileID: 8339520144446072523}
+  ikWeight: 1
 --- !u!114 &3183052713336949485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -783,6 +785,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   score: 0
   m_PhotonView: {fileID: 5466604009275080871}
+--- !u!114 &7771569855155354703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495907222151937870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6abea5e8278803c498555f49d6bb1fa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  attackType: 0
+  pointsEarned: 0
+  cardType: {fileID: 11400000, guid: 8da0dabeea148624da7f1e6347ee93d6, type: 2}
+  animator: {fileID: 7724687428481711278}
+  moveSpeed: 0
+  effectsPrefab:
+  - {fileID: 3432958286849152088, guid: 87ee7299dd44ed747af24dbb91bcd33b, type: 3}
+  - {fileID: 4021103657954561961, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}
+  - {fileID: 1429954232896169633, guid: 83036083a4ebcd34f98131bd3cf6f4d2, type: 3}
+  rightHandEffectParent: {fileID: 921412926307944003}
+  leftHandEffectParent: {fileID: 5527781547712881436}
+  sweatEffect: {fileID: 7639882663483308670}
+  bloodEffect: {fileID: 5306364370867646091}
+  knockOutCamera: {fileID: 0}
+  groundHitEffect: {fileID: 0}
+  boxer: {fileID: 0}
+  targetToMove: {fileID: 0}
+  rightHandEffect: []
+  leftHandEffect: []
+  _animationRPC: {fileID: 0}
+  speed: 0
+--- !u!114 &2834138271018478736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495907222151937870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ea19dece88236947932e81082a35258, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1791357079897220593
 GameObject:
   m_ObjectHideFlags: 0
@@ -3332,6 +3380,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1066758779770365515, guid: 11752c4efbbb3334cb653f4fb57bdb2b, type: 3}
   m_PrefabInstance: {fileID: 1641793605313947541}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5306364370867646091 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6875638537394587934, guid: 11752c4efbbb3334cb653f4fb57bdb2b, type: 3}
+  m_PrefabInstance: {fileID: 1641793605313947541}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2044175612222378617
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3969,6 +4022,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5f1feffd19715e40b8a1abed30b6f22, type: 3}
+--- !u!1 &7639882663483308670 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1245987682601367864, guid: f5f1feffd19715e40b8a1abed30b6f22, type: 3}
+  m_PrefabInstance: {fileID: 8884744445285696326}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8607152863403676266 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 882226220757455148, guid: f5f1feffd19715e40b8a1abed30b6f22, type: 3}

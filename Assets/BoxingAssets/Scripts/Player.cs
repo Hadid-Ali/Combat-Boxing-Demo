@@ -1,5 +1,4 @@
 using DG.Tweening;
-using SmoothShakeFree;
 using System.Collections.Generic;
 using UnityEngine;
 using static CardNamesScriptable;
@@ -43,14 +42,19 @@ public class Player : Boxer
     public delegate void GroundHitEffectActivation();
     public static event GroundHitEffectActivation onGroundHit;
 
+    [SerializeField] private AnimationRPC _animationRPC; 
+
     private void Start()
     {
+        _animationRPC = GetComponent<AnimationRPC>();
+
         foreach (GameObject effect in effectsPrefab)
         {
             HitEffects.InstantiateHitEffects(effect, rightHandEffectParent, rightHandEffect);
             HitEffects.InstantiateHitEffects(effect, leftHandEffectParent, leftHandEffect);
         }
     }
+
     private void OnEnable()
     {
         onAttack += AttackAction;
@@ -64,6 +68,7 @@ public class Player : Boxer
         onKnockedout += KnockOut;
         onGroundHit += GroundHitEffect;
     }
+
     private void OnDisable()
     {
         onAttack -= AttackAction;
@@ -111,10 +116,12 @@ public class Player : Boxer
                 break;
             }
         }
+
         float val = 0;
-        animator.SetFloat("HitBlendIndex", 0);
-        animator.ResetTrigger("hit");
-        animator.SetBool("IsDefending", false);
+        _animationRPC.RPC_SetFloat("DefenceBlendINdex", 0);
+        _animationRPC.RPC_ResetTrigger("hit");
+        _animationRPC.RPC_SetBool("IsDefending", false);
+        
         switch (_attack)
         {
             case AttackType.idle:
@@ -186,21 +193,24 @@ public class Player : Boxer
         }
 
     }
+
     void UpdatePoints(int p)
     {
         pointsEarned += p;
         GameHUD.OnUpdatingPoints(BoxerType.player, p);
     }
+
     void CallAnimation(AttackType anim)
     {
         animator.ResetTrigger(anim.ToString().ToLower());
         animator.SetTrigger(anim.ToString().ToLower());
-        //Debug.LogError("animation " + anim.ToString().ToLower());
     }
+
     public static void GetRandomDefence(string reaction)
     {
         onRandomDefence?.Invoke(reaction);
     }
+
     float valHit = 0;
     float valLastHit = 0;
     [SerializeField] float speed = 0;
@@ -220,7 +230,7 @@ public class Player : Boxer
 
         speedTween = DOTween.To(() => animator.GetFloat("HitBlendIndex"), x =>
         {
-            animator.SetFloat("HitBlendIndex", x);
+            _animationRPC.RPC_SetFloat("HitBlendIndex", x);
 
         }, targetSpeed, duration).SetEase(Ease.Linear).OnComplete(() =>
         {
@@ -237,9 +247,10 @@ public class Player : Boxer
         {
             if (!animator.GetCurrentAnimatorStateInfo(0).IsTag("hit"))
             {
-                animator.ResetTrigger("hit");
-                animator.SetTrigger("hit");
+                _animationRPC.RPC_ResetTrigger("hit");
+                _animationRPC.RPC_SetTrigger("hit");
             }
+
             switch (hitReaction)
             {
                 case "FacePunch":
@@ -263,50 +274,55 @@ public class Player : Boxer
         else
         {
             val = Random.Range(0.25f, 0.65f);
-            animator.SetFloat("DefenceBlendINdex", val);
-            animator.SetBool("IsDefending", true);
+            _animationRPC.RPC_SetFloat("DefenceBlendINdex", val);
+            _animationRPC.RPC_SetBool("IsDefending", true);
         }
-       
     }
+
+
     public static void Knockedout()
     {
         onKnockedout?.Invoke();
     }
-    void KnockOut()
+
+    private void KnockOut()
     {
         if (!animator.GetCurrentAnimatorStateInfo(0).IsTag("knockout"))
         {
-            animator.ResetTrigger("knockout");
-            animator.SetTrigger("knockout");
+            _animationRPC.RPC_ResetTrigger("knockout");
+            _animationRPC.RPC_SetTrigger("knockout");
         }
 
         valHit = 1.0f;
-        animator.SetFloat("KnockoutBlendIndex", valHit);
-        //knockOutCamera.SetActive(true);
-
-        Invoke("EnableKnockOutCamer", 0.06f);
+        _animationRPC.RPC_SetFloat("KnockoutBlendIndex", valHit);   
+        Invoke(nameof(EnableKnockOutCamer), 0.06f);
     }
-    void EnableKnockOutCamer()
+
+    private void EnableKnockOutCamer()
     {
         knockOutCamera.SetActive(true);
-        CancelInvoke("EnableKnockOutCamer");
+        CancelInvoke(nameof(EnableKnockOutCamer));
     }
+
     public static void EnableGroundHitEffect()
     {
         onGroundHit?.Invoke();
     }
-    void GroundHitEffect()
+
+    private void GroundHitEffect()
     {
         Time.timeScale = 1.0f;
 
         groundHitEffect.SetActive(true);
         groundHitEffect.GetComponent<ParticleSystem>().Play();
     }
+
     public static AttackType GetAttackState()
     {
         return onAttackState.Invoke();
     }
-    AttackType GetCurrentAttackState()
+
+    private AttackType GetCurrentAttackState()
     {
         return attackType;
     }
@@ -315,23 +331,27 @@ public class Player : Boxer
     {
          onAttackResetState.Invoke();
     }
-    void ResetAttackState()
+
+    private void ResetAttackState()
     {
         attackType = AttackType.idle;
-        animator.SetFloat("HitBlendIndex", 0);
-        animator.ResetTrigger("hit");
-        animator.SetFloat("DefenceBlendINdex", 0);
-        animator.SetBool("IsDefending", false);
+        _animationRPC.RPC_SetFloat("KnockoutBlendIndex", 0);
+        _animationRPC.RPC_ResetTrigger("hit");
+        _animationRPC.RPC_SetFloat("DefenceBlendINdex", 0);
+        _animationRPC.RPC_SetBool("IsDefending", false);
     }
+
     public static void PlayLeftHandEffect()
     {
         onLeftHandEffectActivation?.Invoke();
     }
+
     public static void PlayRightHandEffect()
     {
         onRightHandEffectActivation?.Invoke();
     }
-    void RightHandEffect()
+
+    private void RightHandEffect()
     {
         foreach (GameObject g in rightHandEffect)
         {
@@ -339,10 +359,10 @@ public class Player : Boxer
             g.GetComponent<ParticleSystem>().Play();
         }
         StartShaking();
-        Invoke("StopShaking", 0.07f);
+        Invoke(nameof(StopShaking), 0.07f);
     }
 
-    void LeftHandEffect()
+    private void LeftHandEffect()
     {
         foreach (GameObject g in leftHandEffect)
         {
@@ -350,26 +370,31 @@ public class Player : Boxer
             g.GetComponent<ParticleSystem>().Play();
         }
         StartShaking();
-        Invoke("StopShaking", 0.07f);
+        Invoke(nameof(StopShaking), 0.07f);
     }
-    void StopShaking()
+
+    private void StopShaking()
     {
         //mainCamera.GetComponent<SmoothShake>().ForceStop();
     }
-    void StartShaking()
+
+    private void StartShaking()
     {
         //mainCamera.GetComponent<SmoothShake>().StartShake();
     }
+
     public static void PlaySweatEffect()
     {
         onSweatEffectPlay?.Invoke();
     }
-    void SweatEffect()
+
+    private void SweatEffect()
     {
         sweatEffect.gameObject.SetActive(true);
         sweatEffect.GetComponent<ParticleSystem>().Play();
         bloodEffect.SetActive(true);
         bloodEffect.GetComponent<ParticleSystem>().Play();
     }
+
     #endregion
 }
