@@ -24,16 +24,15 @@ public class NetworkGameplayManager : MonoBehaviour
     public virtual void Awake()
     {
         m_NetworkPlayerSpawner.Initialize(OnPlayerSpawned);
-        m_NetworkScoreHandler.Initialize(OnPlayerWin);
-        
+        m_NetworkScoreHandler.Initialize(OnPlayerWin);       
     }
     
     private void Start()
     {
-        if (PhotonNetwork.IsMasterClient)
-            GameEvents.NetworkEvents.OnMasterGameplayLoaded.Raise();
+        //if (PhotonNetwork.IsMasterClient)
+        //    GameEvents.NetworkEvents.OnMasterGameplayLoaded.Raise();
 
-        StartMatchInternal();
+        //StartMatchInternal();
         Application.runInBackground = true;
     }
 

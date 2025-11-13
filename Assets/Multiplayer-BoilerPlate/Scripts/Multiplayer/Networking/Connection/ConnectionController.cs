@@ -222,6 +222,7 @@ public class ConnectionController : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         print("On Lobby Joined");
+        PhotonNetwork.AutomaticallySyncScene = true;
         GameEvents.NetworkEvents.LobbyJoined.Raise();
     }
 
