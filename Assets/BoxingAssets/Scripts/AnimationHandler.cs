@@ -1,6 +1,7 @@
 using DG.Tweening;
+using Photon.Pun;
 using UnityEngine;
-using static Boxer;
+
 
 public class AnimationHandler : MonoBehaviour
 {
@@ -19,22 +20,10 @@ public class AnimationHandler : MonoBehaviour
 
     public void OnAttackAnimationComplete()
     {
-        if (GameplayManager.FirstAttacker() != "")
-        {
-            if (GameplayManager.FirstAttacker().ToLower().Equals(BoxerType.player.ToString().ToLower()))
-                Invoke(nameof(CallOpponentAttack), 1.5f);
-            else
-                Invoke(nameof(CallPlayerAttack), 1.5f);
+        Debug.Log("Attack complete, resetting round.");
 
-            GameplayManager.ResetFirstAttackerValue("");
-        }
-    }
-
-    private void CallOpponentAttack()
-    {
-        Player.OnResetAttackState();
-        OpponentAI.OnAttackAction(CardsManager.OnOpponentSelectedAttack());
-        CancelInvoke("CallOpponentAttack");
+        if(PhotonNetwork.IsMasterClient)
+            GameplayManager.instance.ResetRoundInternal();
     }
 
     private void CallPlayerAttack()

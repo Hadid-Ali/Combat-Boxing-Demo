@@ -8,6 +8,7 @@ public class CardNamesScriptable : ScriptableObject
     [Serializable]
     public class Boxing_Card
     {
+        public Boxer.AttackType attackType;
         public string id;
         public int priority;
         public string name;

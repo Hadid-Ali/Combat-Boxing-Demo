@@ -20,8 +20,7 @@ public class NetworkPlayerController : PlayerController
     }
 
     public void OnSpawn()
-    {
-        
+    {       
         PhotonNetwork.RegisterPhotonView(m_PhotonView);
         GameEvents.NetworkEvents.NetworkDisconnectedEvent.Register(OnNetworkDisconnect);
         GameEvents.GameplayEvents.RoundCompleted.Register(OnPlayerSubmitScore);
@@ -89,8 +88,7 @@ public class NetworkPlayerController : PlayerController
     {
         NetworkManager.NetworkUtilities.RaiseRPC(m_PhotonView, nameof(SyncAwardPlayerPoints_RPC), RpcTarget.All,
             new object[] { ID , reward});
-    }
-    
+    }    
     
 
     [PunRPC]

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f6c88915f73d8fe4da7e3b2e267e573c, type: 3}
-  m_Name: CardNames
+  m_Name: CardNames 1
   m_EditorClassIdentifier: 
   cards:
   - attackType: 1

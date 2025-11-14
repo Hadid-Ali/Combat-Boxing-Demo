@@ -85,7 +85,7 @@ public class OpponentAI : Boxer
 
     #region Events Invoke
 
-    public static void OnAttackAction(AttackType _type)
+    public static void OnAttackAction(AttackType _type, int winnerID)
     {
         onAttack?.Invoke(_type);
     }

@@ -51,9 +51,7 @@ public class CardsManager : MonoBehaviour
     public delegate void RegenerateCardList();
     public static event RegenerateCardList onRegeneratingCards;
 
-
     private PhotonView _photonView;
-
 
     #endregion
 
@@ -130,6 +128,7 @@ public class CardsManager : MonoBehaviour
         cardInfo.transform.localScale = Vector3.one;
         cardInfo.icon.sprite = card.cardSprite;
         cardInfo.priority = card.priority;
+        cardInfo._type = card.attackType;
 
         Button btn = cardObj.GetComponent<Button>();
         btn.onClick.RemoveAllListeners();
@@ -138,6 +137,12 @@ public class CardsManager : MonoBehaviour
 
     public void OnCardSelected(Card_Info cardInfo)
     {
+        if(cardsInstantiated.Count == 0)
+        {
+            Debug.Log("No cards instantiated!");
+            return;
+        }
+
         int playerId = PhotonNetwork.LocalPlayer.ActorNumber;
 
         // Make sure the card has a PhotonView
@@ -201,15 +206,14 @@ public class CardsManager : MonoBehaviour
         GameplayManager.instance.StartCardPriorityEvaluation();
     }
 
-
     public void EnableCardSelection(bool enable)
     {
-        foreach (var card in cardsInstantiated)
-        {
-            Button btn = card.GetComponent<Button>();
-            if (btn != null)
-                btn.interactable = enable;
-        }
+        //foreach (var card in cardsInstantiated)
+        //{
+        //    Button btn = card.GetComponent<Button>();
+        //    if (btn != null)
+        //        btn.interactable = enable;
+        //}
 
         if (blockerOBJ != null)
             blockerOBJ.SetActive(!enable);
@@ -297,7 +301,7 @@ public class CardsManager : MonoBehaviour
         cardsInstantiated.Clear();
         InstantiateCards();
         GameHUD.ChooseCardTimer(-1);
-        CameraManager.SwitchToPlayerPosition();
+        //CameraManager.SwitchToPlayerPosition();
         GameHUD.EnablingBottomUI(true);
     }
 }

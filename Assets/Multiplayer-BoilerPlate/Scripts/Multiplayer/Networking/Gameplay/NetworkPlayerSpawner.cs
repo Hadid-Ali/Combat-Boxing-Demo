@@ -17,7 +17,9 @@ public class NetworkPlayerSpawner : MonoBehaviour, INetworkPlayerSpawner
 
     [SerializeField] private NetworkGameplayManager m_Manager;
     private NetworkPlayerController m_PlayerController;
-    
+
+    private PhotonView _PhotonView;
+
 
     private void Awake()
     {
@@ -27,7 +29,9 @@ public class NetworkPlayerSpawner : MonoBehaviour, INetworkPlayerSpawner
 
     private void Start()
     {
-        Invoke(nameof(SpawnPlayer), 2f);
+        _PhotonView = GetComponent<PhotonView>();
+        SpawnPlayer();
+        //Invoke(nameof(SpawnPlayer), 2f);
     }
 
     private void OnEnable()
@@ -73,7 +77,8 @@ public class NetworkPlayerSpawner : MonoBehaviour, INetworkPlayerSpawner
             : Vector3.zero;
 
         Debug.Log($"Spawning player prefab '{prefabName}' at position {spawnPos}");
-        PhotonNetwork.Instantiate($"Network/Player/{prefabName}", spawnPos, Quaternion.Euler(rotation), 0);
+        var player = PhotonNetwork.Instantiate($"Network/Player/{prefabName}", 
+            spawnPos, Quaternion.Euler(rotation), 0);
     }
 
     public void RegisterPlayer(PlayerController playerController)

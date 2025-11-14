@@ -1,8 +1,11 @@
-﻿using Photon.Pun;
+﻿using NUnit.Framework;
+using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using static Boxer;
+
 
 public class GameplayManager : MonoBehaviour
 {
@@ -16,25 +19,19 @@ public class GameplayManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    [SerializeField] GameObject mainCamera;
-    [SerializeField] Transform playerCameraTransform;
-    [SerializeField] Transform opponentCameraTransform;
-    [SerializeField] Transform attackFocusedCamera;
     [SerializeField] CardsManager cardsManager;
+    [SerializeField] CameraManager cameraManager;
+    [SerializeField] RoundTracker roundTracker;
 
-    public delegate void ChangeCameraPosition(Transform pos);
-    public static event ChangeCameraPosition onChangingCameraPosition;
     [SerializeField] bool startAttack;
+    [SerializeField] float rayDistance;
+    [SerializeField] LayerMask layerMask;    
 
     public delegate bool CheckAttackCall();
     public static event CheckAttackCall onStartAttack;
 
     public delegate void SetStartAttack(bool val);
     public static event SetStartAttack onValueSetAttack;
-
-    public delegate Transform GetAttackCamera();
-    public static event GetAttackCamera onAttackCamera;
-
 
     public delegate string FetchFirstAttacker();
     public static event FetchFirstAttacker onRevealFirstAttacker;
@@ -46,13 +43,25 @@ public class GameplayManager : MonoBehaviour
 
     [SerializeField] private Card_Info player1SelectedCard;
     [SerializeField] private Card_Info player2SelectedCard;
-
+    [SerializeField] private Card_Info highPriorityCard;
 
     private PhotonView _photonView;
+    private List<Player> joinedPlayers = new List<Player>();
+
 
     private void Start()
     {
         _photonView = GetComponent<PhotonView>();
+    }
+
+    public void RegisterPlayer(Player player)
+    {
+        joinedPlayers.Add(player);
+    }
+
+    public Card_Info GetHighPriorityCard()
+    {
+        return highPriorityCard;
     }
 
     public void SetPlayer1SelectedCard(Card_Info card)
@@ -79,6 +88,7 @@ public class GameplayManager : MonoBehaviour
     {
         player1SelectedCard = null;
         player2SelectedCard = null;
+        highPriorityCard = null;
     }
 
     public void StartCardPriorityEvaluation()
@@ -105,17 +115,19 @@ public class GameplayManager : MonoBehaviour
             return;
         }
 
-        // Compare priorities (assuming higher number = higher priority)
         if (cardP1.priority > cardP2.priority)
         {
+            highPriorityCard = cardP1;
             OnCardPriorityResolved(1, cardP1, cardP2);
         }
         else if (cardP2.priority > cardP1.priority)
         {
+            highPriorityCard = cardP2;
             OnCardPriorityResolved(2, cardP2, cardP1);
         }
         else
         {
+            highPriorityCard = cardP1;
             OnCardPriorityResolved(0, cardP1, cardP2);
         }
     }
@@ -123,30 +135,42 @@ public class GameplayManager : MonoBehaviour
     // Called after priority evaluation
     private void OnCardPriorityResolved(int winnerId, Card_Info winningCard, Card_Info losingCard)
     {
-        // Trigger winner logic / animations
-        if (winnerId == 1)
-            Debug.Log("Player 1 wins the round.");
-        else if (winnerId == 2)
-            Debug.Log("Player 2 wins the round.");
-        else
-            Debug.Log("The round is a tie.");
-
-        // Start delay timer on all clients
-        _photonView.RPC(nameof(RPC_StartRoundDelay), RpcTarget.AllBuffered, 2f); // 2 seconds delay
+        roundTracker.RegisterRoundWinner(winnerId);
+        cameraManager.SwitchByWinner(winnerId, () =>
+        {
+            StartAttackSequence(winnerId);
+        });
     }
 
+
+    public void ResetRoundInternal()
+    {        
+        _photonView.RPC(nameof(ResetCamAnOtherData), RpcTarget.AllBuffered);
+    }
+
+
     [PunRPC]
-    private void RPC_StartRoundDelay(float delay)
+    public void ResetCamAnOtherData()
     {
-        Debug.Log($"Starting round delay of {delay} seconds.");
+        cameraManager.SwitchToMain(() =>
+        {
+            Debug.Log("Resetting round after attack sequence.");
+            double fireTime = PhotonNetwork.Time + 1.0;
+            StartRoundDelay(fireTime);
+        });
+    }
+
+
+    private void StartRoundDelay(double delay)
+    {
+        Debug.Log("Starting round delay until: " + delay);
         StartCoroutine(RoundDelayCoroutine(delay));
     }
 
-    private IEnumerator RoundDelayCoroutine(float delay)
+    private IEnumerator RoundDelayCoroutine(double delay)
     {
-        yield return new WaitForSeconds(delay);
-
-        Debug.Log("Round delay over. Resetting round.");
+        while (PhotonNetwork.Time < delay)
+            yield return null;
 
         // Master handles card destruction
         if (PhotonNetwork.IsMasterClient)
@@ -167,8 +191,6 @@ public class GameplayManager : MonoBehaviour
 
     public void ResetRound()
     {
-        Debug.Log("Resetting round...");
-
         // Clear local references
         player1SelectedCard = null;
         player2SelectedCard = null;
@@ -177,123 +199,101 @@ public class GameplayManager : MonoBehaviour
         if (cardsManager != null)
             cardsManager.EnableCardSelection(true);
 
-        Debug.Log("New round started — players can select cards.");
+
+        if (PhotonNetwork.IsMasterClient && roundTracker.CurrentRound >= roundTracker.maxRounds)
+        {
+            StartCoroutine(WinnerDeclare());
+        }
     }
 
 
-    private void OnEnable()
+    private IEnumerator WinnerDeclare()
     {
-        onChangingCameraPosition += ChangeCamTransform;
+        yield return new WaitForSeconds(2f);
+        _photonView.RPC(nameof(RPC_MatchFinished), RpcTarget.All);
+    }
+
+
+    [PunRPC]
+    private void RPC_MatchFinished()
+    {
+        Debug.Log("Match Finished. Displaying Win Panel.");
+        roundTracker.ShowWinPanel();
+    }
+
+    private void OnEnable()
+    {        
         onStartAttack += GetAttackValue;
         onValueSetAttack += SetAttackValue;
-        onAttackCamera += GetCameraTargetForCombat;
         onRevealFirstAttacker += GetFirstAttacker;
         onSetFirstAttackerValue += ReSetFirstAttacker;
+        roundTracker.OnRoundEnd += HandleRoundEnd;
+        roundTracker.OnMatchFinished += HandleMatchFinished;
     }
 
     private void OnDisable()
-    {
-        onChangingCameraPosition -= ChangeCamTransform;
+    {        
         onStartAttack -= GetAttackValue;
         onValueSetAttack -= SetAttackValue;
-        onAttackCamera -= GetCameraTargetForCombat;
         onRevealFirstAttacker -= GetFirstAttacker;
         onSetFirstAttackerValue -= ReSetFirstAttacker;
+        roundTracker.OnRoundEnd -= HandleRoundEnd;
+        roundTracker.OnMatchFinished -= HandleMatchFinished;
     }
-    
+
+    private void HandleRoundEnd(int winnerID, int round)
+    {
+        Debug.Log($"Round {round} winner: Player {winnerID}");
+        // Play round win animation, reset fighters, etc.
+    }
+
+    private void HandleMatchFinished(int winnerID)
+    {
+        if (winnerID == -1)
+            Debug.Log("Match is a DRAW!");
+        else
+            Debug.Log($"Match Winner: Player {winnerID}");
+    }
+
     public static void SetAttack(bool val)
     {
         onValueSetAttack?.Invoke(val);
     }
-    void SetAttackValue(bool val)
+
+    private void SetAttackValue(bool val)
     {
         startAttack = val;
     }
+
     public static bool GetAttackCall()
     {
         return onStartAttack.Invoke();
     }
-    bool GetAttackValue()
+
+    private bool GetAttackValue()
     {
         return startAttack;
     }
+
     private void Update()
     {
-        RaycastToDetectPlayerPointer();
         Attack();
     }
-    public static void ChangingCameraTransform(Transform pos)
+    
+    private void ShiftOpponentCameraOnSelection()
     {
-        onChangingCameraPosition?.Invoke(pos);
+        //CameraManager.SwitchToOpponentPosition();
+        Invoke(nameof(GetCardForAI), 2);
+        CancelInvoke(nameof(ShiftOpponentCameraOnSelection));
     }
-    void ChangeCamTransform(Transform pos)
-    {
-        mainCamera.transform.position = pos.position;
-        mainCamera.transform.eulerAngles = pos.eulerAngles;
-    }
-    [SerializeField] float rayDistance;
-    [SerializeField]LayerMask layerMask;
-    Vector2 screenPoint = Vector2.zero;
 
-    void RaycastToDetectPlayerPointer()
-    {
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    screenPoint = Input.mousePosition;
-        //    if (IsPointerOverUI(screenPoint))
-        //    {
-        //        Card_Info c = null;
-        //        foreach(RaycastResult r in results)
-        //        {
-        //            if(r.gameObject.GetComponent<Card_Info>())
-        //            {
-        //                c = r.gameObject.GetComponent<Card_Info>();
-        //                c.gameObject.name = c.m_TextMeshPro.text;
-        //                c.CardSelected(GameHUD.GetPlayerCardTargetPosition(), Boxer.BoxerType.player);
-        //                Invoke("ShiftOpponentCameraOnSelection", 1);
-        //                //Debug.Log("UI element was hit" + c.m_TextMeshPro.text);
-        //                break;
-        //            }
-        //        }
-                
-        //        return; 
-        //    }
-           
-        //}
-    }
-    List<RaycastResult> results = new List<RaycastResult>();
-
-    bool IsPointerOverUI(Vector2 screenPos)
-    {
-        PointerEventData eventData = new PointerEventData(EventSystem.current);
-        eventData.position = screenPos;
-
-        EventSystem.current.RaycastAll(eventData, results);
-     
-        return results.Count > 0;
-    }
-    void ShiftOpponentCameraOnSelection()
-    {
-        CameraManager.SwitchToOpponentPosition();
-        Invoke("GetCardForAI", 2);
-        CancelInvoke("ShiftOpponentCameraOnSelection");
-    }
-    void GetCardForAI()
+    private void GetCardForAI()
     {
         OpponentAI.GetCardForAi();
-        CancelInvoke("GetCardForAI");
+        CancelInvoke(nameof(GetCardForAI));
     }
-
-
-    public static Transform GetCombatCamera()
-    {
-        return onAttackCamera.Invoke();
-    }
-    Transform GetCameraTargetForCombat()
-    {
-        return attackFocusedCamera.transform;
-    }
-    void Attack()
+    
+    private void Attack()
     {
         if (startAttack)
         {
@@ -302,43 +302,59 @@ public class GameplayManager : MonoBehaviour
             else
                 boxerWhoWillAttackFirst = "Ai";
 
-            Invoke("ShiftToCombat", 1);
+            Invoke(nameof(ShiftToCombat), 1);
             startAttack = false;
         }
-
     }
 
-    void ShiftToCombat()
+    private void ShiftToCombat()
     {
-        CameraManager.SwitchToFightingPosition();
+        //cameraManager.SwitchToFightingPosition();
         GameHUD.DisableBottomUI(false);
-        Invoke("CallForAttack", 1);
-        CancelInvoke("ShiftToCombat");
+        Invoke(nameof(CallForAttack), 1);
+        CancelInvoke(nameof(ShiftToCombat));
     }
 
-    void CallForAttack()
+    private void CallForAttack()
     {
         GameHUD.AvailableRounds();
         if(boxerWhoWillAttackFirst.ToLower().Equals(Boxer.BoxerType.player.ToString().ToLower()))
-            Player.OnAttackAction(CardsManager.OnSelectedAttack());
+            Player.OnAttackAction(CardsManager.OnSelectedAttack(), 1);
         else
-            OpponentAI.OnAttackAction(CardsManager.OnOpponentSelectedAttack());
-        CancelInvoke("CallForAttack");
+            OpponentAI.OnAttackAction(CardsManager.OnOpponentSelectedAttack(), 2);
+        CancelInvoke(nameof(CallForAttack));
+    }
+
+    public void StartAttackSequence(int winnerID)
+    {
+        Debug.Log("Starting Attack Sequence with High Priority Card: " + (int)highPriorityCard._type);
+        _photonView.RPC(nameof(InvokeAttack), RpcTarget.All, (int)highPriorityCard._type, winnerID);
+    }
+
+
+    [PunRPC]
+    public void InvokeAttack(int _type, int winnerID)
+    {
+        Debug.Log("Player Invoking Attack: " + (AttackType)_type + this.gameObject.name + "Winner ID" + winnerID);
+        Player.OnAttackAction((AttackType)_type, winnerID);
     }
 
     public static string FirstAttacker()
     {
         return onRevealFirstAttacker.Invoke();
     }
-    string GetFirstAttacker()
+
+    private string GetFirstAttacker()
     {
         return boxerWhoWillAttackFirst;
     }
+
     public static void ResetFirstAttackerValue(string val)
     {
         onSetFirstAttackerValue?.Invoke(val);
     }
-    void ReSetFirstAttacker(string val)
+
+    private void ReSetFirstAttacker(string val)
     {
         boxerWhoWillAttackFirst = val;
     }

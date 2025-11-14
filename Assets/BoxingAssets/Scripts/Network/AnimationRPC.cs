@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 #if PHOTON_UNITY_NETWORKING
 using Photon.Pun;
 #endif
@@ -19,8 +19,6 @@ public class AnimationRPC : MonoBehaviour
         photonView = GetComponent<PhotonView>();
 #endif
     }
-
-    // ========== LOCAL METHODS ==========
 
     public void PlayAnimation(string animationName)
     {
@@ -52,9 +50,9 @@ public class AnimationRPC : MonoBehaviour
         animator.SetInteger(paramName, value);
     }
 
-    // ========== MULTIPLAYER RPC WRAPPERS ==========
 
 #if PHOTON_UNITY_NETWORKING
+
 
     public void RPC_PlayAnimation(string animationName)
     {
@@ -68,64 +66,64 @@ public class AnimationRPC : MonoBehaviour
         PlayAnimation(animationName);
     }
 
-    public void RPC_SetTrigger(string animationName)
+    public void RPC_SetTrigger(string triggerName)
     {
         if (photonView != null)
-            photonView.RPC(nameof(RPC_SetTriggerInternal), RpcTarget.All, animationName);
+            photonView.RPC(nameof(RPC_SetTriggerInternal), RpcTarget.All, triggerName);
     }
 
     [PunRPC]
-    private void RPC_SetTriggerInternal(string animationName)
+    private void RPC_SetTriggerInternal(string triggerName)
     {
-        SetTrigger(animationName);
+        SetTrigger(triggerName);
     }
 
-    public void RPC_ResetTrigger(string animationName)
+    public void RPC_ResetTrigger(string triggerName)
     {
         if (photonView != null)
-            photonView.RPC(nameof(RPC_ResetTriggerInternal), RpcTarget.All, animationName);
+            photonView.RPC(nameof(RPC_ResetTriggerInternal), RpcTarget.All, triggerName);
     }
 
     [PunRPC]
-    private void RPC_ResetTriggerInternal(string animationName)
+    private void RPC_ResetTriggerInternal(string triggerName)
     {
-        ResetTrigger(animationName);
+        ResetTrigger(triggerName);
     }
 
-    public void RPC_SetBool(string animationName, bool value)
+    public void RPC_SetBool(string paramName, bool value)
     {
         if (photonView != null)
-            photonView.RPC(nameof(RPC_SetBoolInternal), RpcTarget.All, animationName, value);
+            photonView.RPC(nameof(RPC_SetBoolInternal), RpcTarget.All, paramName, value);
     }
 
     [PunRPC]
-    private void RPC_SetBoolInternal(string animationName, bool value)
+    private void RPC_SetBoolInternal(string paramName, bool value)
     {
-        SetBool(animationName, value);
+        SetBool(paramName, value);
     }
 
-    public void RPC_SetFloat(string animationName, float value)
+    public void RPC_SetFloat(string paramName, float value)
     {
         if (photonView != null)
-            photonView.RPC(nameof(RPC_SetFloatInternal), RpcTarget.All, animationName, value);
+            photonView.RPC(nameof(RPC_SetFloatInternal), RpcTarget.All, paramName, value);
     }
 
     [PunRPC]
-    private void RPC_SetFloatInternal(string animationName, float value)
+    private void RPC_SetFloatInternal(string paramName, float value)
     {
-        SetFloat(animationName, value);
+        SetFloat(paramName, value);
     }
 
-    public void RPC_SetInt(string animationName, int value)
+    public void RPC_SetInt(string paramName, int value)
     {
         if (photonView != null)
-            photonView.RPC(nameof(RPC_SetIntInternal), RpcTarget.All, animationName, value);
+            photonView.RPC(nameof(RPC_SetIntInternal), RpcTarget.All, paramName, value);
     }
 
     [PunRPC]
-    private void RPC_SetIntInternal(string animationName, int value)
+    private void RPC_SetIntInternal(string paramName, int value)
     {
-        SetFloat(animationName, value);
+        SetInt(paramName, value);
     }
 
 #endif

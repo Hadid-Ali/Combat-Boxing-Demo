@@ -1,86 +1,86 @@
-using DG.Tweening;
+﻿using DG.Tweening;
+using Photon.Pun;
 using UnityEngine;
 
-public class CameraManager : MonoBehaviour
+public class CameraManager : MonoBehaviourPun
 {
-    [SerializeField] GameObject mainCamera;
-    [SerializeField] Transform playerPos;
-    [SerializeField] Transform opponentPos;
-    [SerializeField] Transform mainPos;
-    private Tween suckTween;
-    [SerializeField] float cameraMoveSpeed;
+    [Header("Camera Settings")]
+    [SerializeField] private GameObject mainCamera;
 
-    public delegate void SwitchCameraToPlayer();
-    public static event SwitchCameraToPlayer onCameraSwitchingToPlayer;
+    [Header("Camera Positions")]
+    [SerializeField] private Transform playerPos;
+    [SerializeField] private Transform opponentPos;
+    [SerializeField] private Transform mainPos;
 
-    public delegate void SwitchCameraToOpponent();
-    public static event SwitchCameraToOpponent onCameraSwitchingToOpponent;
+    [SerializeField] private float moveDuration = 1f;
 
-    public delegate void SwitchCameraToFightingPosition();
-    public static event SwitchCameraToFightingPosition onCameraSwitchingToFight;
+    private Tween activeTween;
+    private System.Action onCameraMoveComplete;
 
-    private void OnEnable()
+    /// <summary>
+    /// Switches camera based on winner ID
+    /// 1 = Player, 2 = Opponent, otherwise = Main
+    /// </summary>
+    public void SwitchByWinner(int winnerID, System.Action callback = null)
     {
-        onCameraSwitchingToPlayer += SwitchToPlayer;
-        onCameraSwitchingToOpponent += SwitchToOpponent;
-        onCameraSwitchingToFight += SwitchToFighting;
-    }
-
-    private void OnDisable()
-    {
-        onCameraSwitchingToPlayer -= SwitchToPlayer;
-        onCameraSwitchingToOpponent -= SwitchToOpponent;
-        onCameraSwitchingToFight -= SwitchToFighting;
-
-    }
-
-    public static void SwitchToPlayerPosition()
-    {
-        onCameraSwitchingToPlayer?.Invoke();
-    }
-    void SwitchToPlayer()
-    {
-        SwitchPosition(playerPos);
-    }
-    public static void SwitchToOpponentPosition()
-    {
-        onCameraSwitchingToOpponent?.Invoke();
-    }
-    void SwitchToOpponent()
-    {
-        SwitchPosition(opponentPos);
-    }
-    public static void SwitchToFightingPosition()
-    {
-        onCameraSwitchingToFight?.Invoke();
-    }
-    void SwitchToFighting()
-    {
-        SwitchPosition(mainPos);
-    }
-    void SwitchPosition(Transform pos)
-    {
-        CameraShifting(pos);
-    }
-
-    void CameraShifting(Transform target)
-    {
-        if (target == null)
+        Transform target = winnerID switch
         {
-            Debug.LogWarning("Target Point not assigned!");
-            return;
-        }
+            1 => playerPos,
+            2 => opponentPos,
+            _ => mainPos
+        };
 
-        if (suckTween != null && suckTween.IsActive())
-            suckTween.Kill();
+        onCameraMoveComplete = callback;
+
+        photonView.RPC(nameof(RPC_SwitchCamera),
+            RpcTarget.All,
+            target.position,
+            target.rotation.eulerAngles);
+    }
+
+    public void SwitchToPlayer(System.Action callback = null)
+        => SwitchTo(playerPos, callback);
+
+    public void SwitchToOpponent(System.Action callback = null)
+        => SwitchTo(opponentPos, callback);
+
+    public void SwitchToMain(System.Action callback = null)
+        => SwitchTo(mainPos, callback);
+
+
+    private void SwitchTo(Transform target, System.Action callback)
+    {
+        onCameraMoveComplete = callback;
+
+        photonView.RPC(nameof(RPC_SwitchCamera),
+            RpcTarget.All,
+            target.position,
+            target.rotation.eulerAngles);
+    }
+
+
+    [PunRPC]
+    private void RPC_SwitchCamera(Vector3 pos, Vector3 rot)
+    {
+        KillActiveTween();
 
         Sequence seq = DOTween.Sequence();
 
-        seq.Join(mainCamera.transform.DOMove(target.position, cameraMoveSpeed).SetEase(Ease.OutCirc));
+        seq.Join(mainCamera.transform.DOMove(pos, moveDuration).SetEase(Ease.OutCirc));
+        seq.Join(mainCamera.transform.DORotate(rot, moveDuration).SetEase(Ease.OutCirc));
 
-        seq.Join(mainCamera.transform.DORotate(target.eulerAngles, cameraMoveSpeed).SetEase(Ease.OutCirc));
+        activeTween = seq;
 
-        suckTween = seq;
+        seq.OnComplete(() =>
+        {
+            onCameraMoveComplete?.Invoke();
+            onCameraMoveComplete = null;
+        });
+    }
 
+    private void KillActiveTween()
+    {
+        if (activeTween != null && activeTween.IsActive())
+            activeTween.Kill();
     }
 }

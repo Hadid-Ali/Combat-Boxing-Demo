@@ -1,4 +1,8 @@
 using DG.Tweening;
+using ExitGames.Client.Photon;
+using NaughtyAttributes.Test;
+using Photon.Pun;
+using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
 using static CardNamesScriptable;
@@ -7,7 +11,7 @@ public class Player : Boxer
 {
     public static float playerAttackPriority => (CardsManager.GetPriorityValueForAttack(CardsManager.OnSelectedAttack()));
 
-    public delegate void Attack(AttackType _type);
+    public delegate void Attack(AttackType _type, int winnerID);
     public static event Attack onAttack;
 
     public delegate void PointsEarned(int points);
@@ -42,11 +46,16 @@ public class Player : Boxer
     public delegate void GroundHitEffectActivation();
     public static event GroundHitEffectActivation onGroundHit;
 
-    [SerializeField] private AnimationRPC _animationRPC; 
+    [SerializeField] private AnimationRPC _animationRPC;
+    [SerializeField] private int playerID;
+
+    private PhotonView _PhotonView => GetComponent<PhotonView>();
 
     private void Start()
     {
         _animationRPC = GetComponent<AnimationRPC>();
+        SetPlayerID(_PhotonView.Owner.ActorNumber);
+        GameplayManager.instance.RegisterPlayer(this);
 
         foreach (GameObject effect in effectsPrefab)
         {
@@ -83,29 +92,59 @@ public class Player : Boxer
         onGroundHit += GroundHitEffect;
 
     }
+
+    public void SetPlayerID(int id)
+    {
+        playerID = id;
+    }
+
+    public int GetPlayerID()
+    {
+        return playerID;
+    }
+
     #region Events Invoke
 
-    public static void OnAttackAction(AttackType _type)
+    public static void OnAttackAction(AttackType _type, int winnerID)
     {
-        onAttack?.Invoke(_type);
+        onAttack?.Invoke(_type, winnerID);
     }
+
     public static void OnEarnedPoints(int _points)
     {
         onEarnedPoints?.Invoke(_points);
     }
+
     #endregion
 
     #region Functions
-    protected void AttackAction(AttackType _attack)
+    protected void AttackAction(AttackType _attack, int winnerID)
     {
-        playerTween?.Kill();
-        playerTween = boxer.DOMove(targetToMove.position, moveSpeed).SetEase(Ease.Linear).OnComplete(() =>
-                      {
-                          TriggerAttackAnimation(_attack);
-                      });
+        Debug.Log("In attack action method");
+
+        if (winnerID != _PhotonView.Owner.ActorNumber)
+        {
+            Debug.Log("Not the winner, skipping attack action for player: " + this.gameObject.name);
+            return;
+        }            
+
+        Debug.Log("Player Attack Action: " + _attack.ToString() + this.gameObject.name);   
+
+        if (targetToMove == null)
+        {
+            TriggerAttackAnimation(_attack);
+        }
+        else
+        {
+            playerTween?.Kill();
+            playerTween = boxer.DOMove(targetToMove.position, moveSpeed).SetEase(Ease.Linear).OnComplete(() =>
+            {
+                TriggerAttackAnimation(_attack);
+            });
+        }       
     }
 
-    void TriggerAttackAnimation(AttackType _attack)
+    private void TriggerAttackAnimation(AttackType _attack)
     {        
         Boxing_Card _card = null;
         foreach (Boxing_Card c in cardType.cards)
@@ -116,6 +155,8 @@ public class Player : Boxer
                 break;
             }
         }
+
+        Debug.Log("0n Attack Animation Triggered: " + _attack.ToString() + this.gameObject.name);
 
         float val = 0;
         _animationRPC.RPC_SetFloat("DefenceBlendINdex", 0);
@@ -131,7 +172,9 @@ public class Player : Boxer
                 //Debug.Log("-----POWER PUNCH CALLED-----");
                 UpdatePoints(_card.rewardAmount);
                 val = Random.Range(_card.minAnimFloat, _card.maxAnimFloat);
-                animator.SetFloat(_card.blendIndex, 1);
+                val = _card.maxAnimFloat;
+                //animator.SetFloat(_card.blendIndex, 1);
+                _animationRPC.RPC_SetFloat(_card.blendIndex, 1);
                 CallAnimation(AttackType.powerpunch);
                 attackType = AttackType.powerpunch;
                 break;
@@ -140,7 +183,9 @@ public class Player : Boxer
                 UpdatePoints(_card.rewardAmount);
                 //val = Random.Range(_card.minAnimFloat, _card.maxAnimFloat);
                 val = 1;
-                animator.SetFloat(_card.blendIndex, val);
+                _animationRPC.RPC_SetFloat(_card.blendIndex, val);
+                val = _card.maxAnimFloat;
+                //animator.SetFloat(_card.blendIndex, val);
                 CallAnimation(AttackType.combo);
                 attackType = AttackType.combo;
 
@@ -149,49 +194,53 @@ public class Player : Boxer
                 //Debug.Log("-----UPPER CUT CALLED-----");
                 UpdatePoints(_card.rewardAmount);
                 val = Random.Range(_card.minAnimFloat, _card.maxAnimFloat);
-                animator.SetFloat(_card.blendIndex, val);
+                val = _card.maxAnimFloat;
+                _animationRPC.RPC_SetFloat(_card.blendIndex, val);
+                //animator.SetFloat(_card.blendIndex, val);
                 CallAnimation(AttackType.uppercut);
                 attackType = AttackType.uppercut;
-
                 break;
+
             case AttackType.overhand:
                 //Debug.Log("-----OVERHAND CALLED-----");
                 UpdatePoints(_card.rewardAmount);
                 val = Random.Range(_card.minAnimFloat, _card.maxAnimFloat);
-                animator.SetFloat(_card.blendIndex, val);
+                val = _card.maxAnimFloat;
+                _animationRPC.RPC_SetFloat(_card.blendIndex, val);
                 CallAnimation(AttackType.overhand);
                 attackType = AttackType.overhand;
-
                 break;
+
             case AttackType.hook:
                 //Debug.Log("-----HOOK CALLED-----");
                 UpdatePoints(_card.rewardAmount);
                 val = Random.Range(_card.minAnimFloat, _card.maxAnimFloat);
-                animator.SetFloat(_card.blendIndex, val);
+                val = _card.maxAnimFloat;
+                _animationRPC.RPC_SetFloat(_card.blendIndex, val);
                 CallAnimation(AttackType.hook);
                 attackType = AttackType.hook;
-
                 break;
+
             case AttackType.body:
                 //Debug.Log("-----BODY CALLED-----");
                 UpdatePoints(_card.rewardAmount);
                 val = Random.Range(_card.minAnimFloat, _card.maxAnimFloat);
-                animator.SetFloat(_card.blendIndex, val);
+                val = _card.maxAnimFloat;
+                _animationRPC.RPC_SetFloat(_card.blendIndex, val);
                 CallAnimation(AttackType.body);
                 attackType = AttackType.body;
-
                 break;
+
             case AttackType.jab:
                 //Debug.Log("-----JAB CALLED-----");
                 UpdatePoints(_card.rewardAmount);
                 val = Random.Range(_card.minAnimFloat, _card.maxAnimFloat);
-                animator.SetFloat(_card.blendIndex, val);
+                val = _card.maxAnimFloat;
+                _animationRPC.RPC_SetFloat(_card.blendIndex, val);
                 CallAnimation(AttackType.jab);
                 attackType = AttackType.jab;
-
                 break;
         }
-
     }
 
     void UpdatePoints(int p)

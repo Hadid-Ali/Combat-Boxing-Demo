@@ -2794,7 +2794,7 @@ Animator:
   m_GameObject: {fileID: 8887615823647050475}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 620cff0763f6fe44f932dbb3ebb9590d, type: 3}
-  m_Controller: {fileID: 9100000, guid: 690577f99448b7447aad5e2fd6dc97c4, type: 2}
+  m_Controller: {fileID: 9100000, guid: 0a07878225221da4387262ebdaaddb01, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -2820,7 +2820,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   originalPos: {fileID: 0}
   speed: 0.25
-  boxerName: Ai
+  boxerName: Player
   animator: {fileID: 8970941476985846280}
   rightHandTarget: {fileID: 1417988917410719542}
   leftHandTarget: {fileID: 4094771599780787661}
@@ -2894,6 +2894,7 @@ MonoBehaviour:
   rightHandEffect: []
   leftHandEffect: []
   _animationRPC: {fileID: 0}
+  playerID: 0
   speed: 0
 --- !u!114 &6610322085979150887
 MonoBehaviour:

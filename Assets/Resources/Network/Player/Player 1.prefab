@@ -818,6 +818,7 @@ MonoBehaviour:
   rightHandEffect: []
   leftHandEffect: []
   _animationRPC: {fileID: 0}
+  playerID: 0
   speed: 0
 --- !u!114 &2834138271018478736
 MonoBehaviour:
