@@ -24,7 +24,6 @@ public static partial class GameEvents
         public static GameEvent<string> SubmissionTimerTick = new();
         
         public static GameEvent GameRoomCreated = new();
-
         public static GameEvent OnMasterGameplayLoaded = new();
     }
 }

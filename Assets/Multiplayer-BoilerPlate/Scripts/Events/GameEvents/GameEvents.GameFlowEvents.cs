@@ -10,4 +10,12 @@ public static partial class GameEvents
         
         public static GameEvent SubmissionTimerOver = new();
     }
+
+    public static class BoxingDemoGameFlowEvents
+    {
+        public static GameEvent<int> RoundStart = new();
+        public static GameEvent<int, int> RoundComplete = new();
+        public static GameEvent<int> MatchFinished = new();
+        public static GameEvent PlayerLeftRoom = new();
+    }
 }

@@ -47,12 +47,12 @@ public class AnimationHandler : MonoBehaviour
     {
         if (boxerName.Equals("Player"))
         {
-            OpponentAI.GetRandomDefence(reaction);
+            //OpponentAI.GetRandomDefence(reaction);
         }
         else if (boxerName.Equals("Ai"))
         {
             Debug.LogError("body hit ");
-            Player.GetRandomDefence(reaction);
+            
         }
     }
 
@@ -61,12 +61,12 @@ public class AnimationHandler : MonoBehaviour
         if (boxerName.Equals("Player"))
         {
             Player.PlayRightHandEffect();
-            if (attack.Equals("FacePunch") || attack.Equals("UppercutPunch"))
-                OpponentAI.PlaySweatEffect();
+            //if (attack.Equals("FacePunch") || attack.Equals("UppercutPunch"))
+                //OpponentAI.PlaySweatEffect();
         }
         else if (boxerName.Equals("Ai"))
         {
-            OpponentAI.PlayRightHandEffect();
+            //OpponentAI.PlayRightHandEffect();
             if (attack.Equals("FacePunch") || attack.Equals("UppercutPunch"))
                 Player.PlaySweatEffect();
         }       
@@ -78,12 +78,12 @@ public class AnimationHandler : MonoBehaviour
         if (boxerName.Equals("Player"))
         {
             Player.PlayLeftHandEffect();
-            if (attack.Equals("FacePunch") || attack.Equals("UppercutPunch"))
-                OpponentAI.PlaySweatEffect();
+            //if (attack.Equals("FacePunch") || attack.Equals("UppercutPunch"))
+                //OpponentAI.PlaySweatEffect();
         }
         else if (boxerName.Equals("Ai"))
         {
-            OpponentAI.PlayLeftHandEffect();
+            //OpponentAI.PlayLeftHandEffect();
             if (attack.Equals("FacePunch") || attack.Equals("UppercutPunch"))
                 Player.PlaySweatEffect();
         }      
@@ -93,7 +93,7 @@ public class AnimationHandler : MonoBehaviour
     {
         if (boxerName.Equals("Player"))
         {
-            OpponentAI.Knockedout();
+            //OpponentAI.Knockedout();
         }
         else if (boxerName.Equals("Ai"))
         {
@@ -115,7 +115,7 @@ public class AnimationHandler : MonoBehaviour
 
     private void ResetOpponentAnimation()
     {
-        OpponentAI.OnResetAttackState();
+        //OpponentAI.OnResetAttackState();
         CancelInvoke(nameof(ResetOpponentAnimation));
     }
 

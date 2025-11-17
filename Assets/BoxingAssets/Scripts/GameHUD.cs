@@ -5,148 +5,38 @@ using UnityEngine.UI;
 
 public class GameHUD : MonoBehaviour
 {
-    [SerializeField] RectTransform playerCardTargetPos;
-    [SerializeField] RectTransform aiCardTargetPos;
-    [SerializeField] GameObject bottomUi;
-    [SerializeField] Image cardSelectionTimer;
-    [SerializeField] Color[] barColor;
-    [SerializeField] TextMeshProUGUI roundsText;
-    [SerializeField] TextMeshProUGUI playerPoints;
-    [SerializeField] TextMeshProUGUI aiPoints;
-    [SerializeField] int totalRounds;
-    [SerializeField] int playedRound;
-    [SerializeField] float targetValueForBG;
-    [SerializeField] float animationSpeedForBottomUi;
-    public delegate void StartCardSelectionTimer(float val);
-    public static event StartCardSelectionTimer onCardTimerStart;
+    [SerializeField] private TextMeshProUGUI roundText;
+    [SerializeField] private TextMeshProUGUI player1PointsText;
+    [SerializeField] private TextMeshProUGUI player2PointsText;
 
-    public delegate void Rounds();
-    public static event Rounds onRoundsAvailablity;
+    private int totalRounds = 3;
 
-    public delegate void UpdatePoints(Boxer.BoxerType _type, int points);
-    public static event UpdatePoints onPointsUpdate;
-
-    public delegate void DeactivateBottomUI(bool active);
-    public static event DeactivateBottomUI onUiDeactivity;
-
-    public delegate void ActivateBottomUI(bool active);
-    public static event ActivateBottomUI onActivatingUI;
-
-    public delegate RectTransform GetPlayerSelectedCardTarget();
-    public static event GetPlayerSelectedCardTarget onPlayerCardTargetPos;
-
-    public delegate RectTransform GetAISelectedCardTarget();
-    public static event GetAISelectedCardTarget onAICardTargetPos;
-    bool isFull => (cardSelectionTimer.fillAmount == 1);
-    bool isEmpty => (cardSelectionTimer.fillAmount == 0);
-
-    private void Update()
-    {
-        ChooseCardTimer(0.01f);
-    }
     private void OnEnable()
     {
-        onCardTimerStart += FillBar;
-        onRoundsAvailablity += CheckRounds;
-        onPointsUpdate += UpdatePointUI;
-        onUiDeactivity += DisableUI;
-        onPlayerCardTargetPos += GetPlayerCardTargetPos;
-        onAICardTargetPos += GetAICardTargetPos;
-        onActivatingUI += EnableBottomUI;
+        GameEvents.BoxingDemoGameFlowEvents.RoundStart.Register(UpdateRoundText);
+        GameEvents.BoxingDemoGameFlowEvents.RoundComplete.Register(UpdatePlayerPoints);
     }
+
     private void OnDisable()
     {
-        onCardTimerStart -= FillBar;
-        onRoundsAvailablity -= CheckRounds;
-        onPointsUpdate += UpdatePointUI;
-        onUiDeactivity -= DisableUI;
-        onPlayerCardTargetPos += GetPlayerCardTargetPos;
-        onAICardTargetPos += GetAICardTargetPos;
-        onActivatingUI -= EnableBottomUI;
-    }
-    public static void ChooseCardTimer(float val)
-    {
-        onCardTimerStart?.Invoke(val);
-    }
-    void FillBar(float val)
-    {
-        val = val * Time.deltaTime;
-        cardSelectionTimer.fillAmount -= val;
+        GameEvents.BoxingDemoGameFlowEvents.RoundStart.UnRegister(UpdateRoundText);
+        GameEvents.BoxingDemoGameFlowEvents.RoundComplete.UnRegister(UpdatePlayerPoints);
     }
 
-    public static void AvailableRounds()
+
+    public void UpdateRoundText(int round)
     {
-        onRoundsAvailablity?.Invoke();
-    }
-    void CheckRounds()
-    {
-
-        playedRound++;
-        if(playedRound >= totalRounds)
-            playedRound = totalRounds;
-        roundsText.text = playedRound + "/"+totalRounds.ToString();
-
-        Debug.LogError("CheckRounds " + playedRound);
-
+        roundText.text = "Rounds " + round.ToString() + "/" + totalRounds;
     }
 
-    public static void OnUpdatingPoints(Boxer.BoxerType _type, int points)
+    public void UpdatePlayerPoints(int winnerID, int currentRound)
     {
-        onPointsUpdate?.Invoke(_type, points);
-    }
-    void UpdatePointUI(Boxer.BoxerType _type, int points)
-    {
-        switch (_type)
-        {
-            case Boxer.BoxerType.player:
-                playerPoints.text = points.ToString();
-                break;
-            case Boxer.BoxerType.Ai:
-                aiPoints.text = points.ToString();
-                break;
-        }
-    }
+        UpdateRoundText(currentRound);
 
-    public static void DisableBottomUI(bool val)
-    {
-        onUiDeactivity?.Invoke(val);
-    }
-    void DisableUI(bool ui)
-    {
-        bottomUi.GetComponent<RectTransform>().DOAnchorPos(new Vector2(0, targetValueForBG), animationSpeedForBottomUi).SetEase(Ease.Linear).OnComplete(() =>
-        {
-            bottomUi.SetActive(ui);
-            bottomUi.transform.DOPause();
-        });
-    }
-    public static void EnablingBottomUI(bool val)
-    {
-        onActivatingUI?.Invoke(val);
-    }
-    void EnableBottomUI(bool ui)
-    {
-        bottomUi.SetActive(ui);
+        int currentPoints1 = GameplayManager.instance.roundTracker.Getplayer1Wins();
+        player1PointsText.text = "Points: " + currentPoints1.ToString();
 
-        bottomUi.GetComponent<RectTransform>().DOAnchorPos(Vector2.zero, animationSpeedForBottomUi).SetEase(Ease.Linear).OnComplete(() =>
-        {
-            bottomUi.transform.DOPause();
-        });
-    }
-    public static RectTransform GetPlayerCardTargetPosition()
-    {
-        return onPlayerCardTargetPos.Invoke();
-    }
-    public static RectTransform GetAICardTargetPosition()
-    {
-        return onAICardTargetPos.Invoke();
-    }
-    RectTransform GetPlayerCardTargetPos()
-    {
-        return playerCardTargetPos;
-    }
-
-    RectTransform GetAICardTargetPos()
-    {
-        return aiCardTargetPos;
+        int currentPoints2 = GameplayManager.instance.roundTracker.Getplayer2Wins();
+        player2PointsText.text = "Points: " + currentPoints2.ToString();
     }
 }

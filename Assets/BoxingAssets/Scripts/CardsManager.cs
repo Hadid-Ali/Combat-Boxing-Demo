@@ -72,7 +72,6 @@ public class CardsManager : MonoBehaviour
         onGettingAvailableCards += GetCardsInstantiated;
         onOpponentAttackSelection += SetOpponentsAttack;
         onPriorityCheck += GetAttackPriority;
-        onRegeneratingCards += ResetAndRegenerateCard;
     }
 
     private void OnDisable()
@@ -84,7 +83,6 @@ public class CardsManager : MonoBehaviour
         onGettingAvailableCards += GetCardsInstantiated;
         onOpponentAttackSelection -= SetOpponentsAttack;
         onPriorityCheck -= GetAttackPriority;
-        onRegeneratingCards -= ResetAndRegenerateCard;
     }
 
     private void InstantiatingCards()
@@ -290,18 +288,5 @@ public class CardsManager : MonoBehaviour
     public static void RegenerateCards()
     {
         onRegeneratingCards?.Invoke();
-    }
-
-    void ResetAndRegenerateCard()
-    {
-        foreach(var g in cardsInstantiated)
-        {
-            Destroy(g);
-        }
-        cardsInstantiated.Clear();
-        InstantiateCards();
-        GameHUD.ChooseCardTimer(-1);
-        //CameraManager.SwitchToPlayerPosition();
-        GameHUD.EnablingBottomUI(true);
     }
 }

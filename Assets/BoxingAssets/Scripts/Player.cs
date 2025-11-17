@@ -14,9 +14,6 @@ public class Player : Boxer
     public delegate void Attack(AttackType _type, int winnerID);
     public static event Attack onAttack;
 
-    public delegate void PointsEarned(int points);
-    public static event PointsEarned onEarnedPoints;
-
     [SerializeField] Transform boxer;
     [SerializeField] Transform targetToMove;
 
@@ -67,7 +64,6 @@ public class Player : Boxer
     private void OnEnable()
     {
         onAttack += AttackAction;
-        onEarnedPoints += UpdatePoints;
         onRandomDefence += RandomDefense;
         onAttackState += GetAttackState;
         onAttackResetState += ResetAttackState;
@@ -81,7 +77,6 @@ public class Player : Boxer
     private void OnDisable()
     {
         onAttack -= AttackAction;
-        onEarnedPoints -= UpdatePoints;
         onRandomDefence -= RandomDefense;
         onAttackState -= GetAttackState;
         onAttackResetState -= ResetAttackState;
@@ -110,12 +105,8 @@ public class Player : Boxer
         onAttack?.Invoke(_type, winnerID);
     }
 
-    public static void OnEarnedPoints(int _points)
-    {
-        onEarnedPoints?.Invoke(_points);
-    }
-
     #endregion
+
 
     #region Functions
     protected void AttackAction(AttackType _attack, int winnerID)
@@ -169,41 +160,29 @@ public class Player : Boxer
                 attackType = AttackType.idle;
                 break;
             case AttackType.powerpunch:
-                //Debug.Log("-----POWER PUNCH CALLED-----");
-                UpdatePoints(_card.rewardAmount);
                 val = Random.Range(_card.minAnimFloat, _card.maxAnimFloat);
                 val = _card.maxAnimFloat;
-                //animator.SetFloat(_card.blendIndex, 1);
                 _animationRPC.RPC_SetFloat(_card.blendIndex, 1);
                 CallAnimation(AttackType.powerpunch);
                 attackType = AttackType.powerpunch;
                 break;
             case AttackType.combo:
-                //Debug.Log("-----COMBO CALLED-----");
-                UpdatePoints(_card.rewardAmount);
-                //val = Random.Range(_card.minAnimFloat, _card.maxAnimFloat);
                 val = 1;
                 _animationRPC.RPC_SetFloat(_card.blendIndex, val);
                 val = _card.maxAnimFloat;
-                //animator.SetFloat(_card.blendIndex, val);
                 CallAnimation(AttackType.combo);
                 attackType = AttackType.combo;
 
                 break;
             case AttackType.uppercut:
-                //Debug.Log("-----UPPER CUT CALLED-----");
-                UpdatePoints(_card.rewardAmount);
                 val = Random.Range(_card.minAnimFloat, _card.maxAnimFloat);
                 val = _card.maxAnimFloat;
                 _animationRPC.RPC_SetFloat(_card.blendIndex, val);
-                //animator.SetFloat(_card.blendIndex, val);
                 CallAnimation(AttackType.uppercut);
                 attackType = AttackType.uppercut;
                 break;
 
             case AttackType.overhand:
-                //Debug.Log("-----OVERHAND CALLED-----");
-                UpdatePoints(_card.rewardAmount);
                 val = Random.Range(_card.minAnimFloat, _card.maxAnimFloat);
                 val = _card.maxAnimFloat;
                 _animationRPC.RPC_SetFloat(_card.blendIndex, val);
@@ -212,8 +191,6 @@ public class Player : Boxer
                 break;
 
             case AttackType.hook:
-                //Debug.Log("-----HOOK CALLED-----");
-                UpdatePoints(_card.rewardAmount);
                 val = Random.Range(_card.minAnimFloat, _card.maxAnimFloat);
                 val = _card.maxAnimFloat;
                 _animationRPC.RPC_SetFloat(_card.blendIndex, val);
@@ -222,8 +199,6 @@ public class Player : Boxer
                 break;
 
             case AttackType.body:
-                //Debug.Log("-----BODY CALLED-----");
-                UpdatePoints(_card.rewardAmount);
                 val = Random.Range(_card.minAnimFloat, _card.maxAnimFloat);
                 val = _card.maxAnimFloat;
                 _animationRPC.RPC_SetFloat(_card.blendIndex, val);
@@ -232,8 +207,6 @@ public class Player : Boxer
                 break;
 
             case AttackType.jab:
-                //Debug.Log("-----JAB CALLED-----");
-                UpdatePoints(_card.rewardAmount);
                 val = Random.Range(_card.minAnimFloat, _card.maxAnimFloat);
                 val = _card.maxAnimFloat;
                 _animationRPC.RPC_SetFloat(_card.blendIndex, val);
@@ -241,12 +214,6 @@ public class Player : Boxer
                 attackType = AttackType.jab;
                 break;
         }
-    }
-
-    void UpdatePoints(int p)
-    {
-        pointsEarned += p;
-        GameHUD.OnUpdatingPoints(BoxerType.player, p);
     }
 
     void CallAnimation(AttackType anim)

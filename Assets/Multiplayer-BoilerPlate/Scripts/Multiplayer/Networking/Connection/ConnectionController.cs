@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Photon.Pun;
 using Photon.Realtime;
-using UnityAtoms.BaseAtoms;
 using UnityEngine;
-using UnityAtoms;
 
 
 public class ConnectionController : MonoBehaviourPunCallbacks
@@ -271,7 +269,9 @@ public class ConnectionController : MonoBehaviourPunCallbacks
         {
             GameEvents.NetworkPlayerEvents.OnPlayerLeftRoom.Raise(otherPlayer.ActorNumber);
             print($"Player {otherPlayer.ActorNumber} left.");
-        }
+        }  
+        
+        GameEvents.BoxingDemoGameFlowEvents.PlayerLeftRoom.Raise();
 
         cachedMasterClient = PhotonNetwork.MasterClient;
         UpdatePlayersList();

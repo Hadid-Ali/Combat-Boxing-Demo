@@ -19,9 +19,9 @@ public class GameplayManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    [SerializeField] CardsManager cardsManager;
-    [SerializeField] CameraManager cameraManager;
-    [SerializeField] RoundTracker roundTracker;
+    public CardsManager cardsManager;
+    public CameraManager cameraManager;
+    public RoundTracker roundTracker;
 
     [SerializeField] bool startAttack;
     [SerializeField] float rayDistance;
@@ -227,8 +227,8 @@ public class GameplayManager : MonoBehaviour
         onValueSetAttack += SetAttackValue;
         onRevealFirstAttacker += GetFirstAttacker;
         onSetFirstAttackerValue += ReSetFirstAttacker;
-        roundTracker.OnRoundEnd += HandleRoundEnd;
-        roundTracker.OnMatchFinished += HandleMatchFinished;
+        GameEvents.BoxingDemoGameFlowEvents.RoundComplete.Register(HandleRoundEnd);
+        GameEvents.BoxingDemoGameFlowEvents.MatchFinished.Register(HandleMatchFinished);
     }
 
     private void OnDisable()
@@ -237,8 +237,8 @@ public class GameplayManager : MonoBehaviour
         onValueSetAttack -= SetAttackValue;
         onRevealFirstAttacker -= GetFirstAttacker;
         onSetFirstAttackerValue -= ReSetFirstAttacker;
-        roundTracker.OnRoundEnd -= HandleRoundEnd;
-        roundTracker.OnMatchFinished -= HandleMatchFinished;
+        GameEvents.BoxingDemoGameFlowEvents.RoundComplete.UnRegister(HandleRoundEnd);
+        GameEvents.BoxingDemoGameFlowEvents.MatchFinished.UnRegister(HandleMatchFinished);
     }
 
     private void HandleRoundEnd(int winnerID, int round)
@@ -275,55 +275,6 @@ public class GameplayManager : MonoBehaviour
         return startAttack;
     }
 
-    private void Update()
-    {
-        Attack();
-    }
-    
-    private void ShiftOpponentCameraOnSelection()
-    {
-        //CameraManager.SwitchToOpponentPosition();
-        Invoke(nameof(GetCardForAI), 2);
-        CancelInvoke(nameof(ShiftOpponentCameraOnSelection));
-    }
-
-    private void GetCardForAI()
-    {
-        OpponentAI.GetCardForAi();
-        CancelInvoke(nameof(GetCardForAI));
-    }
-    
-    private void Attack()
-    {
-        if (startAttack)
-        {
-            if(Player.playerAttackPriority < OpponentAI.aiAttackPriority)
-                boxerWhoWillAttackFirst = "player";
-            else
-                boxerWhoWillAttackFirst = "Ai";
-
-            Invoke(nameof(ShiftToCombat), 1);
-            startAttack = false;
-        }
-    }
-
-    private void ShiftToCombat()
-    {
-        //cameraManager.SwitchToFightingPosition();
-        GameHUD.DisableBottomUI(false);
-        Invoke(nameof(CallForAttack), 1);
-        CancelInvoke(nameof(ShiftToCombat));
-    }
-
-    private void CallForAttack()
-    {
-        GameHUD.AvailableRounds();
-        if(boxerWhoWillAttackFirst.ToLower().Equals(Boxer.BoxerType.player.ToString().ToLower()))
-            Player.OnAttackAction(CardsManager.OnSelectedAttack(), 1);
-        else
-            OpponentAI.OnAttackAction(CardsManager.OnOpponentSelectedAttack(), 2);
-        CancelInvoke(nameof(CallForAttack));
-    }
 
     public void StartAttackSequence(int winnerID)
     {

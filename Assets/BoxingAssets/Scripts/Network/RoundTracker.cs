@@ -17,9 +17,16 @@ public class RoundTracker : MonoBehaviourPun
     private int player1Wins = 0;
     private int player2Wins = 0;
 
-    // Events
-    public event Action<int, int> OnRoundEnd;   // winnerID, currentRound
-    public event Action<int> OnMatchFinished;   // matchWinnerID (0 = draw)
+
+    public int Getplayer1Wins()
+    {
+        return player1Wins;
+    }
+
+    public int Getplayer2Wins()
+    {
+        return player2Wins;
+    }
 
 
     public void RegisterRoundWinner(int winnerPlayerID)
@@ -48,12 +55,11 @@ public class RoundTracker : MonoBehaviourPun
         if (winnerPlayerID == 1) player1Wins++;
         else if (winnerPlayerID == 2) player2Wins++;
 
-        OnRoundEnd?.Invoke(winnerPlayerID, currentRound);
+        GameEvents.BoxingDemoGameFlowEvents.RoundComplete.Raise(winnerPlayerID, currentRound); 
 
         if (currentRound >= maxRounds)
             EvaluateMatchWinner();
     }
-
 
     private void EvaluateMatchWinner()
     {
@@ -68,7 +74,7 @@ public class RoundTracker : MonoBehaviourPun
     [PunRPC]
     private void RPC_MatchFinished(int matchWinnerID)
     {
-        OnMatchFinished?.Invoke(matchWinnerID);
+        GameEvents.BoxingDemoGameFlowEvents.MatchFinished.Raise(matchWinnerID);
     }
 
     public void ResetRounds()
