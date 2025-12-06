@@ -117,9 +117,9 @@ public class Player : Boxer
         {
             Debug.Log("Not the winner, skipping attack action for player: " + this.gameObject.name);
             return;
-        }            
+        }
 
-        Debug.Log("Player Attack Action: " + _attack.ToString() + this.gameObject.name);   
+        Debug.Log("Player Attack Action: " + _attack.ToString() + this.gameObject.name);
 
         if (targetToMove == null)
         {
@@ -132,11 +132,11 @@ public class Player : Boxer
             {
                 TriggerAttackAnimation(_attack);
             });
-        }       
+        }
     }
 
     private void TriggerAttackAnimation(AttackType _attack)
-    {        
+    {
         Boxing_Card _card = null;
         foreach (Boxing_Card c in cardType.cards)
         {
@@ -153,7 +153,7 @@ public class Player : Boxer
         _animationRPC.RPC_SetFloat("DefenceBlendINdex", 0);
         _animationRPC.RPC_ResetTrigger("hit");
         _animationRPC.RPC_SetBool("IsDefending", false);
-        
+
         switch (_attack)
         {
             case AttackType.idle:
@@ -258,7 +258,7 @@ public class Player : Boxer
     {
         int rand = 0;
         float val = 0;
-        
+
         if (rand == 0)
         {
             if (!animator.GetCurrentAnimatorStateInfo(0).IsTag("hit"))
@@ -310,7 +310,7 @@ public class Player : Boxer
         }
 
         valHit = 1.0f;
-        _animationRPC.RPC_SetFloat("KnockoutBlendIndex", valHit);   
+        _animationRPC.RPC_SetFloat("KnockoutBlendIndex", valHit);
         Invoke(nameof(EnableKnockOutCamer), 0.06f);
     }
 
@@ -345,7 +345,7 @@ public class Player : Boxer
 
     public static void OnResetAttackState()
     {
-         onAttackResetState.Invoke();
+        onAttackResetState.Invoke();
     }
 
     private void ResetAttackState()
@@ -406,6 +406,7 @@ public class Player : Boxer
 
     private void SweatEffect()
     {
+        Debug.Log(">>> 2nd");
         sweatEffect.gameObject.SetActive(true);
         sweatEffect.GetComponent<ParticleSystem>().Play();
         bloodEffect.SetActive(true);

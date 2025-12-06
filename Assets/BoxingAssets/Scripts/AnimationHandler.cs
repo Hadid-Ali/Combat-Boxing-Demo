@@ -22,7 +22,7 @@ public class AnimationHandler : MonoBehaviour
     {
         Debug.Log("Attack complete, resetting round.");
 
-        if(PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient)
             GameplayManager.instance.ResetRoundInternal();
     }
 
@@ -52,7 +52,7 @@ public class AnimationHandler : MonoBehaviour
         else if (boxerName.Equals("Ai"))
         {
             Debug.LogError("body hit ");
-            
+
         }
     }
 
@@ -60,16 +60,18 @@ public class AnimationHandler : MonoBehaviour
     {
         if (boxerName.Equals("Player"))
         {
+            Debug.Log(">>> 1st | right | one");
             Player.PlayRightHandEffect();
             //if (attack.Equals("FacePunch") || attack.Equals("UppercutPunch"))
-                //OpponentAI.PlaySweatEffect();
+            //OpponentAI.PlaySweatEffect();
         }
         else if (boxerName.Equals("Ai"))
         {
+            Debug.Log(">>> 1st | right | two");
             //OpponentAI.PlayRightHandEffect();
             if (attack.Equals("FacePunch") || attack.Equals("UppercutPunch"))
                 Player.PlaySweatEffect();
-        }       
+        }
     }
 
 
@@ -77,16 +79,18 @@ public class AnimationHandler : MonoBehaviour
     {
         if (boxerName.Equals("Player"))
         {
+            Debug.Log(">>> 1st | left | one");
             Player.PlayLeftHandEffect();
             //if (attack.Equals("FacePunch") || attack.Equals("UppercutPunch"))
-                //OpponentAI.PlaySweatEffect();
+            //OpponentAI.PlaySweatEffect();
         }
         else if (boxerName.Equals("Ai"))
         {
+            Debug.Log(">>> 1st | two | two");
             //OpponentAI.PlayLeftHandEffect();
             if (attack.Equals("FacePunch") || attack.Equals("UppercutPunch"))
                 Player.PlaySweatEffect();
-        }      
+        }
     }
 
     private void OnKnockedOut()
