@@ -1,4 +1,4 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using ExitGames.Client.Photon;
 using NaughtyAttributes.Test;
 using Photon.Pun;
@@ -43,6 +43,9 @@ public class Player : Boxer
     public delegate void GroundHitEffectActivation();
     public static event GroundHitEffectActivation onGroundHit;
 
+    public delegate void PlayOpponentSweat(int targetPlayerID, string attackType);
+    public static event PlayOpponentSweat onOpponentSweatEffect;
+
     [SerializeField] private AnimationRPC _animationRPC;
     [SerializeField] private int playerID;
 
@@ -72,6 +75,7 @@ public class Player : Boxer
         onSweatEffectPlay += SweatEffect;
         onKnockedout += KnockOut;
         onGroundHit += GroundHitEffect;
+        onOpponentSweatEffect += CheckAndPlaySweatEffect;
     }
 
     private void OnDisable()
@@ -85,7 +89,7 @@ public class Player : Boxer
         onSweatEffectPlay -= SweatEffect;
         onKnockedout -= KnockOut;
         onGroundHit += GroundHitEffect;
-
+        onOpponentSweatEffect -= CheckAndPlaySweatEffect;
     }
 
     public void SetPlayerID(int id)
@@ -404,14 +408,87 @@ public class Player : Boxer
         onSweatEffectPlay?.Invoke();
     }
 
+    public static void TriggerOpponentSweat(int targetPlayerID, string attackType)
+    {
+        onOpponentSweatEffect?.Invoke(targetPlayerID, attackType);
+    }
+
     private void SweatEffect()
     {
-        Debug.Log(">>> 2nd");
+        //Debug.Log(">>> 2nd");
         sweatEffect.gameObject.SetActive(true);
         sweatEffect.GetComponent<ParticleSystem>().Play();
         bloodEffect.SetActive(true);
         bloodEffect.GetComponent<ParticleSystem>().Play();
     }
+    private void CheckAndPlaySweatEffect(int targetPlayerID, string attackType)
+    {
+        if (playerID == targetPlayerID)
+        {
+            bool shouldPlaySweat = attackType.Equals("FacePunch") || attackType.Equals("UppercutPunch");
+
+            if (shouldPlaySweat)
+            {
+                Debug.Log(">>> 2nd");
+                sweatEffect.gameObject.SetActive(true);
+                sweatEffect.GetComponent<ParticleSystem>().Play();
+                bloodEffect.SetActive(true);
+                bloodEffect.GetComponent<ParticleSystem>().Play();
+            }
+        }
+    }
+
+
 
     #endregion
 }
+
+/* Overall Network Synchronization Flow Analysis: 
+
+    1. Master Client determines winner
+       ↓
+    2. GameplayManager.RPC "InvokeAttack" → RpcTarget.All (both clients)
+       ↓
+    3. Both clients receive RPC and call: Player.OnAttackAction(attackType, winnerID)
+       ↓
+    4. Static event "onAttack" fires on BOTH clients
+       ↓
+    5. ALL Player instances on both clients check: "Am I the winner?"
+       ↓
+    6. Only the WINNER Player triggers: _animationRPC.RPC_SetTrigger()
+       ↓
+    7. Animation RPC sends to ALL clients (RpcTarget.All)
+       ↓
+    8. Animation plays on WINNER character on BOTH clients
+       ↓
+    9. Animation Events fire LOCALLY during animation on BOTH clients
+       ↓
+    10. AnimationHandler.EffectOnRightHand() called LOCALLY on BOTH clients
+       ↓
+    11. Player.PlayRightHandEffect() static method called LOCALLY
+       ↓
+    12. Static event fires, triggering instance method on local Player
+       ↓
+    13. Particle effects play LOCALLY on BOTH clients
+
+ * now after adding sweat effect logic*
+ 
+    1. Winner's animation pla   ys (synchronized via RPC)
+       ↓
+    2. Animation Event fires locally on both clients
+       ↓
+    3. AnimationHandler.EffectOnRightHand() called locally
+       ↓
+    4. WINNER's punch effect plays (on attacker's hand)
+       ↓
+    5. Determine opponent's player ID
+       ↓
+    6. Call Player.TriggerOpponentSweat(opponentID, attackType)
+       ↓
+    7. Static event fires on all Player instances locally
+       ↓
+    8. Each Player checks: "Is this sweat for me?"
+       ↓
+    9. OPPONENT's sweat effect plays (on the one getting hit)
+ 
+ */

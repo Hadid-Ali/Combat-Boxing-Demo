@@ -62,6 +62,12 @@ public class AnimationHandler : MonoBehaviour
         {
             Debug.Log(">>> 1st | right | one");
             Player.PlayRightHandEffect();
+
+            int opponentID = GetOpponentPlayerID();
+            if (opponentID != -1)
+            {
+                Player.TriggerOpponentSweat(opponentID, attack);
+            }
             //if (attack.Equals("FacePunch") || attack.Equals("UppercutPunch"))
             //OpponentAI.PlaySweatEffect();
         }
@@ -74,23 +80,44 @@ public class AnimationHandler : MonoBehaviour
         }
     }
 
-
     private void EffectOnLeftHand(string attack)
     {
         if (boxerName.Equals("Player"))
         {
             Debug.Log(">>> 1st | left | one");
             Player.PlayLeftHandEffect();
+
+            int opponentID = GetOpponentPlayerID();
+            if (opponentID != -1)
+            {
+                Player.TriggerOpponentSweat(opponentID, attack);
+            }
             //if (attack.Equals("FacePunch") || attack.Equals("UppercutPunch"))
             //OpponentAI.PlaySweatEffect();
         }
         else if (boxerName.Equals("Ai"))
         {
-            Debug.Log(">>> 1st | two | two");
+            Debug.Log(">>> 1st | left | two");
             //OpponentAI.PlayLeftHandEffect();
             if (attack.Equals("FacePunch") || attack.Equals("UppercutPunch"))
                 Player.PlaySweatEffect();
         }
+    }
+    private int GetOpponentPlayerID()
+    {
+        if (!TryGetComponent<PhotonView>(out var myPhotonView)) return -1;
+
+        int myActorNumber = myPhotonView.Owner.ActorNumber;
+
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
+            if (player.ActorNumber != myActorNumber)
+            {
+                return player.ActorNumber;
+            }
+        }
+
+        return -1;
     }
 
     private void OnKnockedOut()

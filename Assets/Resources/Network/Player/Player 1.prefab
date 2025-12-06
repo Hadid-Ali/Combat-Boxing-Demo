@@ -4109,8 +4109,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1720352329548791342, guid: f5f1feffd19715e40b8a1abed30b6f22, type: 3}
+      propertyPath: InitialModule.rotation3D
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1720352329548791342, guid: f5f1feffd19715e40b8a1abed30b6f22, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 0.04
+      value: 0.06
       objectReference: {fileID: 0}
     - target: {fileID: 1720352329548791342, guid: f5f1feffd19715e40b8a1abed30b6f22, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
