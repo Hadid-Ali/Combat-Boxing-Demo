@@ -2846,6 +2846,8 @@ MonoBehaviour:
   animator: {fileID: 8970941476985846280}
   rightHandTarget: {fileID: 1417988917410719542}
   leftHandTarget: {fileID: 4094771599780787661}
+  opponentFaceTarget: {fileID: 1014991188890449232}
+  opponentBodyTarget: {fileID: 7905634215200520698}
   ikWeight: 1
 --- !u!114 &8608137767498369249
 MonoBehaviour:
@@ -2918,6 +2920,8 @@ MonoBehaviour:
   _animationRPC: {fileID: 0}
   playerID: 0
   speed: 0
+  faceHB: {fileID: 1014991188890449232}
+  bodyHB: {fileID: 7905634215200520698}
 --- !u!114 &6610322085979150887
 MonoBehaviour:
   m_ObjectHideFlags: 0

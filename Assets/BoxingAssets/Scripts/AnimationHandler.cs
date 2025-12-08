@@ -15,9 +15,76 @@ public class AnimationHandler : MonoBehaviour
     public Transform rightHandTarget;
     public Transform leftHandTarget;
 
+    [Header("Opponent Hit Points")]
+    [SerializeField] Transform opponentFaceTarget;
+    [SerializeField] Transform opponentBodyTarget;
+
     [Range(0, 1)] public float ikWeight = 1.0f;
 
+    private void Start()
+    {
+        SetupOpponentTargets();
+    }
 
+    private void SetupOpponentTargets()
+    {
+        Player opponent = GetOpponent();
+        if (opponent != null)
+        {
+            opponentFaceTarget = opponent.faceHB/* transform.Find("mixamorig:Hips/mixamorig:Spine/mixamorig:Spine1/mixamorig:Spine2/mixamorig:Neck/mixamorig:Head")*/;
+
+            opponentBodyTarget = opponent.bodyHB /*transform.Find("mixamorig:Hips/mixamorig:Spine/mixamorig:Spine1/mixamorig:Spine2")*/;
+
+            //rightHandTarget = opponentFaceTarget;
+            //leftHandTarget = opponentFaceTarget;
+        }
+    }
+    /*private void Start()
+    {
+        //Invoke(nameof(SetupOpponentTargets), 0.5f);
+    }
+
+    private void SetupOpponentTargets()
+    {
+        Player opponent = GetOpponent();
+        if (opponent != null)
+        {
+            opponentFaceTarget = opponent.GetFaceHitBox();
+            opponentBodyTarget = opponent.GetBodyHitBox();
+
+            if (opponentFaceTarget != null && opponentBodyTarget != null)
+            {
+                rightHandTarget = opponentFaceTarget;
+                leftHandTarget = opponentFaceTarget;
+                Debug.Log($"Successfully set up IK targets for {gameObject.name}");
+            }
+            else
+            {
+                Debug.LogError($"Failed to get hit box transforms from opponent on {gameObject.name}");
+            }
+        }
+        else
+        {
+            Debug.LogError($"Could not find opponent for {gameObject.name}. Retrying...");
+            Invoke(nameof(SetupOpponentTargets), 0.5f);
+        }
+    }*/
+
+    private Player GetOpponent()
+    {
+        if (!TryGetComponent<PhotonView>(out var myPhotonView))
+            return null;
+
+        int myActorNumber = myPhotonView.Owner.ActorNumber;
+
+        foreach (var player in FindObjectsByType<Player>(FindObjectsSortMode.None))
+        {
+            if (player.GetPlayerID() != myActorNumber)
+                return player;
+        }
+
+        return null;
+    }
     public void OnAttackAnimationComplete()
     {
         Debug.Log("Attack complete, resetting round.");
@@ -159,6 +226,8 @@ public class AnimationHandler : MonoBehaviour
     private void OnAnimatorIK(int layerIndex)
     {
         if (animator == null) return;
+        //rightHandTarget = opponentFaceTarget;
+        //leftHandTarget = opponentFaceTarget;
 
         if (rightHandTarget != null)
         {

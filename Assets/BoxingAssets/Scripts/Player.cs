@@ -235,6 +235,51 @@ public class Player : Boxer
     float valLastHit = 0;
     [SerializeField] float speed = 0;
 
+    [Header("Hit Boxes Refs")]
+    public Transform faceHB;
+    public Transform bodyHB;
+    //[SerializeField] private string faceHBPath = "mixamorig:Hips/mixamorig:Spine/mixamorig:Spine1/mixamorig:Spine2/mixamorig:Neck/mixamorig:Head";
+    //[SerializeField] private string bodyHBPath = "mixamorig:Hips/mixamorig:Spine/mixamorig:Spine1/mixamorig:Spine2";
+
+    private void Awake()
+    {
+        //InitializeHitBoxReferences();
+    }
+
+    private void InitializeHitBoxReferences()
+    {
+        if (faceHB == null)
+        {
+            Transform head = transform.Find("mixamorig:Hips/mixamorig:Spine/mixamorig:Spine1/mixamorig:Spine2/mixamorig:Neck/mixamorig:Head");
+            if (head != null)
+                faceHB = head;
+            else
+                Debug.LogError($"Could not find Head transform on {gameObject.name}");
+        }
+
+        if (bodyHB == null)
+        {
+            Transform body = transform.Find("mixamorig:Hips/mixamorig:Spine/mixamorig:Spine1/mixamorig:Spine2");
+            if (body != null)
+                bodyHB = body;
+            else
+                Debug.LogError($"Could not find Body transform on {gameObject.name}");
+        }
+    }
+
+    public Transform GetFaceHitBox()
+    {
+        if (faceHB == null)
+            InitializeHitBoxReferences();
+        return faceHB;
+    }
+
+    public Transform GetBodyHitBox()
+    {
+        if (bodyHB == null)
+            InitializeHitBoxReferences();
+        return bodyHB;
+    }
 
     private Tween speedTween;
     public void SetBlendSpeed(float targetSpeed, float duration)

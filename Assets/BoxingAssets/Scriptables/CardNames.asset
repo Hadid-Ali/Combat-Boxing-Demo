@@ -22,7 +22,7 @@ MonoBehaviour:
     rewardAmount: 0
     animations:
     - SteppingBack
-    minAnimFloat: 0
+    minAnimFloat: 0.7
     maxAnimFloat: 1
     blendIndex: PowerpunchBlendIndex
   - attackType: 2
@@ -54,8 +54,8 @@ MonoBehaviour:
     animations:
     - LeadUppercut
     - RearUppercut
-    minAnimFloat: 0.3
-    maxAnimFloat: 0.7
+    minAnimFloat: 0.35
+    maxAnimFloat: 0.8
     blendIndex: UppercutBlendIndex
   - attackType: 5
     id: 3
@@ -67,8 +67,8 @@ MonoBehaviour:
     animations:
     - LeadHook
     - RearHook
-    minAnimFloat: 0.2
-    maxAnimFloat: 0.8
+    minAnimFloat: 0.22
+    maxAnimFloat: 0.5
     blendIndex: HookBlendIndex
   - attackType: 6
     id: 4
@@ -97,6 +97,6 @@ MonoBehaviour:
     animations:
     - SteppingJab
     - Jab
-    minAnimFloat: 0.3
-    maxAnimFloat: 0.8
+    minAnimFloat: 0.5
+    maxAnimFloat: 0.551
     blendIndex: JabBlendIndex

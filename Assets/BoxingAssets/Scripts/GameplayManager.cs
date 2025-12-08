@@ -59,6 +59,29 @@ public class GameplayManager : MonoBehaviour
         joinedPlayers.Add(player);
     }
 
+    /*// Can be used later; if needed. I just put the snippet just in case.
+    public Player GetPlayerByActorNumber(int actorNumber)
+    {
+        foreach (Player player in joinedPlayers)
+        {
+            if (player.GetPlayerID() == actorNumber)
+                return player;
+        }
+
+        return null;
+    }
+
+    public Player GetOpponentPlayer(int myActorNumber)
+    {
+        foreach (Player player in joinedPlayers)
+        {
+            if (player.GetPlayerID() != myActorNumber)
+                return player;
+        }
+
+        return null;
+    }*/
+
     public Card_Info GetHighPriorityCard()
     {
         return highPriorityCard;

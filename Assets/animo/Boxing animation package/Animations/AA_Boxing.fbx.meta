@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 3c1d044a678abdc4baeba5ca8aaf8542
 ModelImporter:
-  serializedVersion: 22200
+  serializedVersion: 24200
   internalIDToNameTable:
   - first:
       74: -5012225918164684038
@@ -1140,6 +1140,13 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
+      - time: 0.32527345
+        functionName: EffectOnLeftHand
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -1298,6 +1305,13 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
+      - time: 0.42141622
+        functionName: EffectOnLeftHand
+        data: BodyHit
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -1371,8 +1385,8 @@ ModelImporter:
       curves: []
       events:
       - time: 0.5001826
-        functionName: OnDamage
-        data: 
+        functionName: EffectOnRightHand
+        data: BodyHit
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
@@ -1457,8 +1471,8 @@ ModelImporter:
       curves: []
       events:
       - time: 0.40186158
-        functionName: OnDamage
-        data: 
+        functionName: EffectOnLeftHand
+        data: UppercutPunch
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
@@ -1550,8 +1564,8 @@ ModelImporter:
         intParameter: 0
         messageOptions: 0
       - time: 0.40108892
-        functionName: OnDamage
-        data: 
+        functionName: EffectOnRightHand
+        data: UppercutPunch
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
@@ -2871,6 +2885,9 @@ ModelImporter:
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
     optimizeBones: 1
+    generateMeshLods: 0
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
     meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
