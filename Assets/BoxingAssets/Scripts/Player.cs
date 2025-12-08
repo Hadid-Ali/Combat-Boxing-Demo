@@ -154,7 +154,7 @@ public class Player : Boxer
         Debug.Log("0n Attack Animation Triggered: " + _attack.ToString() + this.gameObject.name);
 
         float val = 0;
-        _animationRPC.RPC_SetFloat("DefenceBlendINdex", 0);
+        _animationRPC.RPC_SetFloat("DefenceBlendIndex", 0);
         _animationRPC.RPC_ResetTrigger("hit");
         _animationRPC.RPC_SetBool("IsDefending", false);
 
