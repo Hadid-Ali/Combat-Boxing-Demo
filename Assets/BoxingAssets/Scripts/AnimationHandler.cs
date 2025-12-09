@@ -125,6 +125,7 @@ public class AnimationHandler : MonoBehaviour
 
     private void EffectOnRightHand(string attack)
     {
+        SoundManager.Instance.PlayPunchSound();
         if (boxerName.Equals("Player"))
         {
             Debug.Log(">>> 1st | right | one");
@@ -149,6 +150,7 @@ public class AnimationHandler : MonoBehaviour
 
     private void EffectOnLeftHand(string attack)
     {
+        SoundManager.Instance.PlayPunchSound();
         if (boxerName.Equals("Player"))
         {
             Debug.Log(">>> 1st | left | one");

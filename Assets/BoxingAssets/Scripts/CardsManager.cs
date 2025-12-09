@@ -135,7 +135,7 @@ public class CardsManager : MonoBehaviour
 
     public void OnCardSelected(Card_Info cardInfo)
     {
-        if(cardsInstantiated.Count == 0)
+        if (cardsInstantiated.Count == 0)
         {
             Debug.Log("No cards instantiated!");
             return;
@@ -153,6 +153,8 @@ public class CardsManager : MonoBehaviour
         }
 
         blockerOBJ.SetActive(true);
+
+        GameEvents.BoxingDemoGameFlowEvents.CardSelected.Raise();
 
         // Send the selection info to everyone (movement happens in RPC)
         _photonView.RPC(
@@ -257,7 +259,7 @@ public class CardsManager : MonoBehaviour
         opponentsAttack = attack;
         //Debug.LogError("selected opponent");
     }
-   
+
     public static List<Card_Info> GetAvailabeCards()
     {
         return onGettingAvailableCards.Invoke();
@@ -270,7 +272,7 @@ public class CardsManager : MonoBehaviour
 
     public static float GetPriorityValueForAttack(AttackType _type)
     {
-       return onPriorityCheck.Invoke(_type);
+        return onPriorityCheck.Invoke(_type);
     }
     float GetAttackPriority(AttackType _type)
     {

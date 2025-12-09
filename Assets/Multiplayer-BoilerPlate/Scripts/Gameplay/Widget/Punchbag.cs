@@ -1,3 +1,4 @@
+using ExitGames.Client.Photon;
 using UnityEngine;
 
 public class Punchbag : MonoBehaviour
@@ -46,6 +47,8 @@ public class Punchbag : MonoBehaviour
     }
     private void ApplyPunchImpact(Collider hitbox)
     {
+        //SoundManager.Instance.PlayPunchSound();
+
         Vector3 hitPoint = hitbox.ClosestPoint(transform.position);
         Vector3 hitDirection = (transform.position - hitPoint).normalized;
 
