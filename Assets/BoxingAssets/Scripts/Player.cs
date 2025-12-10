@@ -3,9 +3,11 @@ using ExitGames.Client.Photon;
 using NaughtyAttributes.Test;
 using Photon.Pun;
 using Photon.Realtime;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static CardNamesScriptable;
+using static GameConstants;
 
 public class Player : Boxer
 {
@@ -17,7 +19,7 @@ public class Player : Boxer
     [SerializeField] Transform boxer;
     [SerializeField] Transform targetToMove;
 
-    public delegate void FetchRandomDefence(string reaction);
+    public delegate void FetchRandomDefence(int targetPlayerID, string reaction);
     public static event FetchRandomDefence onRandomDefence;
 
     public delegate void PlayerKnockedOut();
@@ -226,9 +228,9 @@ public class Player : Boxer
         animator.SetTrigger(anim.ToString().ToLower());
     }
 
-    public static void GetRandomDefence(string reaction)
+    public static void GetRandomDefence(int pId, string reaction)
     {
-        onRandomDefence?.Invoke(reaction);
+        //onRandomDefence?.Invoke(pId, reaction);
     }
 
     float valHit = 0;
@@ -281,30 +283,75 @@ public class Player : Boxer
         return bodyHB;
     }
 
-    private Tween speedTween;
+    /* private Tween speedTween;
+     public void SetBlendSpeed(float targetSpeed, float duration)
+     {
+         float current = animator.GetFloat(Animations.HitBlendIndex);
+         if (Mathf.Approximately(current, targetSpeed) || Mathf.Approximately(valLastHit, targetSpeed))
+             return;
+
+         valLastHit = targetSpeed;
+
+         if (speedTween != null && speedTween.IsActive())
+             speedTween.Kill();
+
+         speedTween = DOTween.To(() => animator.GetFloat(Animations.HitBlendIndex), x =>
+         {
+             _animationRPC.RPC_SetFloat(Animations.HitBlendIndex, x);
+
+         }, targetSpeed, duration).SetEase(Ease.Linear).OnComplete(() =>
+         {
+             valLastHit = -1f;
+         });
+
+     }*/
+    private Coroutine blendSpeedCoroutine;
     public void SetBlendSpeed(float targetSpeed, float duration)
     {
-        float current = animator.GetFloat("HitBlendIndex");
+        float current = animator.GetFloat(Animations.HitBlendIndex);
         if (Mathf.Approximately(current, targetSpeed) || Mathf.Approximately(valLastHit, targetSpeed))
             return;
 
         valLastHit = targetSpeed;
 
-        if (speedTween != null && speedTween.IsActive())
-            speedTween.Kill();
+        //_animationRPC.RPC_SetFloat(Animations.HitBlendIndex, targetSpeed);
 
-        speedTween = DOTween.To(() => animator.GetFloat("HitBlendIndex"), x =>
-        {
-            _animationRPC.RPC_SetFloat("HitBlendIndex", x);
+        animator.SetFloat(Animations.HitBlendIndex, targetSpeed);
 
-        }, targetSpeed, duration).SetEase(Ease.Linear).OnComplete(() =>
-        {
-            valLastHit = -1f;
-        });
+        /* if (blendSpeedCoroutine != null)
+             StopCoroutine(blendSpeedCoroutine);
+
+         blendSpeedCoroutine = StartCoroutine(AnimateBlendSpeed(targetSpeed, duration));*/
     }
 
-    void RandomDefense(string hitReaction)
+    private IEnumerator AnimateBlendSpeed(float targetSpeed, float duration)
     {
+        float startSpeed = animator.GetFloat(Animations.HitBlendIndex);
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / duration;
+            float currentValue = Mathf.Lerp(startSpeed, targetSpeed, t);
+
+            //_animationRPC.RPC_SetFloat(Animations.HitBlendIndex, currentValue);
+
+            yield return null;
+        }
+
+        _animationRPC.RPC_SetFloat(Animations.HitBlendIndex, targetSpeed);
+        valLastHit = -1f;
+    }
+
+    void RandomDefense(int targetPlayerID, string hitReaction)
+    {
+        if (playerID != targetPlayerID)
+        {
+            return;
+        }
+
+        Debug.Log("<color=orange>>>></color> Random Defense Reaction: " + hitReaction);
         int rand = 0;
         float val = 0;
 
@@ -312,25 +359,28 @@ public class Player : Boxer
         {
             if (!animator.GetCurrentAnimatorStateInfo(0).IsTag("hit"))
             {
-                _animationRPC.RPC_ResetTrigger("hit");
-                _animationRPC.RPC_SetTrigger("hit");
+                Debug.Log("<color=white>>>></color> Hit check");
+                //_animationRPC.RPC_ResetTrigger("hit");
+                //_animationRPC.RPC_SetTrigger("hit");
+                animator.ResetTrigger("hit");
+                animator.SetTrigger("hit");
             }
 
             switch (hitReaction)
             {
-                case "FacePunch":
+                case AnimationReactions.facePunch:
                     valHit = 0.25f;
                     SetBlendSpeed(valHit, speed);
                     break;
-                case "UppercutPunch":
+                case AnimationReactions.uppercutPunch:
                     valHit = 0.5f;
                     SetBlendSpeed(valHit, speed);
                     break;
-                case "BodyHit":
+                case AnimationReactions.bodyHit:
                     valHit = 0.75f;
                     SetBlendSpeed(valHit, speed);
                     break;
-                case "BodyUppercut":
+                case AnimationReactions.bodyUppercut:
                     valHit = 1.0f;
                     SetBlendSpeed(valHit, speed);
                     break;
@@ -343,7 +393,6 @@ public class Player : Boxer
             _animationRPC.RPC_SetBool("IsDefending", true);
         }
     }
-
 
     public static void Knockedout()
     {
@@ -456,6 +505,11 @@ public class Player : Boxer
     public static void TriggerOpponentSweat(int targetPlayerID, string attackType)
     {
         onOpponentSweatEffect?.Invoke(targetPlayerID, attackType);
+    }
+    public static void TriggerOpponentDefence(int targetPlayerID, string reaction)
+    {
+        Debug.Log("<color=red>>>></color> TriggerOpponentDefence called for playerID: " + targetPlayerID);
+        onRandomDefence?.Invoke(targetPlayerID, reaction);
     }
 
     private void SweatEffect()

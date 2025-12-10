@@ -115,6 +115,11 @@ public class AnimationHandler : MonoBehaviour
         if (boxerName.Equals("Player"))
         {
             //OpponentAI.GetRandomDefence(reaction);
+            int opponentID = GetOpponentPlayerID();
+            if (opponentID != -1)
+            {
+                Player.TriggerOpponentDefence(opponentID, reaction);
+            }
         }
         else if (boxerName.Equals("Ai"))
         {
@@ -135,6 +140,8 @@ public class AnimationHandler : MonoBehaviour
             if (opponentID != -1)
             {
                 Player.TriggerOpponentSweat(opponentID, attack);
+                //Player.TriggerOpponentDefence(opponentID, attack);
+
             }
             //if (attack.Equals("FacePunch") || attack.Equals("UppercutPunch"))
             //OpponentAI.PlaySweatEffect();
@@ -160,6 +167,8 @@ public class AnimationHandler : MonoBehaviour
             if (opponentID != -1)
             {
                 Player.TriggerOpponentSweat(opponentID, attack);
+                //Player.TriggerOpponentDefence(opponentID, attack);
+
             }
             //if (attack.Equals("FacePunch") || attack.Equals("UppercutPunch"))
             //OpponentAI.PlaySweatEffect();

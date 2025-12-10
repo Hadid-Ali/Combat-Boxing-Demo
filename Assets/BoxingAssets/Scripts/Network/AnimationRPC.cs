@@ -42,6 +42,7 @@ public class AnimationRPC : MonoBehaviour
 
     public void SetFloat(string paramName, float value)
     {
+        Debug.Log("<color=green>Setting Float Parameter:</color> " + paramName + " to " + value);
         animator.SetFloat(paramName, value);
     }
 

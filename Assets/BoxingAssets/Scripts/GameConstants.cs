@@ -17,7 +17,13 @@ public static class GameConstants
         public const string BodyHit = "BodyHit";
         public const string BodyUppercut = "BodyUppercut";
     }
-
+    public static class AnimationReactions
+    {
+        public const string facePunch = "FacePunch";
+        public const string uppercutPunch = "UppercutPunch";
+        public const string bodyHit = "BodyHit";
+        public const string bodyUppercut = "BodyUppercut";
+    }
     public static class Tags
     {
         public const string Player = "Player";
